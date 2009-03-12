@@ -1,3 +1,24 @@
+/***************************************************************************
+ *   Copyright (C) 2009 by open-nandra                                     *
+ *   matej.haulik@gmail.com                                                *
+ *   marek.belisko@open-nandra.com                                         *
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ *   This program is distributed in the hope that it will be useful,       *
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
+ *   GNU General Public License for more details.                          *
+ *                                                                         *
+ *   You should have received a copy of the GNU General Public License     *
+ *   along with this program; if not, write to the                         *
+ *   Free Software Foundation, Inc.,                                       *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
+ ***************************************************************************/
+
 #include <stdio.h>
 #include <usb.h>
 
@@ -18,69 +39,65 @@ void printDevDesc(struct usb_device *dev)
 // print configuration descriptor
 void printConfDesc()
 {
-	;
+   
 }
 
-main()
+int main()
 {
 	struct usb_bus *busses;
-
+	
 	usb_init();
 	usb_find_busses();
 	usb_find_devices();
-
+	
 	busses = usb_get_busses();
 	printf("usb program\n");
-
+	
 	struct usb_bus *bus;
 	int c, i, a;
 	
-	for(bus=busses; bus; bus=bus->next)
-	{
+	for(bus=busses; bus; bus=bus->next) {
 		struct usb_device *dev;
-
-		for(dev=bus->devices; dev; dev=dev->next)
-		{
-			switch(dev->descriptor.bDeviceClass)
-			{
-				case 0:
-					printf("Device: class %d: base class \n", dev->descriptor.bDeviceClass);
-					int inter = 0;
-
-					printDevDesc(dev);
-
-					// loop through all of the configurations
-					for(c=0; c < dev->descriptor.bNumConfigurations; c++)
-					{
-						// loop through all of the interfaces
-						for(i=0; i < dev->config[c].bNumInterfaces; i++)
-						{
-							printf("Interface %d\n", i);
-							
-						}
-						inter += i+1;
-					}
-
-					printf("	- %d configurations\n", c+1);
-					printf("	- %d interfaces\n", inter);
-					break;
-
-				case 2:
-					printf("Device: class %d: communications \n", dev->descriptor.bDeviceClass);
-					break;
-
-				case 9:
-					printf("Device: class %d: hub \n", dev->descriptor.bDeviceClass);
-					break;
-
-				case 239:
-					printf("Device: class %d: miscellaneous \n", dev->descriptor.bDeviceClass);
-					break;
-
-				default:
-					printf("Device: class %d: unknown \n", dev->descriptor.bDeviceClass);
-					break;
+	
+		for(dev=bus->devices; dev; dev=dev->next) {
+			switch(dev->descriptor.bDeviceClass) {
+			case 0:
+				printf("Device: class %d: base class \n", dev->descriptor.bDeviceClass);
+				int inter = 0;
+	
+				printDevDesc(dev);
+	
+				// loop through all of the configurations
+				for(c=0; c < dev->descriptor.bNumConfigurations; c++) {
+					// loop through all of the interfaces
+					for(i=0; i < dev->config[c].bNumInterfaces; i++) 
+						printf("Interface %d\n", i);
+			
+					inter += i+1;
+				}
+	
+				printf("    - %d configurations\n", c+1);
+				printf("    - %d interfaces\n", inter);
+				break;
+	
+			case 2:
+				printf("Device: class %d: communications \n", dev->descriptor.bDeviceClass);
+				break;
+	
+			case 9:
+				printf("Device: class %d: hub \n", dev->descriptor.bDeviceClass);
+				break;
+	
+			case 239:
+				printf("Device: class %d: miscellaneous \n", dev->descriptor.bDeviceClass);
+				break;
+	
+			default:
+				printf("Device: class %d: unknown \n", dev->descriptor.bDeviceClass);
+				break;
 			}
 		}
 	}
+	
+	return 0;
 } 
