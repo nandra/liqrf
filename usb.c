@@ -52,7 +52,6 @@ unsigned char master_only_read, spi_check = 0;
 struct liqrf_obj iqrf_dev;
 struct liqrf_obj *iqrf = &iqrf_dev;
 
-
 int err = 1;
 
 #ifdef DEBUG
@@ -216,10 +215,9 @@ int liqrf_read_write(struct liqrf_obj *iqrf, int spi_check, int DLEN)
 	int PTYPE = 0;
 	memset(iqrf->rx_buff, 0, sizeof(iqrf->rx_buff));
 
-	if(spi_check) {
+	if (spi_check) {
 		iqrf->tx_buff[1] = 0x00;
-	}
-	else {
+	} else {
 		if (iqrf->master_only_read)
 			PTYPE = DLEN & 0x7F;
 		else
@@ -230,13 +228,13 @@ int liqrf_read_write(struct liqrf_obj *iqrf, int spi_check, int DLEN)
 		iqrf->tx_buff[DLEN + 3] = count_CRC_tx(iqrf->tx_buff, DLEN + 3);
 	}
 	iqrf->tx_buff[0] = CMD_FOR_CK;
-	
+
 	iqrf->tx_len = DLEN + 5;
 	iqrf->rx_len = DLEN + 4;
 
 	if (liqrf_send_receive_packet(iqrf))
-		goto err; 
-	
+		goto err;
+
 	memset(iqrf->tx_buff, 0, sizeof(iqrf->tx_buff));
 
 	if (!spi_check)
@@ -250,43 +248,43 @@ err:
 /* signal handler 
    usb read write is caled periodically
 */
-void tmr_handler( signo )
+void tmr_handler(signo)
 {
-	
+
 	if (!liqrf_read_write(iqrf, SPI_CHECK, 0))
 		goto exit;
-	if ((liqrf_check_data(iqrf->rx_buff[iqrf->rx_len -1])) 
-		== DATA_READY) {
-		
+	if ((liqrf_check_data(iqrf->rx_buff[iqrf->rx_len - 1]))
+	    == DATA_READY) {
+
 		iqrf->master_only_read = 1;
-		if (!liqrf_read_write(iqrf, SPI_NOTCHECK, 
-			iqrf->rx_buff[iqrf->rx_len -1] & 0x3F))
+		if (!liqrf_read_write(iqrf, SPI_NOTCHECK,
+				      iqrf->rx_buff[iqrf->rx_len - 1] & 0x3F))
 			goto exit;
 	}
-		
 exit:
 	return;
-		
+
 }
 
-	
 int main()
 {
 	timer_t t_id;
-        struct itimerspec time_spec = {.it_interval= {.tv_sec=1,.tv_nsec=0},
-                                        .it_value = {.tv_sec=1,.tv_nsec=0}};
-        struct sigaction act;
-        sigset_t set;
-	
-	sigemptyset( &set );
-        sigaddset( &set, SIGALRM );
-        /* register signal handler */
-        act.sa_flags = 0;
-        act.sa_mask = set;
-        act.sa_handler = &tmr_handler;
+	struct itimerspec time_spec = {
+	.it_interval = {.tv_sec = 1,.tv_nsec = 0},
+	.it_value = {.tv_sec = 1,.tv_nsec = 0}};
 
-        sigaction( SIGALRM, &act, NULL );
-	
+	struct sigaction act;
+	sigset_t set;
+
+	sigemptyset(&set);
+	sigaddset(&set, SIGALRM);
+	/* register signal handler */
+	act.sa_flags = 0;
+	act.sa_mask = set;
+	act.sa_handler = &tmr_handler;
+
+	sigaction(SIGALRM, &act, NULL);
+
 	iqrf->dev = liqrf_device_init();
 
 	if (iqrf->dev == NULL) {
@@ -302,14 +300,14 @@ int main()
 		fprintf(stderr, "Could not open device\n");
 		goto exit;
 	}
-	
-        if (timer_create(CLOCK_MONOTONIC, NULL, &t_id))
-                perror("timer_create");
-	
-	if (timer_settime(t_id, 0, &time_spec, NULL))
-                perror("timer_settime");
 
-	while(err);
+	if (timer_create(CLOCK_MONOTONIC, NULL, &t_id))
+		perror("timer_create");
+
+	if (timer_settime(t_id, 0, &time_spec, NULL))
+		perror("timer_settime");
+
+	while (err) ;
 
 exit:
 
