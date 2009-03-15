@@ -2,4 +2,44 @@ FW uploader for iqrf devices.
 More informations at: http://iqrf.com
 Project page: http://open-nandra.com/?page_id=108
 
+Packet structure:
+The master can send two types of packets with the following structure:
+Master checks the SPI status of the module:
+       Master        SPI_CHECK
+       Slave            SPISTAT
+Master reads/writes a packet from/to the module:
+       Master         SPI_CMD          PTYPE         DM1        DM2        ---    DMSPIDLEN     CRCM
+       Slave          SPISTAT         SPISTAT        DS1        DS2        ---    DSSPIDLEN     CRCS
+Where:
+  SPI_CHECK = 0x00
+  SPI_CMD        = 0xF0
+  SPISTAT: SPI status of the module
+    hex value      SPI status
+         00        SPI not working (disabled by the disableSPI() command)
+         07        SPI suspended by the stopSPI() command
+         3F        SPI not ready (buffer full, last CRCM O.K.)
+        3E         SPI not ready (buffer full, last CRCM error)
+      40 to 63     SPI data ready. Value - 0x40 = number of bytes to be sent from the slave (1 to Nmax )
+         80        SPI ready (communication mode)
+         81        SPI ready (programming mode)
+         82        SPI ready (debugging mode)
+         83        SPI not working in background (e.g. during receiving of RF packet) – Slow mode
+                           Master should prolong the delay between individual bytes when this status is received.
+                           See the T2 parameter in the table above.
+        FF         SPI not working (HW error)
+SPI status of the module is indicated by the IQRF IDE when used together with related IQRF development tools (e.g. CK-
+USB-02):
+  PTYPE:
+     b7 b6       b5    b4    b3 b2 b1          b0
+     CTYPE                  SPIDLEN
+  CTYPE: communication type
+     10: full duplex (the master reads/writes from/to the module, bufferCOM changed)
+     00: half duplex (the master reads from the module, bufferCOM unchanged)
+  SPIDLEN: data length (from 1 to Nmax)
+           TR-xxx-xxA:      Nmax = 35
+           TR-xxx-xxB:      Nmax = 35
+  DM: data from the master
+  DS: data from the slave
+  CRCM = SPI_CMD xor PTYPE xor DM1 xor DM2 ... xor DMSPIDLEN xor 0x5F
+  CRCS = PTYPE xor DS1 xor DS2 ... xor DSSPIDLEN xor 0x5F
 
