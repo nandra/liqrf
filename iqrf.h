@@ -47,6 +47,10 @@ enum data_status {
 	DATA_READY,
 };
 
+enum spi_check_mode {
+	SPI_NOT_CHECK,
+	SPI_CHECK,
+};
 /* SPI status */
 
 #define NO_MODULE_ON_USB        0xFF    // SPI not working (HW error)

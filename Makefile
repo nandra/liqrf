@@ -1,6 +1,6 @@
 CC = gcc
 CFLAGS = -Wall
-LDFLAGS = -lusb 
+LDFLAGS = -lusb -lrt 
 
 
 EXEC = liqrf

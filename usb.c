@@ -23,6 +23,8 @@
 #include <errno.h>
 #include <usb.h>
 #include <string.h>
+#include <time.h>
+#include <signal.h>
 
 #include "iqrf.h"
 
@@ -42,12 +44,16 @@ struct liqrf_obj {
 	unsigned char tx_buff[BUF_LEN];
 	int tx_len;
 	int rx_len;
+	int master_only_read;
 };
 
 unsigned char master_only_read, spi_check = 0;
 
 struct liqrf_obj iqrf_dev;
 struct liqrf_obj *iqrf = &iqrf_dev;
+
+
+int err = 1;
 
 #ifdef DEBUG
 void printDevDesc(struct usb_device *dev)
@@ -89,7 +95,8 @@ static struct usb_device *liqrf_device_init(void)
 		}
 	}
 #ifdef DEBUG
-	printDevDesc(dev);
+	if (dev != NULL)
+		printDevDesc(dev);
 #endif
 	return NULL;
 }
@@ -188,13 +195,13 @@ unsigned char count_CRC_tx(unsigned char *buff, int len)
 }
 
 /* count CRC for received buffer */
-unsigned char check_CRC_rx(unsigned char *buff, int len, int PTYPE, int DLEN)
+unsigned char check_CRC_rx(unsigned char *buff, int PTYPE, int DLEN)
 {
 	unsigned char i, crc_val;
 
 	crc_val = 0x5F ^ PTYPE;
 
-	for (i = 2; i < len; i++)
+	for (i = 2; i < DLEN + 2; i++)
 		crc_val ^= buff[i];
 
 	if (buff[DLEN + 2] == crc_val)
@@ -209,46 +216,77 @@ int liqrf_read_write(struct liqrf_obj *iqrf, int spi_check, int DLEN)
 	int PTYPE = 0;
 	memset(iqrf->rx_buff, 0, sizeof(iqrf->rx_buff));
 
-	/* prepare tx packet */
-	/* see SPI User Manual (www.iqrf.org) */
-	if (!spi_check) {
-		/* Read/Write buffer COM in TR module */
-		iqrf->tx_buff[1] = SPI_R_W;
-		/* read buffer COM in TR module (clear bit7)
-		 * write buffer COM in TR module (set bit7)
-		 */
-		if (master_only_read)
-			PTYPE = (DLEN & 0x7F);
+	if(spi_check) {
+		iqrf->tx_buff[1] = 0x00;
+	}
+	else {
+		if (iqrf->master_only_read)
+			PTYPE = DLEN & 0x7F;
 		else
-			PTYPE = (DLEN | 0x80);
+			PTYPE = DLEN | 0x80;
 
+		iqrf->tx_buff[1] = SPI_R_W;
 		iqrf->tx_buff[2] = PTYPE;
 		iqrf->tx_buff[DLEN + 3] = count_CRC_tx(iqrf->tx_buff, DLEN + 3);
 	}
-	/* command for CK-USB-xx "send this data to TR module via SPI */
 	iqrf->tx_buff[0] = CMD_FOR_CK;
-
+	
 	iqrf->tx_len = DLEN + 5;
 	iqrf->rx_len = DLEN + 4;
 
-	liqrf_send_receive_packet(iqrf);
-
-	/* this is maybee not necessary */
-	/* CloseUSB(); */
+	if (liqrf_send_receive_packet(iqrf))
+		goto err; 
+	
 	memset(iqrf->tx_buff, 0, sizeof(iqrf->tx_buff));
 
 	if (!spi_check)
-		/* check CRC or received packet */
-		if (!check_CRC_rx(iqrf->rx_buff, DLEN + 2, PTYPE, DLEN))
+		/* check CRC for received packet */
+		if (!check_CRC_rx(iqrf->rx_buff, PTYPE, DLEN))
 			return 0;
-
-	spi_check = 0;
-
+err:
 	return 1;
 }
 
+/* signal handler 
+   usb read write is caled periodically
+*/
+void tmr_handler( signo )
+{
+	
+	if (!liqrf_read_write(iqrf, SPI_CHECK, 0))
+		goto exit;
+	if ((liqrf_check_data(iqrf->rx_buff[iqrf->rx_len -1])) 
+		== DATA_READY) {
+		
+		iqrf->master_only_read = 1;
+		if (!liqrf_read_write(iqrf, SPI_NOTCHECK, 
+			iqrf->rx_buff[iqrf->rx_len -1] & 0x3F))
+			goto exit;
+	}
+		
+exit:
+	return;
+		
+}
+
+	
 int main()
 {
+	timer_t t_id;
+        struct itimerspec time_spec = {.it_interval= {.tv_sec=1,.tv_nsec=0},
+                                        .it_value = {.tv_sec=1,.tv_nsec=0}};
+        struct sigaction act;
+        sigset_t set;
+	
+	sigemptyset( &set );
+        sigaddset( &set, SIGALRM );
+        /* register signal handler */
+        act.sa_flags = 0;
+        act.sa_mask = set;
+        act.sa_handler = &tmr_handler;
+
+        sigaction( SIGALRM, &act, NULL );
+	
 	iqrf->dev = liqrf_device_init();
 
 	if (iqrf->dev == NULL) {
@@ -264,9 +302,15 @@ int main()
 		fprintf(stderr, "Could not open device\n");
 		goto exit;
 	}
-	/* usb device is called periodically 
-	 * by timer 
-	 */
+	
+        if (timer_create(CLOCK_MONOTONIC, NULL, &t_id))
+                perror("timer_create");
+	
+	if (timer_settime(t_id, 0, &time_spec, NULL))
+                perror("timer_settime");
+
+	while(err);
+
 exit:
 
 	return 0;
