@@ -26,7 +26,7 @@
 
 #include "iqrf.h"
 
-#define DEBUG 
+#define DEBUG
 
 #ifdef DEBUG
 int dbg_level = 3;
@@ -41,7 +41,7 @@ struct liqrf_obj {
 	unsigned char rx_buff[BUF_LEN];
 	unsigned char tx_buff[BUF_LEN];
 	int tx_len;
-	int rx_len; 
+	int rx_len;
 };
 
 unsigned char master_only_read, spi_check = 0;
@@ -60,13 +60,13 @@ static struct usb_device *liqrf_device_init(void)
 	usb_find_devices();
 
 	for (usb_bus = usb_busses; usb_bus; usb_bus = usb_bus->next) {
-        	for (dev = usb_bus->devices; dev; dev = dev->next) {
-            		if ((dev->descriptor.idVendor == IQRF_VENDOR_ID) &&
-                		(dev->descriptor.idProduct == IQRF_PRODUCT_ID))
-                		return dev;
-        	}
-    	}
-    	return NULL;
+		for (dev = usb_bus->devices; dev; dev = dev->next) {
+			if ((dev->descriptor.idVendor == IQRF_VENDOR_ID) &&
+			    (dev->descriptor.idProduct == IQRF_PRODUCT_ID))
+				return dev;
+		}
+	}
+	return NULL;
 }
 
 /* write to output endpoint and read
@@ -74,42 +74,44 @@ static struct usb_device *liqrf_device_init(void)
 static int liqrf_send_receive_packet(struct liqrf_obj *iqrf)
 {
 	int ret_val = 0, i = 0;
-	
-	ret_val = usb_interrupt_write(iqrf->dev_handle, OUT_EP_NR, 
-		(char *)iqrf->tx_buff, iqrf->tx_len, 32000);
-	
+
+	ret_val = usb_interrupt_write(iqrf->dev_handle, OUT_EP_NR,
+				      (char *)iqrf->tx_buff, iqrf->tx_len,
+				      32000);
+
 	if (ret_val < 0) {
 		fprintf(stderr, "Can't write to output endpoint\n");
 		goto exit;
 	}
-#ifdef DEBUG	
-	for (i=0; i < iqrf->tx_len; i++)
+#ifdef DEBUG
+	for (i = 0; i < iqrf->tx_len; i++)
 		printf("Written string: %X", iqrf->tx_buff[i]);
 
-	printf("\n");	
+	printf("\n");
 #endif
-	ret_val = usb_interrupt_read(iqrf->dev_handle, IN_EP_NR, 
-		(char *)iqrf->rx_buff, iqrf->rx_len, 32000);
-	
+	ret_val = usb_interrupt_read(iqrf->dev_handle, IN_EP_NR,
+				     (char *)iqrf->rx_buff, iqrf->rx_len,
+				     32000);
+
 	if (ret_val < 0) {
 		fprintf(stderr, "Can't read from input endpoint\n");
 		goto exit;
 	}
 #ifdef DEBUG
-	for (i=0; i < ret_val; i++)
+	for (i = 0; i < ret_val; i++)
 		printf("Readed string: %X", iqrf->rx_buff[i]);
 
-	printf("\n");	
+	printf("\n");
 #endif
 	return 0;
-exit: 
-	return ret_val;	
+exit:
+	return ret_val;
 }
 
 /* parse status and check if data are ready */
 enum data_status liqrf_check_data(unsigned char spi_status)
 {
-	enum data_status stat= DATA_NOT_READY;
+	enum data_status stat = DATA_NOT_READY;
 
 	switch (spi_status) {
 	case NO_MODULE_ON_USB:
@@ -118,11 +120,13 @@ enum data_status liqrf_check_data(unsigned char spi_status)
 		break;
 
 	case SPI_CRCM_OK:
-		fprintf(stderr, "Module not ready (full buffer, last CRCM ok)\n");
+		fprintf(stderr,
+			"Module not ready (full buffer, last CRCM ok)\n");
 		break;
 
 	case SPI_CRCM_ERR:
-		fprintf(stderr, "Module not ready (full buffer, last CRCM error)\n");
+		fprintf(stderr,
+			"Module not ready (full buffer, last CRCM error)\n");
 		break;
 
 	case COMMUNICATION_MODE:
@@ -140,15 +144,14 @@ enum data_status liqrf_check_data(unsigned char spi_status)
 		if ((spi_status & 0xC0) == 0x40)
 			stat = DATA_READY;
 	}
-	
+
 	return stat;
 }
-
 
 /* count CRC for transmission */
 unsigned char count_CRC_tx(unsigned char *buff, int len)
 {
- 	unsigned char crc_val;
+	unsigned char crc_val;
 	int i = 0;
 
 	crc_val = 0x5F;
@@ -160,13 +163,13 @@ unsigned char count_CRC_tx(unsigned char *buff, int len)
 }
 
 /* count CRC for received buffer */
-unsigned char check_CRC_rx(unsigned char *buff, int len, int PTYPE, int DLEN) 
+unsigned char check_CRC_rx(unsigned char *buff, int len, int PTYPE, int DLEN)
 {
- 	unsigned char i,crc_val;
+	unsigned char i, crc_val;
 
 	crc_val = 0x5F ^ PTYPE;
 
-	for(i = 2; i < len; i++)
+	for (i = 2; i < len; i++)
 		crc_val ^= buff[i];
 
 	if (buff[DLEN + 2] == crc_val)
@@ -180,7 +183,7 @@ int liqrf_read_write(struct liqrf_obj *iqrf, int spi_check, int DLEN)
 {
 	int PTYPE = 0;
 	memset(iqrf->rx_buff, 0, sizeof(iqrf->rx_buff));
-	
+
 	/* prepare tx packet */
 	/* see SPI User Manual (www.iqrf.org) */
 	if (!spi_check) {
@@ -189,17 +192,17 @@ int liqrf_read_write(struct liqrf_obj *iqrf, int spi_check, int DLEN)
 		/* read buffer COM in TR module (clear bit7)
 		 * write buffer COM in TR module (set bit7)
 		 */
-		if (master_only_read) 
-			PTYPE = (DLEN & 0x7F);	
-		else    
+		if (master_only_read)
+			PTYPE = (DLEN & 0x7F);
+		else
 			PTYPE = (DLEN | 0x80);
 
 		iqrf->tx_buff[2] = PTYPE;
-		iqrf->tx_buff[DLEN + 3] = count_CRC_tx(iqrf->tx_buff, DLEN+3);
+		iqrf->tx_buff[DLEN + 3] = count_CRC_tx(iqrf->tx_buff, DLEN + 3);
 	}
 	/* command for CK-USB-xx "send this data to TR module via SPI */
 	iqrf->tx_buff[0] = CMD_FOR_CK;
-	
+
 	iqrf->tx_len = DLEN + 5;
 	iqrf->rx_len = DLEN + 4;
 
@@ -211,7 +214,7 @@ int liqrf_read_write(struct liqrf_obj *iqrf, int spi_check, int DLEN)
 
 	if (!spi_check)
 		/* check CRC or received packet */
-		if (!check_CRC_rx(iqrf->rx_buff, DLEN+2, PTYPE, DLEN))
+		if (!check_CRC_rx(iqrf->rx_buff, DLEN + 2, PTYPE, DLEN))
 			return 0;
 
 	spi_check = 0;
@@ -219,13 +222,10 @@ int liqrf_read_write(struct liqrf_obj *iqrf, int spi_check, int DLEN)
 	return 1;
 }
 
-
-
-
 int main()
 {
 	iqrf->dev = liqrf_device_init();
-	
+
 	if (iqrf->dev == NULL) {
 		fprintf(stderr, "Could not init device\n");
 		goto exit;
@@ -234,12 +234,15 @@ int main()
 	usb_set_debug(dbg_level);
 
 	iqrf->dev_handle = usb_open(iqrf->dev);
-	
-        if (iqrf->dev_handle == NULL) {
-                fprintf(stderr, "Could not open device\n");
-                goto exit;
-        }
+
+	if (iqrf->dev_handle == NULL) {
+		fprintf(stderr, "Could not open device\n");
+		goto exit;
+	}
+	/* usb device is called periodically 
+	 * by timer 
+	 */
 exit:
 
 	return 0;
-} 
+}
