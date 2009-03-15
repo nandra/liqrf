@@ -1,6 +1,6 @@
 CC = gcc
 CFLAGS = -Wall
-LDFLAGS = -lusb
+LDFLAGS = -lusb 
 
 
 EXEC = liqrf
@@ -14,4 +14,5 @@ $(EXEC): $(OBJS)
 
 clean:
 	-rm -f $(EXEC) *.elf *.gdb *.o
+	-rm -f *.h~ *.c~
 

@@ -1,0 +1,398 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"></head><body>
+
+
+
+<div><a name="0.1_top"></a>
+<p style="padding: 3px 3px 0px; font-family: Arial,Verdana,Helvetica,sans-serif; font-size: 9pt; font-weight: bold;" align="left">PICDEM FS USB Demo Board (C) 2004</p>
+<table cellspacing="0">
+<tbody><tr valign="top"><td><b>Connection Status<b></b></b></td><td>Device connected</td></tr>
+<tr valign="top"><td><b>Current Configuration<b></b></b></td><td>0</td></tr>
+<tr valign="top"><td><b>Speed<b></b></b></td><td>Full</td></tr>
+<tr valign="top"><td><b>Device Address<b></b></b></td><td>1</td></tr>
+<tr valign="top"><td><b>Number Of Open Pipes<b></b></b></td><td>0</td></tr>
+</tbody></table>
+<div><a name="0.1_0ba3c100"><b>Device Descriptor</b> PICDEM FS USB Demo Board (C) 2004</a></div>
+<table cellspacing="0">
+<tbody><tr valign="top"><th>Offset</th><th>Field</th><th>Size</th><th>Value</th><th>Description</th></tr>
+<tr valign="top">
+<td>0</td>
+<td>bLength</td>
+<td>1</td>
+<td>12h</td>
+<td></td>
+</tr>
+<tr valign="top">
+<td>1</td>
+<td>bDescriptorType</td>
+<td>1</td>
+<td>01h</td>
+<td>Device</td>
+</tr>
+<tr valign="top">
+<td>2</td>
+<td>bcdUSB</td>
+<td>2</td>
+<td>0200h</td>
+<td>USB Spec 2.0</td>
+</tr>
+<tr valign="top">
+<td>4</td>
+<td>bDeviceClass</td>
+<td>1</td>
+<td>00h</td>
+<td>Class information in the Interface Descriptors</td>
+</tr>
+<tr valign="top">
+<td>5</td>
+<td>bDeviceSubClass</td>
+<td>1</td>
+<td>00h</td>
+<td></td>
+</tr>
+<tr valign="top">
+<td>6</td>
+<td>bDeviceProtocol</td>
+<td>1</td>
+<td>00h</td>
+<td></td>
+</tr>
+<tr valign="top">
+<td>7</td>
+<td>bMaxPacketSize0</td>
+<td>1</td>
+<td>08h</td>
+<td>8 bytes</td>
+</tr>
+<tr valign="top">
+<td>8</td>
+<td>idVendor</td>
+<td>2</td>
+<td>04D8h</td>
+<td>Microchip Technology, Inc.</td>
+</tr>
+<tr valign="top">
+<td>10</td>
+<td>idProduct</td>
+<td>2</td>
+<td>000Ch</td>
+<td></td>
+</tr>
+<tr valign="top">
+<td>12</td>
+<td>bcdDevice</td>
+<td>2</td>
+<td>0000h</td>
+<td>0.00</td>
+</tr>
+<tr valign="top">
+<td>14</td>
+<td>iManufacturer</td>
+<td>1</td>
+<td>01h</td>
+<td>"Microchip Technology Inc."</td>
+</tr>
+<tr valign="top">
+<td>15</td>
+<td>iProduct</td>
+<td>1</td>
+<td>02h</td>
+<td>"PICDEM FS USB Demo Board (C) 2004"</td>
+</tr>
+<tr valign="top">
+<td>16</td>
+<td>iSerialNumber</td>
+<td>1</td>
+<td>00h</td>
+<td></td>
+</tr>
+<tr valign="top">
+<td>17</td>
+<td>bNumConfigurations</td>
+<td>1</td>
+<td>01h</td>
+<td></td>
+</tr>
+</tbody></table>
+<div><a name="0.1_c7f3c100"><b>Configuration Descriptor 1</b> Bus Powered, 100 mA</a></div>
+<table cellspacing="0">
+<tbody><tr valign="top"><th>Offset</th><th>Field</th><th>Size</th><th>Value</th><th>Description</th></tr>
+<tr valign="top">
+<td>0</td>
+<td>bLength</td>
+<td>1</td>
+<td>09h</td>
+<td></td>
+</tr>
+<tr valign="top">
+<td>1</td>
+<td>bDescriptorType</td>
+<td>1</td>
+<td>02h</td>
+<td>Configuration</td>
+</tr>
+<tr valign="top">
+<td>2</td>
+<td>wTotalLength</td>
+<td>2</td>
+<td>0020h</td>
+<td></td>
+</tr>
+<tr valign="top">
+<td>4</td>
+<td>bNumInterfaces</td>
+<td>1</td>
+<td>01h</td>
+<td></td>
+</tr>
+<tr valign="top">
+<td>5</td>
+<td>bConfigurationValue</td>
+<td>1</td>
+<td>01h</td>
+<td></td>
+</tr>
+<tr valign="top">
+<td>6</td>
+<td>iConfiguration</td>
+<td>1</td>
+<td>00h</td>
+<td></td>
+</tr>
+<tr valign="top">
+<td>7</td>
+<td>bmAttributes</td>
+<td>1</td>
+<td>80h</td>
+<td>Bus Powered</td>
+</tr>
+<tr valign="top">
+<td></td>
+<td>4..0: Reserved</td>
+<td></td>
+<td>...00000&nbsp;</td>
+<td></td>
+</tr>
+<tr valign="top">
+<td></td>
+<td>5: Remote Wakeup</td>
+<td></td>
+<td>..0.....&nbsp;</td>
+<td>No</td>
+</tr>
+<tr valign="top">
+<td></td>
+<td>6: Self Powered</td>
+<td></td>
+<td>.0......&nbsp;</td>
+<td>No, Bus Powered</td>
+</tr>
+<tr valign="top">
+<td></td>
+<td>7: Reserved (set to one)<br>(bus-powered for 1.0)</td>
+<td></td>
+<td>1.......&nbsp;</td>
+<td></td>
+</tr>
+<tr valign="top">
+<td>8</td>
+<td>bMaxPower</td>
+<td>1</td>
+<td>32h</td>
+<td>100 mA</td>
+</tr>
+</tbody></table>
+<div>
+<div><a name="0.1_58f3c100"><b>Interface Descriptor 0/0</b>  2 Endpoints</a></div>
+<table cellspacing="0">
+<tbody><tr valign="top"><th>Offset</th><th>Field</th><th>Size</th><th>Value</th><th>Description</th></tr>
+<tr valign="top">
+<td>0</td>
+<td>bLength</td>
+<td>1</td>
+<td>09h</td>
+<td></td>
+</tr>
+<tr valign="top">
+<td>1</td>
+<td>bDescriptorType</td>
+<td>1</td>
+<td>04h</td>
+<td>Interface</td>
+</tr>
+<tr valign="top">
+<td>2</td>
+<td>bInterfaceNumber</td>
+<td>1</td>
+<td>00h</td>
+<td></td>
+</tr>
+<tr valign="top">
+<td>3</td>
+<td>bAlternateSetting</td>
+<td>1</td>
+<td>00h</td>
+<td></td>
+</tr>
+<tr valign="top">
+<td>4</td>
+<td>bNumEndpoints</td>
+<td>1</td>
+<td>02h</td>
+<td></td>
+</tr>
+<tr valign="top">
+<td>5</td>
+<td>bInterfaceClass</td>
+<td>1</td>
+<td>00h</td>
+<td></td>
+</tr>
+<tr valign="top">
+<td>6</td>
+<td>bInterfaceSubClass</td>
+<td>1</td>
+<td>00h</td>
+<td></td>
+</tr>
+<tr valign="top">
+<td>7</td>
+<td>bInterfaceProtocol</td>
+<td>1</td>
+<td>00h</td>
+<td></td>
+</tr>
+<tr valign="top">
+<td>8</td>
+<td>iInterface</td>
+<td>1</td>
+<td>00h</td>
+<td></td>
+</tr>
+</tbody></table>
+<div>
+<div><a name="0.1_e8f3c100"><b>Endpoint Descriptor 01</b>  1 Out, Interrupt, 32 ms</a></div>
+<table cellspacing="0">
+<tbody><tr valign="top"><th>Offset</th><th>Field</th><th>Size</th><th>Value</th><th>Description</th></tr>
+<tr valign="top">
+<td>0</td>
+<td>bLength</td>
+<td>1</td>
+<td>07h</td>
+<td></td>
+</tr>
+<tr valign="top">
+<td>1</td>
+<td>bDescriptorType</td>
+<td>1</td>
+<td>05h</td>
+<td>Endpoint</td>
+</tr>
+<tr valign="top">
+<td>2</td>
+<td>bEndpointAddress</td>
+<td>1</td>
+<td>01h</td>
+<td>1 Out</td>
+</tr>
+<tr valign="top">
+<td>3</td>
+<td>bmAttributes</td>
+<td>1</td>
+<td>03h</td>
+<td>Interrupt</td>
+</tr>
+<tr valign="top">
+<td></td>
+<td>1..0: Transfer Type</td>
+<td></td>
+<td>......11&nbsp;</td>
+<td>Interrupt</td>
+</tr>
+<tr valign="top">
+<td></td>
+<td>7..2: Reserved</td>
+<td></td>
+<td>000000..&nbsp;</td>
+<td></td>
+</tr>
+<tr valign="top">
+<td>4</td>
+<td>wMaxPacketSize</td>
+<td>2</td>
+<td>0040h</td>
+<td>64 bytes</td>
+</tr>
+<tr valign="top">
+<td>6</td>
+<td>bInterval</td>
+<td>1</td>
+<td>20h</td>
+<td>32 ms</td>
+</tr>
+</tbody></table>
+<div><a name="0.1_59f3c100"><b>Endpoint Descriptor 81</b>  1 In, Interrupt, 32 ms</a></div>
+<table cellspacing="0">
+<tbody><tr valign="top"><th>Offset</th><th>Field</th><th>Size</th><th>Value</th><th>Description</th></tr>
+<tr valign="top">
+<td>0</td>
+<td>bLength</td>
+<td>1</td>
+<td>07h</td>
+<td></td>
+</tr>
+<tr valign="top">
+<td>1</td>
+<td>bDescriptorType</td>
+<td>1</td>
+<td>05h</td>
+<td>Endpoint</td>
+</tr>
+<tr valign="top">
+<td>2</td>
+<td>bEndpointAddress</td>
+<td>1</td>
+<td>81h</td>
+<td>1 In</td>
+</tr>
+<tr valign="top">
+<td>3</td>
+<td>bmAttributes</td>
+<td>1</td>
+<td>03h</td>
+<td>Interrupt</td>
+</tr>
+<tr valign="top">
+<td></td>
+<td>1..0: Transfer Type</td>
+<td></td>
+<td>......11&nbsp;</td>
+<td>Interrupt</td>
+</tr>
+<tr valign="top">
+<td></td>
+<td>7..2: Reserved</td>
+<td></td>
+<td>000000..&nbsp;</td>
+<td></td>
+</tr>
+<tr valign="top">
+<td>4</td>
+<td>wMaxPacketSize</td>
+<td>2</td>
+<td>0040h</td>
+<td>64 bytes</td>
+</tr>
+<tr valign="top">
+<td>6</td>
+<td>bInterval</td>
+<td>1</td>
+<td>20h</td>
+<td>32 ms</td>
+</tr>
+</tbody></table>
+</div>
+</div>
+<p style="padding: 0pt; color: rgb(204, 204, 204); font-family: Arial,Verdana,Helvetica,sans-serif; font-size: 8pt;" align="center">This report was generated by <a style="color: rgb(204, 204, 204); text-decoration: none;" href="http://www.usblyzer.com/" target="_blank">USBlyzer</a></p>
+</div>
+</body></html>
