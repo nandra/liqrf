@@ -49,6 +49,28 @@ unsigned char master_only_read, spi_check = 0;
 struct liqrf_obj iqrf_dev;
 struct liqrf_obj *iqrf = &iqrf_dev;
 
+#ifdef DEBUG
+void printDevDesc(struct usb_device *dev)
+{
+	printf("bDescriptorType: %d (0x%x)\n", dev->descriptor.bDescriptorType,
+	       dev->descriptor.bDescriptorType);
+	printf("bcdUSB: %d (0x%x)\n", dev->descriptor.bcdUSB,
+	       dev->descriptor.bcdUSB);
+	printf("bDeviceProtocol: %d (0x%x)\n", dev->descriptor.bDeviceProtocol,
+	       dev->descriptor.bDeviceProtocol);
+	printf("idVendor: %d (0x%x)\n", dev->descriptor.idVendor,
+	       dev->descriptor.idVendor);
+	printf("idProduct: %d (0x%x)\n", dev->descriptor.idProduct,
+	       dev->descriptor.idProduct);
+	printf("bcdDevice: %d (0x%x)\n", dev->descriptor.bcdDevice,
+	       dev->descriptor.bcdDevice);
+	printf("iManufacturer: %d (0x%x)\n", dev->descriptor.iManufacturer,
+	       dev->descriptor.iManufacturer);
+	printf("iProduct: %d (0x%x)\n", dev->descriptor.iProduct,
+	       dev->descriptor.iProduct);
+}
+#endif
+
 /* device initialization */
 static struct usb_device *liqrf_device_init(void)
 {
@@ -66,6 +88,9 @@ static struct usb_device *liqrf_device_init(void)
 				return dev;
 		}
 	}
+#ifdef DEBUG
+	printDevDesc(dev);
+#endif
 	return NULL;
 }
 
