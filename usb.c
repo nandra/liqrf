@@ -25,6 +25,7 @@
 #include <string.h>
 #include <time.h>
 #include <signal.h>
+#include <ctype.h>
 
 #include "iqrf.h"
 
@@ -139,9 +140,9 @@ static int liqrf_send_receive_packet(struct liqrf_obj *iqrf)
 		goto exit;
 	}
 #ifdef DEBUG
+	printf("Written data:\n");
 	for (i = 0; i < iqrf->tx_len; i++)
-		printf("Written string: %X\n", iqrf->tx_buff[i]);
-
+		printf("%2X ", iqrf->tx_buff[i]);
 	printf("\n");
 #endif
 	ret_val = usb_interrupt_read(iqrf->dev_handle, IN_EP_NR,
@@ -153,9 +154,13 @@ static int liqrf_send_receive_packet(struct liqrf_obj *iqrf)
 		goto exit;
 	}
 #ifdef DEBUG
-	for (i = 0; i < ret_val; i++)
-		printf("Readed string: %X\n", iqrf->rx_buff[i]);
-
+	printf("Readed string:\n");
+	for (i = 0; i < ret_val; i++) {
+		if (isprint(iqrf->rx_buff[i]))
+			printf("%c ", iqrf->rx_buff[i]);
+		else
+			printf("%X ", iqrf->rx_buff[i]);
+	}
 	printf("\n");
 #endif
 	return 0;
@@ -277,6 +282,7 @@ void tmr_handler(signo)
 
 	if (!liqrf_read_write(iqrf, SPI_CHECKING, 0))
 		goto exit;
+	
 	if ((liqrf_check_data(iqrf->rx_buff[iqrf->rx_len - 1]))
 	    == DATA_READY) {
 
