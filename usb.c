@@ -251,13 +251,13 @@ err:
 void tmr_handler(signo)
 {
 
-	if (!liqrf_read_write(iqrf, SPI_CHECK, 0))
+	if (!liqrf_read_write(iqrf, SPI_MODE_CHECK, 0))
 		goto exit;
 	if ((liqrf_check_data(iqrf->rx_buff[iqrf->rx_len - 1]))
 	    == DATA_READY) {
 
 		iqrf->master_only_read = 1;
-		if (!liqrf_read_write(iqrf, SPI_NOTCHECK,
+		if (!liqrf_read_write(iqrf, SPI_MODE_NOT_CHECK,
 				      iqrf->rx_buff[iqrf->rx_len - 1] & 0x3F))
 			goto exit;
 	}

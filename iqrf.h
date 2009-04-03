@@ -48,8 +48,8 @@ enum data_status {
 };
 
 enum spi_check_mode {
-	SPI_NOT_CHECK,
-	SPI_CHECK,
+	SPI_MODE_NOT_CHECK,
+	SPI_MODE_CHECK,
 };
 /* SPI status */
 
