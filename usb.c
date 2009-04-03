@@ -57,22 +57,42 @@ int err = 1;
 #ifdef DEBUG
 void printDevDesc(struct usb_device *dev)
 {
-	printf("bDescriptorType: %d (0x%x)\n", dev->descriptor.bDescriptorType,
+	printf("#	bDescriptorType: %d (0x%x)\n", dev->descriptor.bDescriptorType,
 	       dev->descriptor.bDescriptorType);
-	printf("bcdUSB: %d (0x%x)\n", dev->descriptor.bcdUSB,
+	printf("#	bcdUSB: %d (0x%x)\n", dev->descriptor.bcdUSB,
 	       dev->descriptor.bcdUSB);
-	printf("bDeviceProtocol: %d (0x%x)\n", dev->descriptor.bDeviceProtocol,
+	printf("#	bDeviceProtocol: %d (0x%x)\n", dev->descriptor.bDeviceProtocol,
 	       dev->descriptor.bDeviceProtocol);
-	printf("idVendor: %d (0x%x)\n", dev->descriptor.idVendor,
+	printf("#	idVendor: %d (0x%x)\n", dev->descriptor.idVendor,
 	       dev->descriptor.idVendor);
-	printf("idProduct: %d (0x%x)\n", dev->descriptor.idProduct,
+	printf("#	idProduct: %d (0x%x)\n", dev->descriptor.idProduct,
 	       dev->descriptor.idProduct);
-	printf("bcdDevice: %d (0x%x)\n", dev->descriptor.bcdDevice,
+	printf("#	bcdDevice: %d (0x%x)\n", dev->descriptor.bcdDevice,
 	       dev->descriptor.bcdDevice);
-	printf("iManufacturer: %d (0x%x)\n", dev->descriptor.iManufacturer,
+	printf("#	iManufacturer: %d (0x%x)\n", dev->descriptor.iManufacturer,
 	       dev->descriptor.iManufacturer);
-	printf("iProduct: %d (0x%x)\n", dev->descriptor.iProduct,
+	printf("#	iProduct: %d (0x%x)\n", dev->descriptor.iProduct,
 	       dev->descriptor.iProduct);
+	printf("#	bNumConfigurations: %d (0x%x)\n",dev->descriptor.bNumConfigurations,
+		dev->descriptor.bNumConfigurations);
+}
+
+
+void printStrings(void)
+{
+	char sManufacturer[256];
+	char sProduct[256];
+
+	if(usb_get_string_simple(iqrf->dev_handle, iqrf->dev->descriptor.iManufacturer, 
+		sManufacturer, sizeof(sManufacturer)))
+		printf("#	Manufacturer string: %s\n", sManufacturer);
+	else
+		printf("#	Cannot get manufacturer string.\n");
+
+	if(usb_get_string_simple(iqrf->dev_handle, iqrf->dev->descriptor.iProduct, sProduct, sizeof(sProduct)))
+		printf("#	Product string: %s\n", sProduct);
+	else
+		printf("#	Cannot get product string.\n");
 }
 #endif
 
@@ -82,6 +102,8 @@ static struct usb_device *liqrf_device_init(void)
 	struct usb_bus *usb_bus;
 	struct usb_device *dev;
 
+	usb_bus = usb_get_busses();
+
 	usb_init();
 	usb_find_busses();
 	usb_find_devices();
@@ -89,14 +111,16 @@ static struct usb_device *liqrf_device_init(void)
 	for (usb_bus = usb_busses; usb_bus; usb_bus = usb_bus->next) {
 		for (dev = usb_bus->devices; dev; dev = dev->next) {
 			if ((dev->descriptor.idVendor == IQRF_VENDOR_ID) &&
-			    (dev->descriptor.idProduct == IQRF_PRODUCT_ID))
+			    (dev->descriptor.idProduct == IQRF_PRODUCT_ID)) {
+#ifdef DEBUG
+				if (dev != NULL)
+					printDevDesc(dev);
+#endif	
 				return dev;
+			}
 		}
 	}
-#ifdef DEBUG
-	if (dev != NULL)
-		printDevDesc(dev);
-#endif
+
 	return NULL;
 }
 
@@ -116,7 +140,7 @@ static int liqrf_send_receive_packet(struct liqrf_obj *iqrf)
 	}
 #ifdef DEBUG
 	for (i = 0; i < iqrf->tx_len; i++)
-		printf("Written string: %X", iqrf->tx_buff[i]);
+		printf("Written string: %X\n", iqrf->tx_buff[i]);
 
 	printf("\n");
 #endif
@@ -130,7 +154,7 @@ static int liqrf_send_receive_packet(struct liqrf_obj *iqrf)
 	}
 #ifdef DEBUG
 	for (i = 0; i < ret_val; i++)
-		printf("Readed string: %X", iqrf->rx_buff[i]);
+		printf("Readed string: %X\n", iqrf->rx_buff[i]);
 
 	printf("\n");
 #endif
@@ -251,13 +275,13 @@ err:
 void tmr_handler(signo)
 {
 
-	if (!liqrf_read_write(iqrf, SPI_MODE_CHECK, 0))
+	if (!liqrf_read_write(iqrf, SPI_CHECKING, 0))
 		goto exit;
 	if ((liqrf_check_data(iqrf->rx_buff[iqrf->rx_len - 1]))
 	    == DATA_READY) {
 
 		iqrf->master_only_read = 1;
-		if (!liqrf_read_write(iqrf, SPI_MODE_NOT_CHECK,
+		if (!liqrf_read_write(iqrf, SPI_NOT_CHECKING,
 				      iqrf->rx_buff[iqrf->rx_len - 1] & 0x3F))
 			goto exit;
 	}
