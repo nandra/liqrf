@@ -3,8 +3,8 @@ CFLAGS = -Wall
 LDFLAGS = -lusb -lrt 
 
 
-EXEC = spi_example
-OBJS = usb.o
+EXEC = liqrf
+OBJS = usb.o hex_parser.o spi.o liqrf.o 
 
 all: $(EXEC)
 
