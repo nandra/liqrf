@@ -21,5 +21,20 @@
 #ifndef LIQRF_H
 #define LIQRF_H
 
+#include "usb.h"
+
+#define DEBUG
+
+#define BUF_LEN 64
+
+/* object for holding global variables */
+struct liqrf_obj {
+	struct usb_device *dev;
+	struct usb_dev_handle *dev_handle;
+	unsigned char rx_buff[BUF_LEN];
+	unsigned char tx_buff[BUF_LEN];
+	int tx_len;
+	int rx_len;
+};
 
 #endif

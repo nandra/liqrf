@@ -18,81 +18,32 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-#include <ctype.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
+#ifndef USB_H
+#define USB_H
 
-#include "liqrf.h"
+#include <usb.h>
 
-void print_help(void)
-{
-	fprintf(stderr, "Using ./liqrf -f <hex file> [-v]\n");		
-	fprintf(stderr, "-f <hex file> - hex file for loading \n");
-	fprintf(stderr, "-v - verbose output\n");
-}
+#define DEBUG_USB
 
+/* usb device has only 1 configuration 
+   and only 1 interface which consist 
+   from 2 interrupt endpoints 
+  
+   vendor id and product id only for 
+   CK USB2 (CK USB3 not supported yet)
+*/
 
-int main (int argc, char **argv)
-{
-	int verbose = 0;
-	struct liqrf_obj liqrf;
-	char *hex_file = NULL;
-	int c;
+#define IQRF_VENDOR_ID (0x04D8)
+#define IQRF_PRODUCT_ID (0x000C)
 
-	opterr = 0;
-	
-	if (argc < 2) {
-		fprintf (stderr, "You need to specify input hex file\n\n");
-		print_help();
-		goto exit;
-	}
-	
-	while ((c = getopt (argc, argv, "hvf:")) != -1) {
-  		switch (c) {
-		case 'v':
- 			verbose = 1;
- 			break;
-    		case 'f':
-      			hex_file = optarg;
-      			break;
-		case 'h':
-			print_help();			
-			break;
-    		case '?':
-      			if (optopt == 'f') {
-        			fprintf (stderr, "Option -%c requires an argument.\n", optopt);
-			} else if (isprint (optopt)) {
-        			fprintf (stderr, "Unknown option `-%c'.\n\n", optopt);
-				print_help();
-			} else {
-				fprintf (stderr, "Unknown option character `\\x%x'.\n", optopt);
-			}
-      			goto exit;
-			break;
-    		default:
-      			goto exit;
-			break;
-    		}
-	}
+/* endpoint numbers */
+#define OUT_EP_NR (0x01)
+#define IN_EP_NR (0x81)
 
-	liqrf.dev = liqrf_device_init();
-	
-	if (liqrf.dev == NULL) {
-		fprintf(stderr, "Could not init device\n");
-		goto exit;
-	}
+/* exports */
+struct usb_device *liqrf_device_init(void);
+int liqrf_send_receive_packet(struct usb_dev_handle *dev_handle, 
+				char *tx_buff, int tx_len, char *rx_buff, int rx_len);
+#define liqrf_device_open(dev) usb_open(dev)
 
-/* FIXME: use global debug or verbose level */
-// 	usb_set_debug(dbg_level);
-
-	liqrf.dev_handle = liqrf_device_open(liqrf.dev);
-
-	if (liqrf.dev_handle == NULL) {
-		fprintf(stderr, "Could not open device\n");
-		goto exit;
-	}
-
-exit:	
-	return 0;
-}
+#endif /* USB_H */
