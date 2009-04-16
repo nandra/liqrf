@@ -2,7 +2,7 @@ FW uploader for iqrf devices.
 More informations at: http://iqrf.com
 Project page: http://open-nandra.com/?page_id=108
 
-Packet structure:
+SPI Packet structure:
 The master can send two types of packets with the following structure:
 Master checks the SPI status of the module:
        Master        SPI_CHECK
