@@ -18,3 +18,103 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
+
+#include <stdio.h>
+#include <errno.h>
+#include <string.h>
+#include <stdlib.h>
+#include "hex_parser.h"
+
+#define MAX_DATA 32
+
+
+/*
+	read and parse data from hex file
+	parameters: hexfile - file name
+	return: pointer to program data object
+			NULL in case of problem
+	note: created object program_data should
+		  be freed later in program
+*/
+program_data *hex_get_data(char *hexfile)
+{
+	program_data *prog_obj;
+	FILE *hex;
+	int	len, adr, type;
+	unsigned int data;
+	int i;
+
+	// init program object
+	prog_obj = (program_data *) malloc(sizeof(program_data));
+	if(prog_obj == NULL) 
+	{
+		fprintf(stderr, "Not enough memory.\n");
+		return NULL;
+	}
+	prog_obj->eeprom_size = 0;
+	prog_obj->flash_size = 0;
+
+	// open hex file
+	hex = fopen(hexfile, "r");
+	if(hex == NULL)
+	{
+		fprintf(stderr, "Cannot open file %s\n", hexfile);
+		return NULL;
+	}
+
+	// read hex file
+	while(1)
+	{
+		if(fscanf(hex, ":%2x%4x%2x", &len, &adr, &type) != 3)
+		{
+			fclose(hex);
+			free(prog_obj);
+			return NULL;
+		}
+		printf("lenght is %d, address is %d, type is %d\n", len, adr, type);
+
+		switch(type)
+		{
+			case DATA:	
+				// read data to buffer
+				for(i=0; i<len; i++)
+				{
+					if(fscanf(hex, "%2x", &data) == 0)
+					{
+						printf("read 0 data\n");
+						fclose(hex);
+						free(prog_obj);
+						return NULL;
+					}
+					printf("%d ", data);
+					if((adr >= FLASH_START_ADR) && (adr < FLASH_END_ADR))
+					{
+						prog_obj->flash[prog_obj->flash_size++] = data;
+					}
+					else if((adr >= EEPROM_START_ADR) && (adr < EEPROM_END_ADR))
+					{
+						prog_obj->eeprom[prog_obj->eeprom_size++] = data;
+						fscanf(hex,"%2x", &data);			// skip every second byte (=0x00)
+						i++;
+					}
+				}
+				printf("\n");
+				break;
+
+			case END_OF_FILE:
+				fclose(hex);
+				return prog_obj;
+
+			default:
+				fprintf(stderr, "Unsupported type of hex format.\n");
+				fclose(hex);
+				free(prog_obj);
+				return NULL;
+		}
+
+		// go to end of line
+		while(getc(hex) != '\n')
+			;
+
+	}
+}
