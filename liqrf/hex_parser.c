@@ -76,11 +76,17 @@ program_data *hex_get_data(char *hexfile)
 				}
 				printf("%d ", data);
 				if ((adr >= FLASH_START_ADR) && (adr < FLASH_END_ADR)) {
-					prog_obj->flash[prog_obj->flash_size++] = data;
+					prog_obj->flash[prog_obj->flash_size] = data;
+
+					printf("flash[%d] = 0x%x\n", prog_obj->flash_size, 
+						prog_obj->flash[prog_obj->flash_size]);
+
+					prog_obj->flash_size++;
 				} else if ((adr >= EEPROM_START_ADR) && (adr < EEPROM_END_ADR)) {
 					prog_obj->eeprom[prog_obj->eeprom_size] = data;
 
-	printf("eeprom[%d] = %x\n", prog_obj->eeprom_size, prog_obj->eeprom[prog_obj->eeprom_size]);
+					printf("eeprom[%d] = 0x%x\n", prog_obj->eeprom_size, 
+						prog_obj->eeprom[prog_obj->eeprom_size]);
 
 					prog_obj->eeprom_size++;
 					fscanf(hex,"%2x", &data); // skip every second byte (=0x00)
