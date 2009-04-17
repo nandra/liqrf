@@ -46,8 +46,8 @@ typedef enum {  DATA,
 }hex_type;
 
 typedef struct {
-	char eeprom[EEPROM_MAX_SIZE];
-	char flash[FLASH_MAX_SIZE];
+	unsigned char eeprom[EEPROM_MAX_SIZE];
+	unsigned char flash[FLASH_MAX_SIZE];
 	unsigned int eeprom_size;
 	unsigned int flash_size;
 }program_data;
