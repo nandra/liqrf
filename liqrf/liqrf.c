@@ -21,6 +21,7 @@
 #include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <unistd.h>
 
 #include "liqrf.h"
@@ -32,6 +33,75 @@ void print_help(void)
 	fprintf(stderr, "-v - verbose output\n");
 }
 
+unsigned char count_checksum(unsigned char *data, int len)
+{
+	int i = 0, result = 0;
+
+	for (i = 0; i < len; i++)
+		result ^= data[i];
+	
+	return result;
+}
+
+/* prepare data for usb transmission */
+int prepare_usb_data(int data_type, unsigned char *data, int data_len, 
+			unsigned short addr, struct liqrf_obj *obj)
+{
+	int i, data_fill = 0;
+
+	memset(obj->tx_buff, 0, sizeof(obj->tx_buff));
+
+	switch (data_type) {
+	case EEPROM_PROG:
+		obj->tx_buff[0] = PROG_MODE;
+		obj->tx_buff[1] = EEPROM_DATA;
+		obj->tx_buff[2] = UNKNOWN;
+		/* address is just one byte */
+		obj->tx_buff[3] = addr & 0xFF;
+		/*FIXME this is currently not known suppose */
+		obj->tx_buff[4] = data_len;
+
+		memcpy(&obj->tx_buff[5], data, data_len);
+		obj->tx_buff[5 + data_len] = count_checksum(&data[4], 1+data_len);
+		printf("eeprom data len = %d\n", data_len);
+		for (i = 0; i < BUF_LEN; i++)
+			printf("%2x ", obj->tx_buff[i]);		
+
+		printf("\n");				
+		break;
+	
+	case FLASH_PROG:
+		obj->tx_buff[0] = PROG_MODE;
+		obj->tx_buff[1] = FLASH_DATA;
+		obj->tx_buff[2] = UNKNOWN;
+		obj->tx_buff[3] = addr & 0xFF;
+		obj->tx_buff[4] = (addr >> 8) & 0xFF;
+
+		memcpy(&obj->tx_buff[5], data, data_len);
+		/* if we have less data then block size 
+		   fill it with 0xFF and 0x3F
+		*/
+		if (data_len < FLASH_BLOCK_SIZE) {
+			data_fill = FLASH_BLOCK_SIZE - data_len;
+			
+			for (i = 0; i < data_fill; i++) {
+				obj->tx_buff[5 + data_len + i++] = 0xFF;
+				obj->tx_buff[5 + data_len + i] = 0x3F;
+			}
+		} 
+		obj->tx_buff[5 + data_len + data_fill] = count_checksum(&data[4], 1+data_len);
+		printf("flash data len = %d\n", data_len);
+		for (i = 0; i < BUF_LEN; i++)
+			printf("%2x ", obj->tx_buff[i]);		
+
+		printf("\n");		
+		break;
+	default:
+		fprintf(stderr, "Unsupported data!\n");
+		break;
+	}
+	return 0;
+}
 
 int main (int argc, char **argv)
 {
@@ -41,7 +111,9 @@ int main (int argc, char **argv)
 	int c;
 	program_data *hex_data;
 	opterr = 0;
-	
+	int flash_addr = FLASH_BASE_ADDR;
+	int len = 0, block_count;
+
 	if (argc < 2) {
 		fprintf (stderr, "You need to specify input hex file\n\n");
 		print_help();
@@ -97,8 +169,30 @@ int main (int argc, char **argv)
 	if (hex_data == NULL)
 		goto exit;
 
-	for (c= 0; c < EEPROM_MAX_SIZE; c++)
-		printf("EEPROM[%d] = 0x%X\n",c, hex_data->eeprom[c]);
+	/* first start prepare eeprom data */
+	if (hex_data->eeprom_size) 
+		prepare_usb_data(EEPROM_PROG, hex_data->eeprom, hex_data->eeprom_size, 
+				EEPROM_BASE_ADDR, &liqrf);
+	
+	/* prepare flash data by 32 bytes blocks */
+	block_count = hex_data->flash_size / FLASH_BLOCK_SIZE;
+	
+	if (hex_data->flash_size % FLASH_BLOCK_SIZE) 
+		block_count++;
+	
+	for (c = 0; c < block_count; c++) {
+		if ((hex_data->flash_size - (c * FLASH_BLOCK_SIZE)) < FLASH_BLOCK_SIZE)
+			len = hex_data->flash_size - (c * FLASH_BLOCK_SIZE);
+		else 
+			len = FLASH_BLOCK_SIZE;
+
+		prepare_usb_data(FLASH_PROG, &hex_data->flash[c*FLASH_BLOCK_SIZE], len, 
+			flash_addr, &liqrf);	
+		flash_addr += FLASH_ADDR_STEP;
+	}	
+	
 exit:	
+	if (hex_data)
+		hex_free_memory(hex_data);
 	return 0;
 }

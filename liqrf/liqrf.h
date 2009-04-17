@@ -38,4 +38,12 @@ struct liqrf_obj {
 	int rx_len;
 };
 
+#define EEPROM_PROG 0x01
+#define FLASH_PROG 0x02
+
+#define FLASH_BLOCK_SIZE (32) 
+#define EEPROM_BASE_ADDR (0xA0)
+#define FLASH_BASE_ADDR (0x0E00)
+#define FLASH_ADDR_STEP (0x10)
+
 #endif
