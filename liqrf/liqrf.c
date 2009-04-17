@@ -39,7 +39,7 @@ int main (int argc, char **argv)
 	struct liqrf_obj liqrf;
 	char *hex_file = NULL;
 	int c;
-
+	program_data *hex_data;
 	opterr = 0;
 	
 	if (argc < 2) {
@@ -76,23 +76,29 @@ int main (int argc, char **argv)
     		}
 	}
 
-	liqrf.dev = liqrf_device_init();
-	
-	if (liqrf.dev == NULL) {
-		fprintf(stderr, "Could not init device\n");
+// 	liqrf.dev = liqrf_device_init();
+// 	
+// 	if (liqrf.dev == NULL) {
+// 		fprintf(stderr, "Could not init device\n");
+// 		goto exit;
+// 	}
+// 
+// /* FIXME: use global debug or verbose level */
+// // 	usb_set_debug(dbg_level);
+// 
+// 	liqrf.dev_handle = liqrf_device_open(liqrf.dev);
+// 
+// 	if (liqrf.dev_handle == NULL) {
+// 		fprintf(stderr, "Could not open device\n");
+// 		goto exit;
+// 	}
+	hex_data = hex_get_data(hex_file);
+
+	if (hex_data == NULL)
 		goto exit;
-	}
 
-/* FIXME: use global debug or verbose level */
-// 	usb_set_debug(dbg_level);
-
-	liqrf.dev_handle = liqrf_device_open(liqrf.dev);
-
-	if (liqrf.dev_handle == NULL) {
-		fprintf(stderr, "Could not open device\n");
-		goto exit;
-	}
-
+	for (c= 0; c < EEPROM_MAX_SIZE; c++)
+		printf("EEPROM[%d] = 0x%X\n",c, hex_data->eeprom[c]);
 exit:	
 	return 0;
 }

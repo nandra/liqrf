@@ -22,6 +22,7 @@
 #define LIQRF_H
 
 #include "usb.h"
+#include "hex_parser.h"
 
 #define DEBUG
 
