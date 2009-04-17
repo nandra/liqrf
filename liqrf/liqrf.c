@@ -62,10 +62,10 @@ int prepare_usb_data(int data_type, unsigned char *data, int data_len,
 		obj->tx_buff[4] = data_len;
 
 		memcpy(&obj->tx_buff[5], data, data_len);
-		obj->tx_buff[5 + data_len] = count_checksum(&data[4], 1+data_len);
+		obj->tx_buff[5 + data_len] = 0x5f ^ count_checksum(&obj->tx_buff[1], sizeof(obj->tx_buff) -1);
 		printf("eeprom data len = %d\n", data_len);
 		for (i = 0; i < BUF_LEN; i++)
-			printf("%2x ", obj->tx_buff[i]);		
+			printf("%02x ", obj->tx_buff[i]);		
 
 		printf("\n");				
 		break;
@@ -89,10 +89,12 @@ int prepare_usb_data(int data_type, unsigned char *data, int data_len,
 				obj->tx_buff[5 + data_len + i] = 0x3F;
 			}
 		} 
-		obj->tx_buff[5 + data_len + data_fill] = count_checksum(&data[4], 1+data_len);
+		obj->tx_buff[5 + data_len + data_fill] = 0x5f ^ count_checksum(&obj->tx_buff[1], 
+			sizeof(obj->tx_buff) -1);
+
 		printf("flash data len = %d\n", data_len);
 		for (i = 0; i < BUF_LEN; i++)
-			printf("%2x ", obj->tx_buff[i]);		
+			printf("%02x ", obj->tx_buff[i]);		
 
 		printf("\n");		
 		break;
