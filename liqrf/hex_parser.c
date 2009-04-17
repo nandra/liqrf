@@ -29,25 +29,24 @@
 
 
 /*
-	read and parse data from hex file
-	parameters: hexfile - file name
-	return: pointer to program data object
-			NULL in case of problem
-	note: created object program_data should
-		  be freed later in program
+   read and parse data from hex file
+   parameters: hexfile - file name
+   return: pointer to program data object
+	   NULL in case of problem
+   note: created object program_data should
+	  be freed later in program
 */
 program_data *hex_get_data(char *hexfile)
 {
 	program_data *prog_obj;
 	FILE *hex;
 	int	len, adr, type;
-	unsigned int data;
+	unsigned int data;	// temporary buffer for data
 	int i;
 
 	// init program object
 	prog_obj = (program_data *) malloc(sizeof(program_data));
-	if(prog_obj == NULL) 
-	{
+	if (prog_obj == NULL) {
 		fprintf(stderr, "Not enough memory.\n");
 		return NULL;
 	}
@@ -56,65 +55,57 @@ program_data *hex_get_data(char *hexfile)
 
 	// open hex file
 	hex = fopen(hexfile, "r");
-	if(hex == NULL)
-	{
+	if (hex == NULL) {
 		fprintf(stderr, "Cannot open file %s\n", hexfile);
 		return NULL;
 	}
 
 	// read hex file
-	while(1)
-	{
-		if(fscanf(hex, ":%2x%4x%2x", &len, &adr, &type) != 3)
-		{
-			fclose(hex);
-			free(prog_obj);
-			return NULL;
+	while (1) {
+		if (fscanf(hex, ":%2x%4x%2x", &len, &adr, &type) != 3) {
+			goto read_err;
 		}
 		printf("lenght is %d, address is %d, type is %d\n", len, adr, type);
 
-		switch(type)
-		{
-			case DATA:	
-				// read data to buffer
-				for(i=0; i<len; i++)
-				{
-					if(fscanf(hex, "%2x", &data) == 0)
-					{
-						printf("read 0 data\n");
-						fclose(hex);
-						free(prog_obj);
-						return NULL;
-					}
-					printf("%d ", data);
-					if((adr >= FLASH_START_ADR) && (adr < FLASH_END_ADR))
-					{
-						prog_obj->flash[prog_obj->flash_size++] = data;
-					}
-					else if((adr >= EEPROM_START_ADR) && (adr < EEPROM_END_ADR))
-					{
-						prog_obj->eeprom[prog_obj->eeprom_size++] = data;
-						fscanf(hex,"%2x", &data);			// skip every second byte (=0x00)
-						i++;
-					}
+		switch (type) {
+		case DATA:	
+			// read data to buffer
+			for (i=0; i<len; i++) {
+				if (fscanf(hex, "%2x", &data) != 1){
+					goto read_err;
 				}
-				printf("\n");
-				break;
+				printf("%d ", data);
+				if ((adr >= FLASH_START_ADR) && (adr < FLASH_END_ADR)) {
+					prog_obj->flash[prog_obj->flash_size++] = data;
+				} else if ((adr >= EEPROM_START_ADR) && (adr < EEPROM_END_ADR)) {
+					prog_obj->eeprom[prog_obj->eeprom_size] = data;
 
-			case END_OF_FILE:
-				fclose(hex);
-				return prog_obj;
+	printf("eeprom[%d] = %x\n", prog_obj->eeprom_size, prog_obj->eeprom[prog_obj->eeprom_size]);
 
-			default:
-				fprintf(stderr, "Unsupported type of hex format.\n");
-				fclose(hex);
-				free(prog_obj);
-				return NULL;
+					prog_obj->eeprom_size++;
+					fscanf(hex,"%2x", &data); // skip every second byte (=0x00)
+					i++;
+				}
+				// other addresses are ignored
+			}
+			printf("\n");
+			break;
+		case END_OF_FILE:
+			fclose(hex);
+			return prog_obj;
+		default:
+			fprintf(stderr, "Unsupported type of hex format.\n");
+			goto read_err;
 		}
 
 		// go to end of line
-		while(getc(hex) != '\n')
+		while (getc(hex) != '\n')	// end of file check?
 			;
 
 	}
+
+	read_err:
+		fclose(hex);
+		free(prog_obj);
+		return NULL;
 }

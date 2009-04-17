@@ -28,19 +28,22 @@
 #define EEPROM_MAX_SIZE	32
 #define FLASH_MAX_SIZE	1000
 
-#define EEPROM_START_ADR	0x1c00
-#define EEPROM_END_ADR		0x4300	
-#define FLASH_START_ADR		0x4340
-#define FLASH_END_ADR		0xffff
+#define FLASH_START_ADR		0x1c00
+#define FLASH_END_ADR		0x4300	
+#define EEPROM_START_ADR	0x4340
+#define EEPROM_END_ADR		0xffff
 #endif
+
+#define hex_free_memory(x) free(x)
+
 // types of hex records
 typedef enum {  DATA, 
-				END_OF_FILE, 
-				EXTENDED_SEGMENT_ADR, 
-				START_SEGMENT_ADR, 
-				EXTENDED_LINEAR_ADR, 
-				START_LINEAR_ADR 
-			 }hex_type;
+		END_OF_FILE, 
+		EXTENDED_SEGMENT_ADR, 
+		START_SEGMENT_ADR, 
+		EXTENDED_LINEAR_ADR, 
+		START_LINEAR_ADR 
+}hex_type;
 
 typedef struct {
 	char eeprom[EEPROM_MAX_SIZE];
