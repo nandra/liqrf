@@ -27,17 +27,17 @@
 #include "liqrf.h"
 
 /* count checksum */
-unsigned char count_checksum(unsigned char *data, int len)
-{
-	int i = 0; 
-	/* value defined in SPI docu */
-	int result = 0x5f;
-
-	for (i = 0; i < len; i++)
-		result ^= data[i];
-	
-	return result;
-}
+// unsigned char count_crc_tx(unsigned char *data, int len)
+// {
+// 	int i = 0; 
+// 	/* value defined in SPI docu */
+// 	int result = 0x5f;
+// 
+// 	for (i = 0; i < len; i++)
+// 		result ^= data[i];
+// 	
+// 	return result;
+// }
 
 /* send data in object via usb */
 int usb_send_data(struct liqrf_obj *obj) 
@@ -60,7 +60,7 @@ void enter_prog_mode(struct liqrf_obj *obj)
 
 	obj->tx_buff[0] = CMD_ENTER_PROG;
 	obj->tx_buff[1] = UNKNOWN_PROG;
-	obj->tx_buff[2] = count_checksum(&obj->tx_buff[1], sizeof(obj->tx_buff) -1);
+	obj->tx_buff[2] = count_crc_tx(&obj->tx_buff[1], sizeof(obj->tx_buff) -1);
 	
 	obj->tx_len = 3;
 	obj->rx_len = 3;
@@ -71,26 +71,81 @@ void enter_prog_mode(struct liqrf_obj *obj)
 	usb_send_data(obj);
 }
 
-/* fill transmission buffer with spi check command */
-void prepare_spi_check_mode(struct liqrf_obj *obj)
+
+/* fill transmission buffer with enter prog mode data 1
+   which are currently unknow (some data for module via SPI)
+   data: 01 F5 81 00 2B
+   rece: 81 81 00 DE 3F 3F 48 48 48 48 
+*/
+int enter_prog_mode_part1(struct liqrf_obj *obj)
 {
+	int i = 0;
+	int ret_val = 0;
+
 	memset(obj->tx_buff, 0, sizeof(obj->tx_buff));
 	memset(obj->rx_buff, 0, sizeof(obj->rx_buff));
 	
 	obj->tx_buff[0] = CMD_FOR_CK;
-	obj->tx_buff[1] = 0;
-	obj->tx_buff[2] = 0;
-	obj->tx_buff[3] = 0;
-	obj->tx_buff[4] = 0;
+	obj->tx_buff[1] = 0xF5;
+	obj->tx_buff[3] = 0x81;
+	obj->tx_buff[4] = 0x00;
+	obj->tx_buff[5] = count_crc_tx(&obj->tx_buff[1], sizeof(obj->tx_buff) -1);
 	
-	obj->tx_len = 5;
-	obj->rx_len = 4;
+	obj->tx_len = 6;
+	/* hardcoded from log */
+	obj->rx_len = 10;
+	for (i = 0; i < BUF_LEN; i++)
+			printf("%02x ", obj->tx_buff[i]);		
+
+	printf("\n");	
+	usb_send_data(obj);
+	if (!check_crc_rx(&obj->rx_buff[2], 0x81, obj->rx_len - 3))
+		ret_val = 1;
+
+	return ret_val;
+	
+}
+
+
+/* fill transmission buffer with enter prog mode data 1
+   which are currently unknow (some data for module via SPI)
+   data: 01 F0 08 00 00 00 00 00 00 00 00 A7 
+   rece: 48 48 01 00 10 4F 22 02 30 03 1A 3F 81
+*/
+int enter_prog_mode_part2(struct liqrf_obj *obj)
+{
+	int i = 0;
+	int ret_val = 0;
+
+	memset(obj->tx_buff, 0, sizeof(obj->tx_buff));
+	memset(obj->rx_buff, 0, sizeof(obj->rx_buff));
+	
+	obj->tx_buff[0] = CMD_FOR_CK;
+	obj->tx_buff[1] = 0xF0;
+	obj->tx_buff[3] = 0x08;
+	
+	obj->tx_buff[11] = count_crc_tx(&obj->tx_buff[1], sizeof(obj->tx_buff) -1);
+	
+	obj->tx_len = 12;
+	obj->rx_len = 13;
+	for (i = 0; i < BUF_LEN; i++)
+			printf("%02x ", obj->tx_buff[i]);		
+
+	printf("\n");	
+	usb_send_data(obj);
+	
+	if (!check_crc_rx(&obj->rx_buff[2], 0x08, obj->rx_len - 3))
+		ret_val = 1;
+
+	return ret_val;
 }
 
 
 /* fill transmission buffer with spi check command */
-void enter_endprog_mode(struct liqrf_obj *obj)
+int enter_endprog_mode(struct liqrf_obj *obj)
 {
+	int ret_val = 0;
+
 	memset(obj->tx_buff, 0, sizeof(obj->tx_buff));
 	memset(obj->rx_buff, 0, sizeof(obj->rx_buff));
 	
@@ -100,11 +155,16 @@ void enter_endprog_mode(struct liqrf_obj *obj)
 	obj->tx_buff[3] = 0xDE;
 	obj->tx_buff[4] = 0x01;
 	obj->tx_buff[5] = 0xFF;
-	obj->tx_buff[6] = count_checksum(&obj->tx_buff[1], sizeof(obj->tx_buff) -1);;
+	obj->tx_buff[6] = count_crc_tx(&obj->tx_buff[1], sizeof(obj->tx_buff) -1);;
 	
 	obj->tx_len = 7;
 	obj->rx_len = 8;
+
 	usb_send_data(obj);
+
+	if (!check_crc_rx(&obj->rx_buff[2], 0x83, obj->rx_len - 3))
+		ret_val = 1;
+	return ret_val;
 }
 
 /* first check spi status */
@@ -112,8 +172,18 @@ int check_prog_mode(struct liqrf_obj *obj)
 {
 	unsigned char spi_stat = SPI_DISABLED;
 	int ret_val = 0;
+
+	memset(obj->tx_buff, 0, sizeof(obj->tx_buff));
+	memset(obj->rx_buff, 0, sizeof(obj->rx_buff));
+	/* prepare data for check spi status */	
+	obj->tx_buff[0] = CMD_FOR_CK;
+	obj->tx_buff[1] = 0;
+	obj->tx_buff[2] = 0;
+	obj->tx_buff[3] = 0;
+	obj->tx_buff[4] = 0;
 	
-	prepare_spi_check_mode(obj);
+	obj->tx_len = 5;
+	obj->rx_len = 4;
 
 	while (spi_stat != PROGRAMMING_MODE) {
 		if (usb_send_data(obj)) 
@@ -125,6 +195,7 @@ int check_prog_mode(struct liqrf_obj *obj)
 	ret_val = 1;
 	return ret_val;
 }
+
 
 
 /* prepare data for usb transmission */
@@ -146,7 +217,7 @@ void prepare_prog_data(int data_type, unsigned char *data, int data_len,
 		obj->tx_buff[4] = data_len;
 
 		memcpy(&obj->tx_buff[5], data, data_len);
-		obj->tx_buff[5 + data_len] = count_checksum(&obj->tx_buff[1], sizeof(obj->tx_buff) -1);
+		obj->tx_buff[5 + data_len] = count_crc_tx(&obj->tx_buff[1], sizeof(obj->tx_buff) -1);
 		printf("eeprom data len = %d\n", data_len);
 		for (i = 0; i < BUF_LEN; i++)
 			printf("%02x ", obj->tx_buff[i]);		
@@ -173,7 +244,7 @@ void prepare_prog_data(int data_type, unsigned char *data, int data_len,
 				obj->tx_buff[5 + data_len + i] = 0x3F;
 			}
 		} 
-		obj->tx_buff[5 + data_len + data_fill] = count_checksum(&obj->tx_buff[1], 
+		obj->tx_buff[5 + data_len + data_fill] = count_crc_tx(&obj->tx_buff[1], 
 			sizeof(obj->tx_buff) -1);
 
 		printf("flash data len = %d\n", data_len);

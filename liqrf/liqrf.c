@@ -103,6 +103,15 @@ int main (int argc, char **argv)
 
 	/* enter to prog mode */	
 	enter_prog_mode(&liqrf);
+
+	/* this parts are unknown 
+	   seems to some SPI cummunication
+	*/
+	if (enter_prog_mode_part1(&liqrf))
+		goto exit;
+
+	if (enter_prog_mode_part2(&liqrf))
+		goto exit;
 	
 	/* send spi status cmd and wait for programming status */
 	if (check_prog_mode(&liqrf)) {

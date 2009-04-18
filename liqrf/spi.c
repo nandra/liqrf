@@ -65,7 +65,7 @@ enum data_status spi_check_data(unsigned char spi_status)
 }
 
 /* count CRC for transmission */
-unsigned char count_CRC_tx(unsigned char *buff, int len)
+unsigned char count_crc_tx(unsigned char *buff, int len)
 {
 	unsigned char crc_val;
 	int i = 0;
@@ -79,53 +79,19 @@ unsigned char count_CRC_tx(unsigned char *buff, int len)
 }
 
 /* count CRC for received buffer */
-unsigned char check_CRC_rx(unsigned char *buff, int PTYPE, int DLEN)
+unsigned char check_crc_rx(unsigned char *buff, int PTYPE, int len)
 {
 	unsigned char i, crc_val;
 
 	crc_val = 0x5F ^ PTYPE;
 
-	for (i = 2; i < DLEN + 2; i++)
+	for (i = 0; i < len; i++)
 		crc_val ^= buff[i];
 
-	if (buff[DLEN + 2] == crc_val)
+	if (buff[len + 1] == crc_val)
 		return 1;
-
+	
+	fprintf(stderr, "Wrong checksum!\n");
 	return 0;
 }
 
-/* read and write to module via SPI */
-// int liqrf_read_write(struct liqrf_obj *iqrf, int spi_check, int DLEN)
-// {
-// 	int PTYPE = 0;
-// 	memset(iqrf->rx_buff, 0, sizeof(iqrf->rx_buff));
-// 
-// 	if (spi_check) {
-// 		iqrf->tx_buff[1] = 0x00;
-// 	} else {
-// 		if (iqrf->master_only_read)
-// 			PTYPE = DLEN & 0x7F;
-// 		else
-// 			PTYPE = DLEN | 0x80;
-// 
-// 		iqrf->tx_buff[1] = SPI_R_W;
-// 		iqrf->tx_buff[2] = PTYPE;
-// 		iqrf->tx_buff[DLEN + 3] = count_CRC_tx(iqrf->tx_buff, DLEN + 3);
-// 	}
-// 	iqrf->tx_buff[0] = CMD_FOR_CK;
-// 
-// 	iqrf->tx_len = DLEN + 5;
-// 	iqrf->rx_len = DLEN + 4;
-// 
-// 	if (liqrf_send_receive_packet(iqrf))
-// 		goto err;
-// 
-// 	memset(iqrf->tx_buff, 0, sizeof(iqrf->tx_buff));
-// 
-// 	if (!spi_check)
-// 		/* check CRC for received packet */
-// 		if (!check_CRC_rx(iqrf->rx_buff, PTYPE, DLEN))
-// 			return 0;
-// err:
-// 	return 1;
-// }
