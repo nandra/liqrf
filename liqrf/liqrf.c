@@ -33,77 +33,6 @@ void print_help(void)
 	fprintf(stderr, "-v - verbose output\n");
 }
 
-unsigned char count_checksum(unsigned char *data, int len)
-{
-	int i = 0, result = 0;
-
-	for (i = 0; i < len; i++)
-		result ^= data[i];
-	
-	return result;
-}
-
-/* prepare data for usb transmission */
-int prepare_usb_data(int data_type, unsigned char *data, int data_len, 
-			unsigned short addr, struct liqrf_obj *obj)
-{
-	int i, data_fill = 0;
-
-	memset(obj->tx_buff, 0, sizeof(obj->tx_buff));
-
-	switch (data_type) {
-	case EEPROM_PROG:
-		obj->tx_buff[0] = PROG_MODE;
-		obj->tx_buff[1] = EEPROM_DATA;
-		obj->tx_buff[2] = UNKNOWN;
-		/* address is just one byte */
-		obj->tx_buff[3] = addr & 0xFF;
-		/*FIXME this is currently not known suppose */
-		obj->tx_buff[4] = data_len;
-
-		memcpy(&obj->tx_buff[5], data, data_len);
-		obj->tx_buff[5 + data_len] = 0x5f ^ count_checksum(&obj->tx_buff[1], sizeof(obj->tx_buff) -1);
-		printf("eeprom data len = %d\n", data_len);
-		for (i = 0; i < BUF_LEN; i++)
-			printf("%02x ", obj->tx_buff[i]);		
-
-		printf("\n");				
-		break;
-	
-	case FLASH_PROG:
-		obj->tx_buff[0] = PROG_MODE;
-		obj->tx_buff[1] = FLASH_DATA;
-		obj->tx_buff[2] = UNKNOWN;
-		obj->tx_buff[3] = addr & 0xFF;
-		obj->tx_buff[4] = (addr >> 8) & 0xFF;
-
-		memcpy(&obj->tx_buff[5], data, data_len);
-		/* if we have less data then block size 
-		   fill it with 0xFF and 0x3F
-		*/
-		if (data_len < FLASH_BLOCK_SIZE) {
-			data_fill = FLASH_BLOCK_SIZE - data_len;
-			
-			for (i = 0; i < data_fill; i++) {
-				obj->tx_buff[5 + data_len + i++] = 0xFF;
-				obj->tx_buff[5 + data_len + i] = 0x3F;
-			}
-		} 
-		obj->tx_buff[5 + data_len + data_fill] = 0x5f ^ count_checksum(&obj->tx_buff[1], 
-			sizeof(obj->tx_buff) -1);
-
-		printf("flash data len = %d\n", data_len);
-		for (i = 0; i < BUF_LEN; i++)
-			printf("%02x ", obj->tx_buff[i]);		
-
-		printf("\n");		
-		break;
-	default:
-		fprintf(stderr, "Unsupported data!\n");
-		break;
-	}
-	return 0;
-}
 
 int main (int argc, char **argv)
 {
@@ -111,13 +40,13 @@ int main (int argc, char **argv)
 	struct liqrf_obj liqrf;
 	char *hex_file = NULL;
 	int c;
-	program_data *hex_data;
+	program_data *hex_data = NULL;
 	opterr = 0;
 	int flash_addr = FLASH_BASE_ADDR;
 	int len = 0, block_count;
 
 	if (argc < 2) {
-		fprintf (stderr, "You need to specify input hex file\n\n");
+		fprintf (stderr, "You need to specify input hex file name!\n\n");
 		print_help();
 		goto exit;
 	}
@@ -166,35 +95,49 @@ int main (int argc, char **argv)
 // 		fprintf(stderr, "Could not open device\n");
 // 		goto exit;
 // 	}
+	/* get eeprom and flash data */
 	hex_data = hex_get_data(hex_file);
 
 	if (hex_data == NULL)
 		goto exit;
 
-	/* first start prepare eeprom data */
-	if (hex_data->eeprom_size) 
-		prepare_usb_data(EEPROM_PROG, hex_data->eeprom, hex_data->eeprom_size, 
-				EEPROM_BASE_ADDR, &liqrf);
+	/* enter to prog mode */	
+	enter_prog_mode(&liqrf);
 	
-	/* prepare flash data by 32 bytes blocks */
-	block_count = hex_data->flash_size / FLASH_BLOCK_SIZE;
+	/* send spi status cmd and wait for programming status */
+	if (check_prog_mode(&liqrf)) {
+		
+		/* first start prepare eeprom data */
+		if (hex_data->eeprom_size) 
+			prepare_prog_data(EEPROM_PROG, hex_data->eeprom, hex_data->eeprom_size, 
+					EEPROM_BASE_ADDR, &liqrf);
+		usb_send_data(&liqrf);
 	
-	if (hex_data->flash_size % FLASH_BLOCK_SIZE) 
-		block_count++;
+		/* prepare flash data by 32 bytes blocks */
+		block_count = hex_data->flash_size / FLASH_BLOCK_SIZE;
 	
-	for (c = 0; c < block_count; c++) {
-		if ((hex_data->flash_size - (c * FLASH_BLOCK_SIZE)) < FLASH_BLOCK_SIZE)
-			len = hex_data->flash_size - (c * FLASH_BLOCK_SIZE);
-		else 
-			len = FLASH_BLOCK_SIZE;
+		if (hex_data->flash_size % FLASH_BLOCK_SIZE) 
+			block_count++;
+	
+		for (c = 0; c < block_count; c++) {
+			if ((hex_data->flash_size - (c * FLASH_BLOCK_SIZE)) < FLASH_BLOCK_SIZE)
+				len = hex_data->flash_size - (c * FLASH_BLOCK_SIZE);
+			else 
+				len = FLASH_BLOCK_SIZE;
 
-		prepare_usb_data(FLASH_PROG, &hex_data->flash[c*FLASH_BLOCK_SIZE], len, 
-			flash_addr, &liqrf);	
-		flash_addr += FLASH_ADDR_STEP;
-	}	
+			prepare_prog_data(FLASH_PROG, &hex_data->flash[c*FLASH_BLOCK_SIZE], len, 
+						flash_addr, &liqrf);	
+			
+			usb_send_data(&liqrf);
+			flash_addr += FLASH_ADDR_STEP;
+		}
+		/* send end progmode request */		
+		enter_endprog_mode(&liqrf);
+	}
+	
 	
 exit:	
-	if (hex_data)
+	if (hex_data != NULL)
 		hex_free_memory(hex_data);
 	return 0;
 }

@@ -22,6 +22,7 @@
 #define LIQRF_H
 
 #include "usb.h"
+#include "spi.h"
 #include "hex_parser.h"
 
 #define DEBUG
@@ -45,5 +46,13 @@ struct liqrf_obj {
 #define EEPROM_BASE_ADDR (0xA0)
 #define FLASH_BASE_ADDR (0x0E00)
 #define FLASH_ADDR_STEP (0x10)
+
+unsigned char count_checksum(unsigned char *data, int len);
+void enter_prog_mode(struct liqrf_obj *obj);
+void enter_endprog_mode(struct liqrf_obj *obj);
+int check_prog_mode(struct liqrf_obj *obj);
+void prepare_prog_data(int data_type, unsigned char *data, int data_len, 
+			unsigned short addr, struct liqrf_obj *obj);
+int usb_send_data(struct liqrf_obj *obj);
 
 #endif

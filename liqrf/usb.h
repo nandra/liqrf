@@ -41,10 +41,15 @@
 #define IN_EP_NR (0x81)
 
 /* every usb write has following entries 
-   PROG_MODE, EEPROM_DATA or FLASH_DATA,
+   CMD_PROG, EEPROM_DATA or FLASH_DATA,
    UNKNOWN, address, data, checksum
 */
-#define PROG_MODE 0x07
+#define CMD_FOR_CK 0x01
+
+#define CMD_ENTER_PROG 0x02
+#define UNKNOWN_PROG 0xE6
+
+#define CMD_PROG 0x07
 #define EEPROM_DATA 0xF3
 #define FLASH_DATA 0xF6
 #define UNKNOWN 0xA2
@@ -52,7 +57,7 @@
 
 /* exports */
 struct usb_device *liqrf_device_init(void);
-int liqrf_send_receive_packet(struct usb_dev_handle *dev_handle, 
+int send_receive_packet(struct usb_dev_handle *dev_handle, 
 				char *tx_buff, int tx_len, char *rx_buff, int rx_len);
 #define liqrf_device_open(dev) usb_open(dev)
 

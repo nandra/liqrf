@@ -86,7 +86,7 @@ struct usb_device *liqrf_device_init(void)
 /* write to output endpoint and read
    data from input endpoint 
  */
-int liqrf_send_receive_packet(struct usb_dev_handle *dev_handle, 
+int send_receive_packet(struct usb_dev_handle *dev_handle, 
 				char *tx_buff, int tx_len, char *rx_buff, int rx_len)
 {
 	int ret_val = 0, i = 0;
