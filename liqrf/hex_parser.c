@@ -50,7 +50,8 @@ program_data *hex_get_data(char *hexfile)
 		fprintf(stderr, "Not enough memory.\n");
 		return NULL;
 	}
-	prog_obj->eeprom_size = 0;
+	prog_obj->app_eeprom_size = 0;
+	prog_obj->usr_eeprom_size = 0;
 	prog_obj->flash_size = 0;
 
 	// open hex file

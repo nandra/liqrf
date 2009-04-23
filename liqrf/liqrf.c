@@ -117,8 +117,8 @@ int main (int argc, char **argv)
 	if (check_prog_mode(&liqrf)) {
 		
 		/* first start prepare eeprom data */
-		if (hex_data->eeprom_size) 
-			prepare_prog_data(EEPROM_PROG, hex_data->eeprom, hex_data->eeprom_size, 
+		if (hex_data->app_eeprom_size) 
+			prepare_prog_data(EEPROM_PROG, hex_data->app_eeprom, hex_data->app_eeprom_size, 
 					EEPROM_BASE_ADDR, &liqrf);
 		usb_send_data(&liqrf);
 	
