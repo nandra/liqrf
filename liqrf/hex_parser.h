@@ -25,13 +25,16 @@
 #define	HEX88
 
 #ifdef	HEX88
-#define EEPROM_MAX_SIZE	32
-#define FLASH_MAX_SIZE	1000
+#define USR_EEPROM_MAX_SIZE	160
+#define APP_EEPROM_MAX_SIZE	32
+#define FLASH_MAX_SIZE		1000
 
 #define FLASH_START_ADR		0x1c00
-#define FLASH_END_ADR		0x4300	
-#define EEPROM_START_ADR	0x4340
-#define EEPROM_END_ADR		0xffff
+#define FLASH_END_ADR		FLASH_START_ADR+FLASH_MAX_SIZE+1
+#define USR_EEPROM_START_ADR	0X4200
+#define	USR_EEPROM_END_ADR	USR_EEPROM_START_ADR+USR_EEPROM_MAX_SIZE+1
+#define APP_EEPROM_START_ADR	0x4340
+#define APP_EEPROM_END_ADR	APP_EEPROM_START_ADR+APP_EEPROM_MAX_SIZE+1
 #endif
 
 #define hex_free_memory(x) free(x)
@@ -46,9 +49,11 @@ typedef enum {  DATA,
 }hex_type;
 
 typedef struct {
-	unsigned char eeprom[EEPROM_MAX_SIZE];
+	unsigned char app_eeprom[APP_EEPROM_MAX_SIZE];
+	unsigned char usr_eeprom[USR_EEPROM_MAX_SIZE];
 	unsigned char flash[FLASH_MAX_SIZE];
-	unsigned int eeprom_size;
+	unsigned int app_eeprom_size;
+	unsigned int usr_eeprom_size;
 	unsigned int flash_size;
 }program_data;
 

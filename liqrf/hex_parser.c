@@ -82,13 +82,24 @@ program_data *hex_get_data(char *hexfile)
 						prog_obj->flash[prog_obj->flash_size]);
 
 					prog_obj->flash_size++;
-				} else if ((adr >= EEPROM_START_ADR) && (adr < EEPROM_END_ADR)) {
-					prog_obj->eeprom[prog_obj->eeprom_size] = data;
+				} else if ((adr >= USR_EEPROM_START_ADR) && 
+						(adr < USR_EEPROM_END_ADR)) {
+					prog_obj->usr_eeprom[prog_obj->usr_eeprom_size] = data;
 
-					printf("eeprom[%d] = 0x%x\n", prog_obj->eeprom_size, 
-						prog_obj->eeprom[prog_obj->eeprom_size]);
+					printf("usr_eeprom[%d] = 0x%x\n", prog_obj->usr_eeprom_size, 
+						prog_obj->usr_eeprom[prog_obj->usr_eeprom_size]);
 
-					prog_obj->eeprom_size++;
+					prog_obj->usr_eeprom_size++;
+					fscanf(hex,"%2x", &data); // skip every second byte (=0x00)
+					i++;
+				} else if ((adr >= APP_EEPROM_START_ADR) && 
+						(adr < APP_EEPROM_END_ADR)) {
+					prog_obj->app_eeprom[prog_obj->app_eeprom_size] = data;
+
+					printf("app_eeprom[%d] = 0x%x\n", prog_obj->app_eeprom_size, 
+						prog_obj->app_eeprom[prog_obj->app_eeprom_size]);
+
+					prog_obj->app_eeprom_size++;
 					fscanf(hex,"%2x", &data); // skip every second byte (=0x00)
 					i++;
 				}
