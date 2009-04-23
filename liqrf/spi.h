@@ -18,47 +18,26 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-#ifndef USB_H
-#define USB_H
+#ifndef SPI_H
+#define SPI_H
 
-#include <usb.h>
-
-#define DEBUG_USB
-
-/* usb device has only 1 configuration 
-   and only 1 interface which consist 
-   from 2 interrupt endpoints 
-  
-   vendor id and product id only for 
-   CK USB2 (CK USB3 not supported yet)
-*/
-
-#define IQRF_VENDOR_ID (0x04D8)
-#define IQRF_PRODUCT_ID (0x000C)
-
-/* endpoint numbers */
-#define OUT_EP_NR (0x01)
-#define IN_EP_NR (0x81)
-
-/* every usb write has following entries 
-   CMD_PROG, EEPROM_DATA or FLASH_DATA,
-   UNKNOWN, address, data, checksum
-*/
-#define CMD_FOR_CK 0x01
-
-#define CMD_ENTER_PROG 0x02
-#define UNKNOWN_PROG 0xE6
-
-#define CMD_PROG 0x07
-#define EEPROM_DATA 0xF3
-#define FLASH_DATA 0xF6
-#define UNKNOWN 0xA2
+enum data_status {
+        DATA_NOT_READY,
+        DATA_READY,
+};
 
 
-/* exports */
-struct usb_device *liqrf_device_init(void);
-int send_receive_packet(struct usb_dev_handle *dev_handle, 
-				char *tx_buff, int tx_len, char *rx_buff, int rx_len);
-#define liqrf_device_open(dev) usb_open(dev)
+#define NO_MODULE_ON_USB        0xFF    // SPI not working (HW error)
+#define SPI_DISABLED            0x00    // SPI not working (disabled)
+#define SPI_CRCM_OK             0x3F    // SPI not ready (full buffer, last CRCM ok)
+#define SPI_CRCM_ERR            0x3E    // SPI not ready (full buffer, last CRCM error)
+#define COMMUNICATION_MODE      0x80    // SPI ready (communication mode)
+#define PROGRAMMING_MODE        0x81    // SPI ready (programming mode)
+#define DEBUG_MODE              0x82    // SPI ready (debugging mode)
+#define SPI_SLOW_MODE           0x83    // SPI is not working on the background - Slow mode
+#define SPI_USER_STOP           0x07    // state after stopSPI();
 
-#endif /* USB_H */
+unsigned char count_crc_tx(unsigned char *buff, int len);
+unsigned char check_crc_rx(unsigned char *buff, int PTYPE, int len);
+
+#endif /* SPI_H */

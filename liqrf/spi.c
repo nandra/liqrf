@@ -18,3 +18,80 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
+
+#include <stdio.h>
+#include <string.h>
+#include "spi.h"
+
+
+/* parse status and check if data are ready */
+enum data_status spi_check_data(unsigned char spi_status)
+{
+	enum data_status stat = DATA_NOT_READY;
+
+	switch (spi_status) {
+	case NO_MODULE_ON_USB:
+	case SPI_DISABLED:
+		fprintf(stderr, "SPI not working (disabled)\n");
+		break;
+
+	case SPI_CRCM_OK:
+		fprintf(stderr,
+			"Module not ready (full buffer, last CRCM ok)\n");
+		break;
+
+	case SPI_CRCM_ERR:
+		fprintf(stderr,
+			"Module not ready (full buffer, last CRCM error)\n");
+		break;
+
+	case COMMUNICATION_MODE:
+		fprintf(stderr, "Module ready - communication mode\n");
+		break;
+
+	case PROGRAMMING_MODE:
+		fprintf(stderr, "Module ready - programming mode\n");
+		break;
+
+	case DEBUG_MODE:
+		fprintf(stderr, "Module ready - debugging mode\n");
+		break;
+	default:
+		if ((spi_status & 0xC0) == 0x40)
+			stat = DATA_READY;
+	}
+
+	return stat;
+}
+
+/* count CRC for transmission */
+unsigned char count_crc_tx(unsigned char *buff, int len)
+{
+	unsigned char crc_val;
+	int i = 0;
+
+	crc_val = 0x5F;
+
+	for (i = 1; i < len; i++)
+		crc_val ^= buff[i];
+
+	return crc_val;
+}
+
+/* count CRC for received buffer */
+unsigned char check_crc_rx(unsigned char *buff, int PTYPE, int len)
+{
+	unsigned char i, crc_val;
+
+	crc_val = 0x5F ^ PTYPE;
+
+	for (i = 0; i < len; i++)
+		crc_val ^= buff[i];
+
+	if (buff[len + 1] == crc_val)
+		return 1;
+	
+	fprintf(stderr, "Wrong checksum!\n");
+	return 0;
+}
+

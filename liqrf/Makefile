@@ -1,10 +1,10 @@
 CC = gcc
-CFLAGS = -Wall
+CFLAGS = -Wall -g
 LDFLAGS = -lusb -lrt 
 
 
 EXEC = liqrf
-OBJS = usb.o hex_parser.o spi.o liqrf.o 
+OBJS = usb.o hex_parser.o spi.o liqrf.o iqrf.o
 
 all: $(EXEC)
 
