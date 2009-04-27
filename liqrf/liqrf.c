@@ -26,6 +26,10 @@
 
 #include "liqrf.h"
 
+int verbose = 0;
+
+
+/* usage help printing */
 void print_help(void)
 {
 	fprintf(stderr, "Using ./liqrf -f <hex file> [-v]\n");		
@@ -36,8 +40,7 @@ void print_help(void)
 
 int main (int argc, char **argv)
 {
-	int verbose = 0;
-	int dbg_level = 3;
+	
 	struct liqrf_obj liqrf;
 	char *hex_file = NULL;
 	int c;
@@ -79,16 +82,16 @@ int main (int argc, char **argv)
 			break;
     		}
 	}
-
+	
 	liqrf.dev = liqrf_device_init();
 	
 	if (liqrf.dev == NULL) {
 		fprintf(stderr, "Could not init device\n");
 		goto exit;
 	}
-
-/* FIXME: use global debug or verbose level */
-// 	usb_set_debug(dbg_level);
+	
+	if (verbose)
+		usb_set_debug(verbose + 2);
 
 	liqrf.dev_handle = liqrf_device_open(liqrf.dev);
 

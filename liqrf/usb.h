@@ -23,8 +23,6 @@
 
 #include <usb.h>
 
-#undef DEBUG_USB
-
 /* usb device has only 1 configuration 
    and only 1 interface which consist 
    from 2 interrupt endpoints 
@@ -54,6 +52,7 @@
 #define FLASH_DATA 0xF6
 #define UNKNOWN 0xA2
 
+extern int verbose;
 
 /* exports */
 struct usb_device *liqrf_device_init(void);
