@@ -91,6 +91,11 @@ int send_receive_packet(struct usb_dev_handle *dev_handle,
 {
 	int ret_val = 0, i = 0;
 
+	printf("Written data len = %d:\n", tx_len);
+	for (i = 0; i < tx_len; i++)
+		printf("%02X ", (unsigned char)tx_buff[i]);
+	printf("\n");
+
 	ret_val = usb_interrupt_write(dev_handle, OUT_EP_NR,
 				      tx_buff, tx_len,
 				      32000);
@@ -99,28 +104,41 @@ int send_receive_packet(struct usb_dev_handle *dev_handle,
 		fprintf(stderr, "Can't write to output endpoint\n");
 		goto exit;
 	}
-#ifdef DEBUG_USB
-	printf("Written data:\n");
-	for (i = 0; i < tx_len; i++)
-		printf("%2X ", tx_buff[i]);
-	printf("\n");
-#endif
+
 	ret_val = usb_interrupt_read(dev_handle, IN_EP_NR,
 				     rx_buff, rx_len,
 				     32000);
-
+	
 	if (ret_val < 0) {
 		fprintf(stderr, "Can't read from input endpoint\n");
 		goto exit;
 	}
-#ifdef DEBUG_USB
-	printf("Readed string:\n");
+	
+// #ifdef DEBUG_USB
+	printf("Readed string len = %d:\n", ret_val);
 	for (i = 0; i < ret_val; i++) 
-		printf("%X ", rx_buff[i]);
+		printf("%02X ", (unsigned char)rx_buff[i]);
 	
 	printf("\n");
-#endif
+// #endif
 	return 0;
+exit:
+	return ret_val;
+}
+
+/* write to output endpoint */
+int send_packet(struct usb_dev_handle *dev_handle, char *tx_buff, int tx_len)
+{
+	int ret_val = 0, i = 0;
+
+	ret_val = usb_interrupt_write(dev_handle, OUT_EP_NR,
+				      tx_buff, tx_len,
+				      32000);
+
+	if (ret_val < 0) {
+		fprintf(stderr, "Can't write to output endpoint\n");
+		goto exit;
+	}
 exit:
 	return ret_val;
 }

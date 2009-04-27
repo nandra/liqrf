@@ -44,7 +44,17 @@ int usb_send_data(struct liqrf_obj *obj)
 {
 	int ret_val = 0;
 	if  (send_receive_packet(obj->dev_handle, (char *)obj->tx_buff, obj->tx_len,
-						(char *)obj->rx_buff, obj->rx_len))
+						(char *)obj->rx_buff, obj->rx_len)) 
+		ret_val = 1;
+	
+	return ret_val;
+}
+
+/* send data in object via usb */
+int usb_write_data(struct liqrf_obj *obj) 
+{
+	int ret_val = 0;
+	if  (send_packet(obj->dev_handle, (char *)obj->tx_buff, obj->tx_len))
 		ret_val = 1;
 	
 	return ret_val;
@@ -68,7 +78,7 @@ void enter_prog_mode(struct liqrf_obj *obj)
 			printf("%02x ", obj->tx_buff[i]);		
 
 	printf("\n");	
-	usb_send_data(obj);
+	usb_write_data(obj);
 }
 
 
@@ -79,7 +89,6 @@ void enter_prog_mode(struct liqrf_obj *obj)
 */
 int enter_prog_mode_part1(struct liqrf_obj *obj)
 {
-	int i = 0;
 	int ret_val = 0;
 
 	memset(obj->tx_buff, 0, sizeof(obj->tx_buff));
@@ -87,17 +96,14 @@ int enter_prog_mode_part1(struct liqrf_obj *obj)
 	
 	obj->tx_buff[0] = CMD_FOR_CK;
 	obj->tx_buff[1] = 0xF5;
-	obj->tx_buff[3] = 0x81;
-	obj->tx_buff[4] = 0x00;
-	obj->tx_buff[5] = count_crc_tx(&obj->tx_buff[1], sizeof(obj->tx_buff) -1);
+	obj->tx_buff[2] = 0x81;
+	obj->tx_buff[3] = 0x00;
+	obj->tx_buff[4] = count_crc_tx(&obj->tx_buff[1], sizeof(obj->tx_buff) -1);
 	
-	obj->tx_len = 6;
+	obj->tx_len = 11;
 	/* hardcoded from log */
 	obj->rx_len = 10;
-	for (i = 0; i < BUF_LEN; i++)
-			printf("%02x ", obj->tx_buff[i]);		
-
-	printf("\n");	
+	
 	usb_send_data(obj);
 	if (!check_crc_rx(&obj->rx_buff[2], 0x81, obj->rx_len - 3))
 		ret_val = 1;
@@ -107,32 +113,33 @@ int enter_prog_mode_part1(struct liqrf_obj *obj)
 }
 
 
-/* fill transmission buffer with enter prog mode data 1
+/* fill transmission buffer with enter prog mode data 2
    which are currently unknow (some data for module via SPI)
-   data: 01 F0 08 00 00 00 00 00 00 00 00 A7 
+   data: 01 F0 08 00 00 00 00 00 00 00 00 A7 00 00
    rece: 48 48 01 00 10 4F 22 02 30 03 1A 3F 81
 */
 int enter_prog_mode_part2(struct liqrf_obj *obj)
 {
-	int i = 0;
 	int ret_val = 0;
+	unsigned char spi_stat = SPI_DISABLED;
 
 	memset(obj->tx_buff, 0, sizeof(obj->tx_buff));
 	memset(obj->rx_buff, 0, sizeof(obj->rx_buff));
 	
 	obj->tx_buff[0] = CMD_FOR_CK;
 	obj->tx_buff[1] = 0xF0;
-	obj->tx_buff[3] = 0x08;
+	obj->tx_buff[2] = 0x08;
 	
 	obj->tx_buff[11] = count_crc_tx(&obj->tx_buff[1], sizeof(obj->tx_buff) -1);
 	
-	obj->tx_len = 12;
+	obj->tx_len = 14;
 	obj->rx_len = 13;
-	for (i = 0; i < BUF_LEN; i++)
-			printf("%02x ", obj->tx_buff[i]);		
-
-	printf("\n");	
-	usb_send_data(obj);
+	
+	while (spi_check_data(spi_stat) != DATA_READY) {
+		usb_send_data(obj);
+		spi_stat = obj->rx_buff[1];
+		usleep(100000);	
+	}
 	
 	if (!check_crc_rx(&obj->rx_buff[2], 0x08, obj->rx_len - 3))
 		ret_val = 1;
@@ -155,9 +162,9 @@ int enter_endprog_mode(struct liqrf_obj *obj)
 	obj->tx_buff[3] = 0xDE;
 	obj->tx_buff[4] = 0x01;
 	obj->tx_buff[5] = 0xFF;
-	obj->tx_buff[6] = count_crc_tx(&obj->tx_buff[1], sizeof(obj->tx_buff) -1);;
+	obj->tx_buff[6] = count_crc_tx(&obj->tx_buff[1], sizeof(obj->tx_buff) -1);
 	
-	obj->tx_len = 7;
+	obj->tx_len = 9;
 	obj->rx_len = 8;
 
 	usb_send_data(obj);
@@ -171,7 +178,7 @@ int enter_endprog_mode(struct liqrf_obj *obj)
 int check_prog_mode(struct liqrf_obj *obj)
 {
 	unsigned char spi_stat = SPI_DISABLED;
-	int ret_val = 0;
+	int ret_val = 0, i;
 
 	memset(obj->tx_buff, 0, sizeof(obj->tx_buff));
 	memset(obj->rx_buff, 0, sizeof(obj->rx_buff));
@@ -184,13 +191,17 @@ int check_prog_mode(struct liqrf_obj *obj)
 	
 	obj->tx_len = 5;
 	obj->rx_len = 4;
+	for (i = 0; i < BUF_LEN; i++)
+			printf("%02x ", obj->tx_buff[i]);		
 
+	printf("\n");	
 	while (spi_stat != PROGRAMMING_MODE) {
 		if (usb_send_data(obj)) 
 			return ret_val;
 		
 		spi_stat = obj->rx_buff[1];
-		printf("%s spistat = %X", __FUNCTION__, spi_stat);
+		printf("%s spistat = %X\n", __FUNCTION__, spi_stat);
+		usleep(100000);
 	}
 	ret_val = 1;
 	return ret_val;
@@ -207,22 +218,35 @@ void prepare_prog_data(int data_type, unsigned char *data, int data_len,
 	memset(obj->tx_buff, 0, sizeof(obj->tx_buff));
 
 	switch (data_type) {
-	case EEPROM_PROG:
+	case EEPROM_USER:
+		obj->tx_buff[0] = CMD_PROG;
+		obj->tx_buff[1] = EEPROM_DATA;
+		obj->tx_buff[2] = 0x83;
+		/* address is just one byte */
+		obj->tx_buff[3] = addr & 0xFF;
+		obj->tx_buff[4] = data_len;
+
+		memcpy(&obj->tx_buff[5], data, data_len);
+		obj->tx_buff[5 + data_len] = count_crc_tx(&obj->tx_buff[1], sizeof(obj->tx_buff) -1);
+		printf("usr eeprom data len = %d\n", data_len);
+	
+		obj->tx_len = BUF_LEN;
+		obj->rx_len = BUF_LEN;	
+		break;
+	case EEPROM_APP:
 		obj->tx_buff[0] = CMD_PROG;
 		obj->tx_buff[1] = EEPROM_DATA;
 		obj->tx_buff[2] = UNKNOWN;
 		/* address is just one byte */
 		obj->tx_buff[3] = addr & 0xFF;
-		/*FIXME this is currently not known just suppose */
 		obj->tx_buff[4] = data_len;
 
 		memcpy(&obj->tx_buff[5], data, data_len);
 		obj->tx_buff[5 + data_len] = count_crc_tx(&obj->tx_buff[1], sizeof(obj->tx_buff) -1);
-		printf("eeprom data len = %d\n", data_len);
-		for (i = 0; i < BUF_LEN; i++)
-			printf("%02x ", obj->tx_buff[i]);		
-
-		printf("\n");				
+		printf("app eeprom data len = %d\n", data_len);
+	
+		obj->tx_len = BUF_LEN;
+		obj->rx_len = BUF_LEN;			
 		break;
 	
 	case FLASH_PROG:
@@ -248,10 +272,10 @@ void prepare_prog_data(int data_type, unsigned char *data, int data_len,
 			sizeof(obj->tx_buff) -1);
 
 		printf("flash data len = %d\n", data_len);
-		for (i = 0; i < BUF_LEN; i++)
-			printf("%02x ", obj->tx_buff[i]);		
-
-		printf("\n");		
+			
+		obj->tx_len = BUF_LEN;
+		obj->rx_len = BUF_LEN;
+	
 		break;
 	default:
 		fprintf(stderr, "Unsupported data!\n");

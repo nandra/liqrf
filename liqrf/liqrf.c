@@ -37,6 +37,7 @@ void print_help(void)
 int main (int argc, char **argv)
 {
 	int verbose = 0;
+	int dbg_level = 3;
 	struct liqrf_obj liqrf;
 	char *hex_file = NULL;
 	int c;
@@ -79,22 +80,22 @@ int main (int argc, char **argv)
     		}
 	}
 
-// 	liqrf.dev = liqrf_device_init();
-// 	
-// 	if (liqrf.dev == NULL) {
-// 		fprintf(stderr, "Could not init device\n");
-// 		goto exit;
-// 	}
-// 
-// /* FIXME: use global debug or verbose level */
-// // 	usb_set_debug(dbg_level);
-// 
-// 	liqrf.dev_handle = liqrf_device_open(liqrf.dev);
-// 
-// 	if (liqrf.dev_handle == NULL) {
-// 		fprintf(stderr, "Could not open device\n");
-// 		goto exit;
-// 	}
+	liqrf.dev = liqrf_device_init();
+	
+	if (liqrf.dev == NULL) {
+		fprintf(stderr, "Could not init device\n");
+		goto exit;
+	}
+
+/* FIXME: use global debug or verbose level */
+// 	usb_set_debug(dbg_level);
+
+	liqrf.dev_handle = liqrf_device_open(liqrf.dev);
+
+	if (liqrf.dev_handle == NULL) {
+		fprintf(stderr, "Could not open device\n");
+		goto exit;
+	}
 	/* get eeprom and flash data */
 	hex_data = hex_get_data(hex_file);
 
@@ -103,23 +104,26 @@ int main (int argc, char **argv)
 
 	/* enter to prog mode */	
 	enter_prog_mode(&liqrf);
-
+	
+	check_prog_mode(&liqrf);
 	/* this parts are unknown 
 	   seems to some SPI cummunication
 	*/
 	if (enter_prog_mode_part1(&liqrf))
 		goto exit;
 
-	if (enter_prog_mode_part2(&liqrf))
-		goto exit;
-	
+	/*FIXME:add check condition */
+	enter_prog_mode_part2(&liqrf);
 	/* send spi status cmd and wait for programming status */
 	if (check_prog_mode(&liqrf)) {
-		
+		if (hex_data->usr_eeprom_size)
+			prepare_prog_data(EEPROM_USER, hex_data->usr_eeprom, hex_data->usr_eeprom_size, 
+					USR_EEPROM_BASE_ADDR, &liqrf);	
+		usb_send_data(&liqrf);
 		/* first start prepare eeprom data */
 		if (hex_data->app_eeprom_size) 
-			prepare_prog_data(EEPROM_PROG, hex_data->app_eeprom, hex_data->app_eeprom_size, 
-					EEPROM_BASE_ADDR, &liqrf);
+			prepare_prog_data(EEPROM_APP, hex_data->app_eeprom, hex_data->app_eeprom_size, 
+					APP_EEPROM_BASE_ADDR, &liqrf);
 		usb_send_data(&liqrf);
 	
 		/* prepare flash data by 32 bytes blocks */
@@ -142,6 +146,9 @@ int main (int argc, char **argv)
 		}
 		/* send end progmode request */		
 		enter_endprog_mode(&liqrf);
+		usb_reset(liqrf.dev_handle);
+
+// 		check_prog_mode(&liqrf);
 	}
 	
 	

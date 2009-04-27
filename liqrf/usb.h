@@ -23,7 +23,7 @@
 
 #include <usb.h>
 
-#define DEBUG_USB
+#undef DEBUG_USB
 
 /* usb device has only 1 configuration 
    and only 1 interface which consist 
@@ -60,5 +60,6 @@ struct usb_device *liqrf_device_init(void);
 int send_receive_packet(struct usb_dev_handle *dev_handle, 
 				char *tx_buff, int tx_len, char *rx_buff, int rx_len);
 #define liqrf_device_open(dev) usb_open(dev)
+int send_packet(struct usb_dev_handle *dev_handle, char *tx_buff, int tx_len);
 
 #endif /* USB_H */

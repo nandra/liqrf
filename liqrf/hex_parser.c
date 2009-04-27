@@ -66,7 +66,7 @@ program_data *hex_get_data(char *hexfile)
 		if (fscanf(hex, ":%2x%4x%2x", &len, &adr, &type) != 3) {
 			goto read_err;
 		}
-		printf("lenght is %d, address is %d, type is %d\n", len, adr, type);
+// 		printf("lenght is %d, address is %d, type is %d\n", len, adr, type);
 
 		switch (type) {
 		case DATA:	
@@ -75,20 +75,20 @@ program_data *hex_get_data(char *hexfile)
 				if (fscanf(hex, "%2x", &data) != 1){
 					goto read_err;
 				}
-				printf("%d ", data);
+// 				printf("%d ", data);
 				if ((adr >= FLASH_START_ADR) && (adr < FLASH_END_ADR)) {
 					prog_obj->flash[prog_obj->flash_size] = data;
 
-					printf("flash[%d] = 0x%x\n", prog_obj->flash_size, 
-						prog_obj->flash[prog_obj->flash_size]);
+// 					printf("flash[%d] = 0x%x\n", prog_obj->flash_size, 
+// 						prog_obj->flash[prog_obj->flash_size]);
 
 					prog_obj->flash_size++;
 				} else if ((adr >= USR_EEPROM_START_ADR) && 
 						(adr < USR_EEPROM_END_ADR)) {
 					prog_obj->usr_eeprom[prog_obj->usr_eeprom_size] = data;
 
-					printf("usr_eeprom[%d] = 0x%x\n", prog_obj->usr_eeprom_size, 
-						prog_obj->usr_eeprom[prog_obj->usr_eeprom_size]);
+// 					printf("usr_eeprom[%d] = 0x%x\n", prog_obj->usr_eeprom_size, 
+// 						prog_obj->usr_eeprom[prog_obj->usr_eeprom_size]);
 
 					prog_obj->usr_eeprom_size++;
 					fscanf(hex,"%2x", &data); // skip every second byte (=0x00)
@@ -97,8 +97,8 @@ program_data *hex_get_data(char *hexfile)
 						(adr < APP_EEPROM_END_ADR)) {
 					prog_obj->app_eeprom[prog_obj->app_eeprom_size] = data;
 
-					printf("app_eeprom[%d] = 0x%x\n", prog_obj->app_eeprom_size, 
-						prog_obj->app_eeprom[prog_obj->app_eeprom_size]);
+// 					printf("app_eeprom[%d] = 0x%x\n", prog_obj->app_eeprom_size, 
+// 						prog_obj->app_eeprom[prog_obj->app_eeprom_size]);
 
 					prog_obj->app_eeprom_size++;
 					fscanf(hex,"%2x", &data); // skip every second byte (=0x00)
