@@ -70,11 +70,11 @@ void enter_prog_mode(struct liqrf_obj *obj)
 
 
 /* fill transmission buffer with enter prog mode data 1
-   which are currently unknow (some data for module via SPI)
+   which are prepare for retrieve module id
    data: 01 F5 81 00 2B
    rece: 81 81 00 DE 3F 3F 48 48 48 48 
 */
-int enter_prog_mode_part1(struct liqrf_obj *obj)
+int request_module_id(struct liqrf_obj *obj)
 {
 	int ret_val = 0;
 
@@ -101,13 +101,14 @@ int enter_prog_mode_part1(struct liqrf_obj *obj)
 
 
 /* fill transmission buffer with enter prog mode data 2
-   which are currently unknow (some data for module via SPI)
+   which are data with module id
+   example:
    data: 01 F0 08 00 00 00 00 00 00 00 00 A7 00 00
    rece: 48 48 01 00 10 4F 22 02 30 03 1A 3F 81
 */
-int enter_prog_mode_part2(struct liqrf_obj *obj)
+int get_module_id(struct liqrf_obj *obj)
 {
-	int ret_val = 0;
+	int ret_val = 0, i = 0;
 	unsigned char spi_stat = SPI_DISABLED;
 
 	memset(obj->tx_buff, 0, sizeof(obj->tx_buff));
@@ -128,8 +129,13 @@ int enter_prog_mode_part2(struct liqrf_obj *obj)
 		usleep(100000);	
 	}
 	
-	if (!check_crc_rx(&obj->rx_buff[2], 0x08, obj->rx_len - 3))
+	if (!check_crc_rx(&obj->rx_buff[2], 0x08, obj->rx_len - 5))
 		ret_val = 1;
+	
+	printf("Module ID:");
+	for (i = 0; i < 4; i++)
+		printf("%02X ", obj->rx_buff[2+i]);
+	printf("\n");
 
 	return ret_val;
 }

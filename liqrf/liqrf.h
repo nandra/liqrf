@@ -51,8 +51,8 @@ struct liqrf_obj {
 
 unsigned char count_checksum(unsigned char *data, int len);
 void enter_prog_mode(struct liqrf_obj *obj);
-int enter_prog_mode_part1(struct liqrf_obj *obj);
-int enter_prog_mode_part2(struct liqrf_obj *obj);	
+int request_module_id(struct liqrf_obj *obj);
+int get_module_id(struct liqrf_obj *obj);	
 int enter_endprog_mode(struct liqrf_obj *obj);
 int check_prog_mode(struct liqrf_obj *obj);
 void prepare_prog_data(int data_type, unsigned char *data, int data_len, 

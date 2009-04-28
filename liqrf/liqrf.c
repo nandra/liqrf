@@ -111,20 +111,20 @@ int main (int argc, char **argv)
 	if (!check_prog_mode(&liqrf))
 		goto exit;
 
-	/* this parts are unknown 
-	   seems to some SPI cummunication
+	/* ask iqrf for module ID, os version and
+	   mcu type
 	*/
-	if (enter_prog_mode_part1(&liqrf))
+	if (request_module_id(&liqrf))
 		goto exit;
 
-	/* FIXME:add check condition 
-	   we will get wrong data back
-	   need to be checked if it's necessary 
-	*/
-	enter_prog_mode_part2(&liqrf);
+	if (get_module_id(&liqrf))
+		goto exit;
 
 	/* send spi status cmd and wait for programming status */
 	if (check_prog_mode(&liqrf)) {
+		fprintf(stderr, "Eeprom length = %d\n", hex_data->usr_eeprom_size + 
+			hex_data->app_eeprom_size);
+		fprintf(stderr, "Flash instructions = %d\n", hex_data->flash_size / 2);
 		/* user eeprom data */
 		if (hex_data->usr_eeprom_size)
 			prepare_prog_data(EEPROM_USER, hex_data->usr_eeprom, hex_data->usr_eeprom_size, 
