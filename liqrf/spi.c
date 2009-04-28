@@ -23,6 +23,10 @@
 #include <string.h>
 #include "spi.h"
 
+#define debug_spi(format, arg...) \
+	if (verbose) {\
+		printf("spi:" format , ## arg); \
+	} else {}\
 
 /* parse status and check if data are ready */
 enum data_status spi_check_data(unsigned char spi_status)
@@ -32,29 +36,27 @@ enum data_status spi_check_data(unsigned char spi_status)
 	switch (spi_status) {
 	case NO_MODULE_ON_USB:
 	case SPI_DISABLED:
-		fprintf(stderr, "SPI not working (disabled)\n");
+		debug_spi("SPI not working (disabled)\n");
 		break;
 
 	case SPI_CRCM_OK:
-		fprintf(stderr,
-			"Module not ready (full buffer, last CRCM ok)\n");
+		debug_spi("Module not ready (full buffer, last CRCM ok)\n");
 		break;
 
 	case SPI_CRCM_ERR:
-		fprintf(stderr,
-			"Module not ready (full buffer, last CRCM error)\n");
+		debug_spi("Module not ready (full buffer, last CRCM error)\n");
 		break;
 
 	case COMMUNICATION_MODE:
-		fprintf(stderr, "Module ready - communication mode\n");
+		debug_spi("Module ready - communication mode\n");
 		break;
 
 	case PROGRAMMING_MODE:
-		fprintf(stderr, "Module ready - programming mode\n");
+		debug_spi("Module ready - programming mode\n");
 		break;
 
 	case DEBUG_MODE:
-		fprintf(stderr, "Module ready - debugging mode\n");
+		debug_spi("Module ready - debugging mode\n");
 		break;
 	default:
 		if ((spi_status & 0xC0) == 0x40)
@@ -86,7 +88,7 @@ unsigned char check_crc_rx(unsigned char *buff, int PTYPE, int len)
 	crc_val = 0x5F ^ PTYPE;
 
 	for (i = 0; i < len; i++) {
-		printf("cr = %x, buff[%d]=%x\n", crc_val, i, buff[i]);
+		debug_spi("crc = %x, buff[%d]=%x\n", crc_val, i, buff[i]);
 		crc_val ^= buff[i];
 	}
 	

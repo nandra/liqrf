@@ -60,4 +60,5 @@ void prepare_prog_data(int data_type, unsigned char *data, int data_len,
 int usb_send_data(struct liqrf_obj *obj);
 int usb_write_data(struct liqrf_obj *obj);
 
+extern int verbose;
 #endif

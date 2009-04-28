@@ -55,10 +55,10 @@
 extern int verbose;
 
 /* exports */
-struct usb_device *liqrf_device_init(void);
+struct usb_device *iqrf_device_init(void);
 int send_receive_packet(struct usb_dev_handle *dev_handle, 
 				char *tx_buff, int tx_len, char *rx_buff, int rx_len);
-#define liqrf_device_open(dev) usb_open(dev)
+#define iqrf_device_open(dev) usb_open(dev)
 int send_packet(struct usb_dev_handle *dev_handle, char *tx_buff, int tx_len);
 
 #endif /* USB_H */

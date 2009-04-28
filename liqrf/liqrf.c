@@ -26,6 +26,7 @@
 
 #include "liqrf.h"
 
+/* global verbose level */
 int verbose = 0;
 
 
@@ -40,14 +41,12 @@ void print_help(void)
 
 int main (int argc, char **argv)
 {
-	
 	struct liqrf_obj liqrf;
 	char *hex_file = NULL;
-	int c;
 	program_data *hex_data = NULL;
 	opterr = 0;
 	int flash_addr = FLASH_BASE_ADDR;
-	int len = 0, block_count;
+	int len = 0, block_count, c;
 
 	if (argc < 2) {
 		fprintf (stderr, "You need to specify input hex file name!\n\n");
@@ -83,7 +82,7 @@ int main (int argc, char **argv)
     		}
 	}
 	
-	liqrf.dev = liqrf_device_init();
+	liqrf.dev = iqrf_device_init();
 	
 	if (liqrf.dev == NULL) {
 		fprintf(stderr, "Could not init device\n");
@@ -93,7 +92,7 @@ int main (int argc, char **argv)
 	if (verbose)
 		usb_set_debug(verbose + 2);
 
-	liqrf.dev_handle = liqrf_device_open(liqrf.dev);
+	liqrf.dev_handle = iqrf_device_open(liqrf.dev);
 
 	if (liqrf.dev_handle == NULL) {
 		fprintf(stderr, "Could not open device\n");
@@ -108,25 +107,36 @@ int main (int argc, char **argv)
 	/* enter to prog mode */	
 	enter_prog_mode(&liqrf);
 	
-	check_prog_mode(&liqrf);
+	/* check if module is in prog. mode */
+	if (!check_prog_mode(&liqrf))
+		goto exit;
+
 	/* this parts are unknown 
 	   seems to some SPI cummunication
 	*/
 	if (enter_prog_mode_part1(&liqrf))
 		goto exit;
 
-	/*FIXME:add check condition */
+	/* FIXME:add check condition 
+	   we will get wrong data back
+	   need to be checked if it's necessary 
+	*/
 	enter_prog_mode_part2(&liqrf);
+
 	/* send spi status cmd and wait for programming status */
 	if (check_prog_mode(&liqrf)) {
+		/* user eeprom data */
 		if (hex_data->usr_eeprom_size)
 			prepare_prog_data(EEPROM_USER, hex_data->usr_eeprom, hex_data->usr_eeprom_size, 
-					USR_EEPROM_BASE_ADDR, &liqrf);	
+					USR_EEPROM_BASE_ADDR, &liqrf);
+		fprintf(stderr, "Programming user eeprom (%d)\n", hex_data->usr_eeprom_size);	
 		usb_send_data(&liqrf);
-		/* first start prepare eeprom data */
+		
+		/* application eeprom data */
 		if (hex_data->app_eeprom_size) 
 			prepare_prog_data(EEPROM_APP, hex_data->app_eeprom, hex_data->app_eeprom_size, 
 					APP_EEPROM_BASE_ADDR, &liqrf);
+		fprintf(stderr, "Programming application eeprom (%d)\n", hex_data->app_eeprom_size);
 		usb_send_data(&liqrf);
 	
 		/* prepare flash data by 32 bytes blocks */
@@ -143,17 +153,14 @@ int main (int argc, char **argv)
 
 			prepare_prog_data(FLASH_PROG, &hex_data->flash[c*FLASH_BLOCK_SIZE], len, 
 						flash_addr, &liqrf);	
-			
+			fprintf(stderr, "Programming flash (%d)\n", len);
 			usb_send_data(&liqrf);
 			flash_addr += FLASH_ADDR_STEP;
 		}
 		/* send end progmode request */		
 		enter_endprog_mode(&liqrf);
 		usb_reset(liqrf.dev_handle);
-
-// 		check_prog_mode(&liqrf);
 	}
-	
 	
 exit:	
 	if (hex_data != NULL)

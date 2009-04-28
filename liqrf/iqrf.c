@@ -26,18 +26,10 @@
 
 #include "liqrf.h"
 
-/* count checksum */
-// unsigned char count_crc_tx(unsigned char *data, int len)
-// {
-// 	int i = 0; 
-// 	/* value defined in SPI docu */
-// 	int result = 0x5f;
-// 
-// 	for (i = 0; i < len; i++)
-// 		result ^= data[i];
-// 	
-// 	return result;
-// }
+#define debug_iqrf(format, arg...) \
+	if (verbose) {\
+		printf("iqrf:" format , ## arg); \
+	} else {}\
 
 /* send data in object via usb */
 int usb_send_data(struct liqrf_obj *obj) 
@@ -63,8 +55,6 @@ int usb_write_data(struct liqrf_obj *obj)
 /* fill transmission buffer with enter prog mode data */
 void enter_prog_mode(struct liqrf_obj *obj)
 {
-	int i = 0;
-
 	memset(obj->tx_buff, 0, sizeof(obj->tx_buff));
 	memset(obj->rx_buff, 0, sizeof(obj->rx_buff));
 
@@ -74,10 +64,7 @@ void enter_prog_mode(struct liqrf_obj *obj)
 	
 	obj->tx_len = 3;
 	obj->rx_len = 3;
-	for (i = 0; i < BUF_LEN; i++)
-			printf("%02x ", obj->tx_buff[i]);		
-
-	printf("\n");	
+	
 	usb_write_data(obj);
 }
 
@@ -178,7 +165,7 @@ int enter_endprog_mode(struct liqrf_obj *obj)
 int check_prog_mode(struct liqrf_obj *obj)
 {
 	unsigned char spi_stat = SPI_DISABLED;
-	int ret_val = 0, i;
+	int ret_val = 0;
 
 	memset(obj->tx_buff, 0, sizeof(obj->tx_buff));
 	memset(obj->rx_buff, 0, sizeof(obj->rx_buff));
@@ -191,16 +178,13 @@ int check_prog_mode(struct liqrf_obj *obj)
 	
 	obj->tx_len = 5;
 	obj->rx_len = 4;
-	for (i = 0; i < BUF_LEN; i++)
-			printf("%02x ", obj->tx_buff[i]);		
-
-	printf("\n");	
+	
 	while (spi_stat != PROGRAMMING_MODE) {
 		if (usb_send_data(obj)) 
 			return ret_val;
 		
 		spi_stat = obj->rx_buff[1];
-		printf("%s spistat = %X\n", __FUNCTION__, spi_stat);
+		debug_iqrf("spistat = %X\n", spi_stat);
 		usleep(100000);
 	}
 	ret_val = 1;
@@ -228,7 +212,7 @@ void prepare_prog_data(int data_type, unsigned char *data, int data_len,
 
 		memcpy(&obj->tx_buff[5], data, data_len);
 		obj->tx_buff[5 + data_len] = count_crc_tx(&obj->tx_buff[1], sizeof(obj->tx_buff) -1);
-		printf("usr eeprom data len = %d\n", data_len);
+		debug_iqrf("usr eeprom data len = %d\n", data_len);
 	
 		obj->tx_len = BUF_LEN;
 		obj->rx_len = BUF_LEN;	
@@ -243,7 +227,7 @@ void prepare_prog_data(int data_type, unsigned char *data, int data_len,
 
 		memcpy(&obj->tx_buff[5], data, data_len);
 		obj->tx_buff[5 + data_len] = count_crc_tx(&obj->tx_buff[1], sizeof(obj->tx_buff) -1);
-		printf("app eeprom data len = %d\n", data_len);
+		debug_iqrf("app eeprom data len = %d\n", data_len);
 	
 		obj->tx_len = BUF_LEN;
 		obj->rx_len = BUF_LEN;			
@@ -271,7 +255,7 @@ void prepare_prog_data(int data_type, unsigned char *data, int data_len,
 		obj->tx_buff[5 + data_len + data_fill] = count_crc_tx(&obj->tx_buff[1], 
 			sizeof(obj->tx_buff) -1);
 
-		printf("flash data len = %d\n", data_len);
+		debug_iqrf("flash data len = %d\n", data_len);
 			
 		obj->tx_len = BUF_LEN;
 		obj->rx_len = BUF_LEN;

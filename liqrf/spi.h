@@ -26,6 +26,7 @@ enum data_status {
         DATA_READY,
 };
 
+extern int verbose;
 
 #define NO_MODULE_ON_USB        0xFF    // SPI not working (HW error)
 #define SPI_DISABLED            0x00    // SPI not working (disabled)

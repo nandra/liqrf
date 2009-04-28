@@ -80,7 +80,6 @@ program_data *hex_get_data(char *hexfile)
 				if (fscanf(hex, "%2x", &data) != 1){
 					goto read_err;
 				}
-// 				printf("%d ", data);
 				if ((adr >= FLASH_START_ADR) && (adr < FLASH_END_ADR)) {
 					prog_obj->flash[prog_obj->flash_size] = data;
 

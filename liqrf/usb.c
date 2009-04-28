@@ -56,7 +56,7 @@ void print_dev_desc(struct usb_device *dev)
 }
 
 /* device initialization */
-struct usb_device *liqrf_device_init(void)
+struct usb_device *iqrf_device_init(void)
 {
 	struct usb_bus *usb_bus;
 	struct usb_device *dev;
@@ -91,7 +91,7 @@ int send_receive_packet(struct usb_dev_handle *dev_handle,
 {
 	int ret_val = 0, i = 0;
 
-	debug_usb("Written data len = %d:\n", tx_len);
+	debug_usb("Write data len = %d:\n", tx_len);
 	for (i = 0; i < tx_len; i++)
 		debug_usb_notext("%02X ", (unsigned char)tx_buff[i]);
 	debug_usb_notext("\n");
@@ -114,7 +114,7 @@ int send_receive_packet(struct usb_dev_handle *dev_handle,
 		goto exit;
 	}
 
-	debug_usb("Readed string len = %d:\n", ret_val);
+	debug_usb("Read string len = %d:\n", ret_val);
 	for (i = 0; i < ret_val; i++) 
 		debug_usb_notext("%02X ", (unsigned char)rx_buff[i]);
 	
