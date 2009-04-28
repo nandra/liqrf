@@ -63,7 +63,8 @@ int main (int argc, char **argv)
       			hex_file = optarg;
       			break;
 		case 'h':
-			print_help();			
+			print_help();
+			goto exit;			
 			break;
     		case '?':
       			if (optopt == 'f') {
