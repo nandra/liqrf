@@ -59,4 +59,5 @@ typedef struct {
 
 program_data *hex_get_data(char *hexfile);
 
+extern int verbose;
 #endif

@@ -39,11 +39,13 @@ struct liqrf_obj {
 	int rx_len;
 };
 
-#define EEPROM_PROG 0x01
-#define FLASH_PROG 0x02
+#define EEPROM_APP 0x01
+#define EEPROM_USER 0x02
+#define FLASH_PROG 0x03
 
 #define FLASH_BLOCK_SIZE (32) 
-#define EEPROM_BASE_ADDR (0xA0)
+#define APP_EEPROM_BASE_ADDR (0xA0)
+#define USR_EEPROM_BASE_ADDR (0x00)
 #define FLASH_BASE_ADDR (0x0E00)
 #define FLASH_ADDR_STEP (0x10)
 
@@ -56,5 +58,6 @@ int check_prog_mode(struct liqrf_obj *obj);
 void prepare_prog_data(int data_type, unsigned char *data, int data_len, 
 			unsigned short addr, struct liqrf_obj *obj);
 int usb_send_data(struct liqrf_obj *obj);
+int usb_write_data(struct liqrf_obj *obj);
 
 #endif

@@ -27,6 +27,11 @@
 
 #define MAX_DATA 32
 
+/* debugging with global verbose */
+#define debug_parser(format, arg...) \
+	if (verbose) {\
+		printf("parser:" format , ## arg); \
+	} else {}\
 
 /*
    read and parse data from hex file
@@ -66,7 +71,7 @@ program_data *hex_get_data(char *hexfile)
 		if (fscanf(hex, ":%2x%4x%2x", &len, &adr, &type) != 3) {
 			goto read_err;
 		}
-		printf("lenght is %d, address is %d, type is %d\n", len, adr, type);
+		debug_parser("lenght is %d, address is %d, type is %d\n", len, adr, type);
 
 		switch (type) {
 		case DATA:	
@@ -75,11 +80,11 @@ program_data *hex_get_data(char *hexfile)
 				if (fscanf(hex, "%2x", &data) != 1){
 					goto read_err;
 				}
-				printf("%d ", data);
+// 				printf("%d ", data);
 				if ((adr >= FLASH_START_ADR) && (adr < FLASH_END_ADR)) {
 					prog_obj->flash[prog_obj->flash_size] = data;
 
-					printf("flash[%d] = 0x%x\n", prog_obj->flash_size, 
+					debug_parser("flash[%d] = 0x%x\n", prog_obj->flash_size, 
 						prog_obj->flash[prog_obj->flash_size]);
 
 					prog_obj->flash_size++;
@@ -87,7 +92,7 @@ program_data *hex_get_data(char *hexfile)
 						(adr < USR_EEPROM_END_ADR)) {
 					prog_obj->usr_eeprom[prog_obj->usr_eeprom_size] = data;
 
-					printf("usr_eeprom[%d] = 0x%x\n", prog_obj->usr_eeprom_size, 
+					debug_parser("usr_eeprom[%d] = 0x%x\n", prog_obj->usr_eeprom_size, 
 						prog_obj->usr_eeprom[prog_obj->usr_eeprom_size]);
 
 					prog_obj->usr_eeprom_size++;
@@ -97,7 +102,7 @@ program_data *hex_get_data(char *hexfile)
 						(adr < APP_EEPROM_END_ADR)) {
 					prog_obj->app_eeprom[prog_obj->app_eeprom_size] = data;
 
-					printf("app_eeprom[%d] = 0x%x\n", prog_obj->app_eeprom_size, 
+					debug_parser("app_eeprom[%d] = 0x%x\n", prog_obj->app_eeprom_size, 
 						prog_obj->app_eeprom[prog_obj->app_eeprom_size]);
 
 					prog_obj->app_eeprom_size++;
@@ -106,9 +111,11 @@ program_data *hex_get_data(char *hexfile)
 				}
 				// other addresses are ignored
 			}
-			printf("\n");
+			debug_parser("\n");
 			break;
 		case END_OF_FILE:
+			debug_parser("EEPROM size: %d\n", prog_obj->app_eeprom_size + prog_obj->usr_eeprom_size);
+			debug_parser("FLASH size: %d\n", prog_obj->flash_size);
 			fclose(hex);
 			return prog_obj;
 		default:

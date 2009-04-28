@@ -39,5 +39,6 @@ enum data_status {
 
 unsigned char count_crc_tx(unsigned char *buff, int len);
 unsigned char check_crc_rx(unsigned char *buff, int PTYPE, int len);
+enum data_status spi_check_data(unsigned char spi_status);
 
 #endif /* SPI_H */

@@ -72,7 +72,7 @@ unsigned char count_crc_tx(unsigned char *buff, int len)
 
 	crc_val = 0x5F;
 
-	for (i = 1; i < len; i++)
+	for (i = 0; i < len; i++) 
 		crc_val ^= buff[i];
 
 	return crc_val;
@@ -85,10 +85,12 @@ unsigned char check_crc_rx(unsigned char *buff, int PTYPE, int len)
 
 	crc_val = 0x5F ^ PTYPE;
 
-	for (i = 0; i < len; i++)
+	for (i = 0; i < len; i++) {
+		printf("cr = %x, buff[%d]=%x\n", crc_val, i, buff[i]);
 		crc_val ^= buff[i];
-
-	if (buff[len + 1] == crc_val)
+	}
+	
+	if (buff[len] == crc_val)
 		return 1;
 	
 	fprintf(stderr, "Wrong checksum!\n");
