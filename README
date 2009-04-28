@@ -2,6 +2,13 @@ FW uploader for iqrf devices.
 More informations at: http://iqrf.com
 Project page: http://open-nandra.com/?page_id=108
 
+Compilation: 
+For compile uploader just type make.
+You should have 2 executables:
+liqrf - uploader
+spi_example - example of spi communication with iqrf modules
+
+Additional informations:
 SPI Packet structure:
 The master can send two types of packets with the following structure:
 Master checks the SPI status of the module:
