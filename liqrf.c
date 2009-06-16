@@ -33,11 +33,69 @@ int verbose = 0;
 /* usage help printing */
 void print_help(void)
 {
-	fprintf(stderr, "Using ./liqrf -f <hex file> [-v]\n");		
+	fprintf(stderr, "Using ./liqrf -f <hex file> [-vm]\n");		
 	fprintf(stderr, "-f <hex file> - hex file for loading \n");
 	fprintf(stderr, "-v - verbose output\n");
+	fprintf(stderr, "-m - menu mode\n");
 }
 
+/* menu printing */
+void print_menu(void)
+{
+	fprintf(stdout, "==LIQRF========================\n");
+	fprintf(stdout, "p - enter prog mode\n");
+	fprintf(stdout, "u - upload program\n");
+	fprintf(stdout, "x - exit\n");
+	fprintf(stdout, "===============================\n");
+	fflush(stdout);
+}
+
+/* menu mode */
+void start_menu(void)
+{
+	char c;
+	struct liqrf_obj liqrf;
+	//char *hex_file = NULL;
+	//program_data *hex_data = NULL;
+	//opterr = 0;
+	//int flash_addr = FLASH_BASE_ADDR;
+	//int len = 0, block_count, c;
+
+	/* init usb device */
+	liqrf.dev = iqrf_device_init();
+	
+	if (liqrf.dev == NULL) {
+		fprintf(stderr, "Err: Could not init device.\n");
+		return;	/* change to some error state */
+	}
+
+	if (verbose)
+		usb_set_debug(verbose + 2);
+
+	liqrf.dev_handle = iqrf_device_open(liqrf.dev);
+
+	if (liqrf.dev_handle == NULL) {
+		fprintf(stderr, "Err: Could not open device.\n");
+		return;
+	}
+
+	print_menu();
+
+	while (1) {
+		c = getchar();
+
+		switch (c) {
+		case 'p':
+			break;
+		case 'u':
+			break;
+		case 'x':
+			return;
+		default:
+			break;
+		}
+	}
+}
 
 int main (int argc, char **argv)
 {
@@ -54,7 +112,7 @@ int main (int argc, char **argv)
 		goto exit;
 	}
 	
-	while ((c = getopt (argc, argv, "hvf:")) != -1) {
+	while ((c = getopt (argc, argv, "hmvf:")) != -1) {
   		switch (c) {
 		case 'v':
  			verbose = 1;
@@ -65,6 +123,10 @@ int main (int argc, char **argv)
 		case 'h':
 			print_help();
 			goto exit;			
+			break;
+		case 'm':
+			start_menu();
+			goto exit;
 			break;
     		case '?':
       			if (optopt == 'f') {

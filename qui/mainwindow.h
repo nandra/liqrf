@@ -21,8 +21,12 @@ public:
 
 private:
     Ui::MainWindow *ui;
+    QProcess *liqrfProcess;
 
 private slots:
+    //void processFinish();
+    void processStdOutput();
+    void processErrOutput();
     void about();
     void enterProgMode();
     void resetModule();

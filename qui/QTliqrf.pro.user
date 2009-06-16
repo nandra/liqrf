@@ -64,14 +64,13 @@
     <value type="QString" >DESKTOP_LAUNCH=kde-open</value>
     <value type="QString" >DESKTOP_SESSION=default</value>
     <value type="QString" >DESKTOP_STARTUP_ID=</value>
-    <value type="QString" >DISPLAY=:0.0</value>
+    <value type="QString" >DISPLAY=:0</value>
     <value type="QString" >DM_CONTROL=/var/run/xdmctl</value>
     <value type="QString" >ENV=/etc/bash.bashrc</value>
     <value type="QString" >FROM_HEADER=</value>
     <value type="QString" >GS_LIB=/home/mato/.fonts</value>
-    <value type="QString" >GTK2_RC_FILES=/etc/gtk-2.0/gtkrc:/usr/share/themes//QtCurve/gtk-2.0/gtkrc:/home/mato/.gtkrc-2.0-qtengine:/home/mato/.gtkrc-2.0:/home/mato/.kde/share/config/gtkrc-2.0</value>
+    <value type="QString" >GTK2_RC_FILES=/etc/gtk-2.0/gtkrc:/usr/share/themes//QtCurve/gtk-2.0/gtkrc:/home/mato/.gtkrc-2.0-qtengine:/home/mato/.gtkrc-2.0</value>
     <value type="QString" >GTK_IM_MODULE=cedilla</value>
-    <value type="QString" >GTK_RC_FILES=/etc/gtk/gtkrc:/home/mato/.gtkrc:/home/mato/.kde/share/config/gtkrc</value>
     <value type="QString" >G_BROKEN_FILENAMES=1</value>
     <value type="QString" >G_FILENAME_ENCODING=@locale,UTF-8,ISO-8859-15,CP1252</value>
     <value type="QString" >HISTSIZE=1000</value>
@@ -87,12 +86,10 @@
     <value type="QString" >JAVA_ROOT=/usr/lib/jvm/jre</value>
     <value type="QString" >JRE_HOME=/usr/lib/jvm/jre</value>
     <value type="QString" >KDE_FULL_SESSION=true</value>
-    <value type="QString" >KDE_MULTIHEAD=false</value>
     <value type="QString" >KDE_SESSION_UID=1000</value>
     <value type="QString" >KDM_AUTOLOGIN=mato</value>
     <value type="QString" >LADSPA_PATH=/usr/lib/ladspa</value>
     <value type="QString" >LANG=en_US.UTF-8</value>
-    <value type="QString" >LD_LIBRARY_PATH=/home/mato/qtcreator/lib/qtcreator:</value>
     <value type="QString" >LESS=-M -I</value>
     <value type="QString" >LESSCLOSE=lessclose.sh %s %s</value>
     <value type="QString" >LESSKEY=/etc/lesskey.bin</value>
@@ -112,18 +109,18 @@
     <value type="QString" >PAGER=less</value>
     <value type="QString" >PATH=/usr/bin:/opt/kde3/bin:/home/mato/bin:/usr/local/bin:/usr/bin:/bin:/usr/bin/X11:/usr/X11R6/bin:/usr/games:/usr/lib/jvm/jre/bin:/usr/lib/mit/bin:/usr/lib/mit/sbin:/usr/lib/qt3/bin</value>
     <value type="QString" >PROFILEREAD=true</value>
-    <value type="QString" >PWD=/home/mato/qtcreator/bin</value>
+    <value type="QString" >PWD=/home/mato</value>
     <value type="QString" >PYTHONSTARTUP=/etc/pythonstart</value>
     <value type="QString" >QTDIR=/usr</value>
     <value type="QString" >QT_IM_MODULE=xim</value>
     <value type="QString" >QT_IM_SWITCHER=imsw-multi</value>
     <value type="QString" >QT_SYSTEM_DIR=/usr/share/desktop-data</value>
-    <value type="QString" >SESSION_MANAGER=local/linux-2g5r:@/tmp/.ICE-unix/2874,unix/linux-2g5r:/tmp/.ICE-unix/2874</value>
+    <value type="QString" >SESSION_MANAGER=local/linux-2g5r:@/tmp/.ICE-unix/2876,unix/linux-2g5r:/tmp/.ICE-unix/2876</value>
     <value type="QString" >SHELL=/bin/bash</value>
     <value type="QString" >SHLVL=1</value>
-    <value type="QString" >SSH_AGENT_PID=2821</value>
+    <value type="QString" >SSH_AGENT_PID=2823</value>
     <value type="QString" >SSH_ASKPASS=/usr/lib/ssh/x11-ssh-askpass</value>
-    <value type="QString" >SSH_AUTH_SOCK=/tmp/ssh-JtzGP2719/agent.2719</value>
+    <value type="QString" >SSH_AUTH_SOCK=/tmp/ssh-LxLXh2721/agent.2721</value>
     <value type="QString" >TERM=xterm</value>
     <value type="QString" >TMPDIR=/tmp</value>
     <value type="QString" >USER=mato</value>
@@ -133,17 +130,18 @@
     <value type="QString" >XCURSOR_THEME=DMZ</value>
     <value type="QString" >XDG_CONFIG_DIRS=/etc/xdg</value>
     <value type="QString" >XDG_DATA_DIRS=/usr/share:/etc/opt/kde3/share:/opt/kde3/share</value>
-    <value type="QString" >XDG_SESSION_COOKIE=37cb60afddb6c78588aa2c894993ab88-1243082128.821914-188900483</value>
+    <value type="QString" >XDG_SESSION_COOKIE=37cb60afddb6c78588aa2c894993ab88-1245041728.758965-1962191535</value>
     <value type="QString" >XDM_MANAGED=/var/run/xdmctl/xdmctl-:0,maysd,mayfn,sched,rsvd,method=classic,auto</value>
     <value type="QString" >XKEYSYMDB=/usr/share/X11/XKeysymDB</value>
     <value type="QString" >XMODIFIERS=@im=local</value>
     <value type="QString" >XNLSPATH=/usr/share/X11/nls</value>
     <value type="QString" >XSESSION_IS_UP=yes</value>
+    <value type="QString" >_=/opt/kde3/bin/kwrapper</value>
     <value type="QString" >mc=() {  . /usr/share/mc/bin/mc-wrapper.sh
 }</value>
    </valuelist>
    <valuelist key="abstractProcess.arguments" type="QVariantList" >
-    <value type="QString" >/home/mato/projects/QTliqrf/QTliqrf/QTliqrf.pro</value>
+    <value type="QString" >/home/mato/projects/liqtest/liqrf/qui/QTliqrf.pro</value>
     <value type="QString" >-spec</value>
     <value type="QString" >/usr/share/qt4/mkspecs/linux-g++</value>
     <value type="QString" >-r</value>
@@ -151,7 +149,7 @@
    </valuelist>
    <value key="abstractProcess.command" type="QString" >/usr/bin/qmake</value>
    <value key="abstractProcess.enabled" type="bool" >false</value>
-   <value key="abstractProcess.workingDirectory" type="QString" >/home/mato/projects/QTliqrf/QTliqrf</value>
+   <value key="abstractProcess.workingDirectory" type="QString" >/home/mato/projects/liqtest/liqrf/qui</value>
    <value key="buildConfiguration" type="int" >2</value>
   </valuemap>
  </data>
@@ -167,14 +165,13 @@
     <value type="QString" >DESKTOP_LAUNCH=kde-open</value>
     <value type="QString" >DESKTOP_SESSION=default</value>
     <value type="QString" >DESKTOP_STARTUP_ID=</value>
-    <value type="QString" >DISPLAY=:0.0</value>
+    <value type="QString" >DISPLAY=:0</value>
     <value type="QString" >DM_CONTROL=/var/run/xdmctl</value>
     <value type="QString" >ENV=/etc/bash.bashrc</value>
     <value type="QString" >FROM_HEADER=</value>
     <value type="QString" >GS_LIB=/home/mato/.fonts</value>
-    <value type="QString" >GTK2_RC_FILES=/etc/gtk-2.0/gtkrc:/usr/share/themes//QtCurve/gtk-2.0/gtkrc:/home/mato/.gtkrc-2.0-qtengine:/home/mato/.gtkrc-2.0:/home/mato/.kde/share/config/gtkrc-2.0</value>
+    <value type="QString" >GTK2_RC_FILES=/etc/gtk-2.0/gtkrc:/usr/share/themes//QtCurve/gtk-2.0/gtkrc:/home/mato/.gtkrc-2.0-qtengine:/home/mato/.gtkrc-2.0</value>
     <value type="QString" >GTK_IM_MODULE=cedilla</value>
-    <value type="QString" >GTK_RC_FILES=/etc/gtk/gtkrc:/home/mato/.gtkrc:/home/mato/.kde/share/config/gtkrc</value>
     <value type="QString" >G_BROKEN_FILENAMES=1</value>
     <value type="QString" >G_FILENAME_ENCODING=@locale,UTF-8,ISO-8859-15,CP1252</value>
     <value type="QString" >HISTSIZE=1000</value>
@@ -190,12 +187,10 @@
     <value type="QString" >JAVA_ROOT=/usr/lib/jvm/jre</value>
     <value type="QString" >JRE_HOME=/usr/lib/jvm/jre</value>
     <value type="QString" >KDE_FULL_SESSION=true</value>
-    <value type="QString" >KDE_MULTIHEAD=false</value>
     <value type="QString" >KDE_SESSION_UID=1000</value>
     <value type="QString" >KDM_AUTOLOGIN=mato</value>
     <value type="QString" >LADSPA_PATH=/usr/lib/ladspa</value>
     <value type="QString" >LANG=en_US.UTF-8</value>
-    <value type="QString" >LD_LIBRARY_PATH=/home/mato/qtcreator/lib/qtcreator:</value>
     <value type="QString" >LESS=-M -I</value>
     <value type="QString" >LESSCLOSE=lessclose.sh %s %s</value>
     <value type="QString" >LESSKEY=/etc/lesskey.bin</value>
@@ -215,18 +210,18 @@
     <value type="QString" >PAGER=less</value>
     <value type="QString" >PATH=/usr/bin:/opt/kde3/bin:/home/mato/bin:/usr/local/bin:/usr/bin:/bin:/usr/bin/X11:/usr/X11R6/bin:/usr/games:/usr/lib/jvm/jre/bin:/usr/lib/mit/bin:/usr/lib/mit/sbin:/usr/lib/qt3/bin</value>
     <value type="QString" >PROFILEREAD=true</value>
-    <value type="QString" >PWD=/home/mato/qtcreator/bin</value>
+    <value type="QString" >PWD=/home/mato</value>
     <value type="QString" >PYTHONSTARTUP=/etc/pythonstart</value>
     <value type="QString" >QTDIR=/usr</value>
     <value type="QString" >QT_IM_MODULE=xim</value>
     <value type="QString" >QT_IM_SWITCHER=imsw-multi</value>
     <value type="QString" >QT_SYSTEM_DIR=/usr/share/desktop-data</value>
-    <value type="QString" >SESSION_MANAGER=local/linux-2g5r:@/tmp/.ICE-unix/2874,unix/linux-2g5r:/tmp/.ICE-unix/2874</value>
+    <value type="QString" >SESSION_MANAGER=local/linux-2g5r:@/tmp/.ICE-unix/2876,unix/linux-2g5r:/tmp/.ICE-unix/2876</value>
     <value type="QString" >SHELL=/bin/bash</value>
     <value type="QString" >SHLVL=1</value>
-    <value type="QString" >SSH_AGENT_PID=2821</value>
+    <value type="QString" >SSH_AGENT_PID=2823</value>
     <value type="QString" >SSH_ASKPASS=/usr/lib/ssh/x11-ssh-askpass</value>
-    <value type="QString" >SSH_AUTH_SOCK=/tmp/ssh-JtzGP2719/agent.2719</value>
+    <value type="QString" >SSH_AUTH_SOCK=/tmp/ssh-LxLXh2721/agent.2721</value>
     <value type="QString" >TERM=xterm</value>
     <value type="QString" >TMPDIR=/tmp</value>
     <value type="QString" >USER=mato</value>
@@ -236,12 +231,13 @@
     <value type="QString" >XCURSOR_THEME=DMZ</value>
     <value type="QString" >XDG_CONFIG_DIRS=/etc/xdg</value>
     <value type="QString" >XDG_DATA_DIRS=/usr/share:/etc/opt/kde3/share:/opt/kde3/share</value>
-    <value type="QString" >XDG_SESSION_COOKIE=37cb60afddb6c78588aa2c894993ab88-1243082128.821914-188900483</value>
+    <value type="QString" >XDG_SESSION_COOKIE=37cb60afddb6c78588aa2c894993ab88-1245041728.758965-1962191535</value>
     <value type="QString" >XDM_MANAGED=/var/run/xdmctl/xdmctl-:0,maysd,mayfn,sched,rsvd,method=classic,auto</value>
     <value type="QString" >XKEYSYMDB=/usr/share/X11/XKeysymDB</value>
     <value type="QString" >XMODIFIERS=@im=local</value>
     <value type="QString" >XNLSPATH=/usr/share/X11/nls</value>
     <value type="QString" >XSESSION_IS_UP=yes</value>
+    <value type="QString" >_=/opt/kde3/bin/kwrapper</value>
     <value type="QString" >mc=() {  . /usr/share/mc/bin/mc-wrapper.sh
 }</value>
    </valuelist>
@@ -250,7 +246,7 @@
    </valuelist>
    <value key="abstractProcess.command" type="QString" >/usr/bin/make</value>
    <value key="abstractProcess.enabled" type="bool" >true</value>
-   <value key="abstractProcess.workingDirectory" type="QString" >/home/mato/projects/QTliqrf/QTliqrf</value>
+   <value key="abstractProcess.workingDirectory" type="QString" >/home/mato/projects/liqtest/liqrf/qui</value>
   </valuemap>
  </data>
  <data>
