@@ -3,13 +3,14 @@
 
 #include <QtGui/QMainWindow>
 #include <QtGui/QMessageBox>
-#include <QProcess>
 
+#include "lusb.h"
 
 namespace Ui
 {
     class MainWindow;
 }
+
 
 class MainWindow : public QMainWindow
 {
@@ -21,15 +22,14 @@ public:
 
 private:
     Ui::MainWindow *ui;
-    QProcess *liqrfProcess;
+    lusb *usb;
 
 private slots:
-    //void processFinish();
-    void processStdOutput();
-    void processErrOutput();
     void about();
     void enterProgMode();
     void resetModule();
 };
+
+
 
 #endif // MAINWINDOW_H
