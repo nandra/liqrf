@@ -3,7 +3,8 @@
 
 #include <QtGui/QMainWindow>
 #include <QtGui/QMessageBox>
-
+#include <QTimer>
+#include <QCheckBox>
 #include "lusb.h"
 #include "hex_parser.h"
 
@@ -25,12 +26,17 @@ private:
     Ui::MainWindow *ui;
     lusb *usb;
     hex_parser *parser;
+    QTimer *timer;
 
+public slots:
+     void on_checkBox_stateChanged(int);
 private slots:
     void on_OpenFileButton_clicked(bool checked);
     void about();
     void enterProgMode();
     void resetModule();
+    void update_spi_status();
+
 };
 
 

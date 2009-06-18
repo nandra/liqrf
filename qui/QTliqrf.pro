@@ -7,6 +7,7 @@ SOURCES += main.cpp \
     mainwindow.cpp \
     lusb.cpp \
     hex_parser.cpp \
+    spi.cpp \
     spi.cpp
 HEADERS += mainwindow.h \
     usb.h \
