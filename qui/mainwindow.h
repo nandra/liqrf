@@ -5,6 +5,7 @@
 #include <QtGui/QMessageBox>
 
 #include "lusb.h"
+#include "hex_parser.h"
 
 namespace Ui
 {
@@ -23,8 +24,10 @@ public:
 private:
     Ui::MainWindow *ui;
     lusb *usb;
+    hex_parser *parser;
 
 private slots:
+    void on_OpenFileButton_clicked(bool checked);
     void about();
     void enterProgMode();
     void resetModule();

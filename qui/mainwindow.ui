@@ -116,17 +116,17 @@
         </spacer>
        </item>
        <item>
-        <widget class="QCheckBox" name="checkBox_2">
+        <widget class="QCheckBox" name="ApplicationCheckBox">
          <property name="enabled">
           <bool>false</bool>
          </property>
          <property name="text">
-          <string>APLICATION</string>
+          <string>APPLICATION</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QCheckBox" name="checkBox_3">
+        <widget class="QCheckBox" name="EepromCheckBox">
          <property name="enabled">
           <bool>false</bool>
          </property>
@@ -247,7 +247,7 @@
      <x>0</x>
      <y>0</y>
      <width>600</width>
-     <height>25</height>
+     <height>24</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
