@@ -38,10 +38,14 @@ MainWindow::MainWindow(QWidget *parent)
 
     /* start checking if device is presented */
     if (ui->checkBox->isChecked()) {
-        if (usb->usb_dev_found())
+        if (usb->usb_dev_found()) {
             timer->start(1000);
-        else
+        } else {
             ui->label_3->setText("No USB device found");
+            /* disable enter prog button */
+            ui->EnterProgButton->setEnabled(false);
+        }
+
     }
     // menu connections
     connect(ui->action_Exit, SIGNAL(triggered(bool)), this, SLOT(close()));
@@ -70,15 +74,22 @@ void MainWindow::resetModule()
 
 void MainWindow::enterProgMode()
 {
+    /* maybee needs to be extended for other SPI statuses */
+    if ((usb->status != NO_MODULE_ON_USB) && (usb->status != SPI_DISABLED)) {
+        // send command to enter prog mode
 
-    // send command to enter prog mode
+        // enable open file button
+        ui->OpenFileButton->setEnabled(true);
+    }
 
-    // enable open file button
-    ui->OpenFileButton->setEnabled(true);
+
 }
 
 MainWindow::~MainWindow()
 {
+    /* close usb */
+    delete parser;
+    delete usb;
     delete ui;
 }
 
@@ -86,7 +97,7 @@ void MainWindow::update_spi_status()
 {
     /* just for test purposes */
     unsigned char buff[64] = {1,0,0,0,0};
-    int len=0;
+    int len = 0;
 
     usb->set_tx_len(5);
     usb->set_rx_len(4);
@@ -96,26 +107,49 @@ void MainWindow::update_spi_status()
 
     switch(buff[1]) {
     case 0x00:
-         ui->label_3->setText("SPI not working (disabled by the disableSPI() command)");
+         ui->label_3->setText("SPI not working");
+         usb->status = SPI_DISABLED;
+         break;
     case 0x07:
-         ui->label_3->setText("SPI suspended by the stopSPI() command");
+         ui->label_3->setText("SPI suspended");
+         usb->status = SPI_USER_STOP;
+         break;
     case 0x3F:
-         ui->label_3->setText("SPI not ready (buffer full, last CRCM O.K.)");
+         ui->label_3->setText("SPI not ready last CRCM O.K.)");
+         usb->status = SPI_CRCM_OK;
+         break;
     case 0x3E:
-         ui->label_3->setText("SPI not ready (buffer full, last CRCM error)");
+         ui->label_3->setText("SPI not ready last CRCM error)");
+         usb->status = SPI_CRCM_ERR;
+         break;
     case 0x80:
          ui->label_3->setText("SPI ready (communication mode)");
+         usb->status = COMMUNICATION_MODE;
+         break;
     case 0x81:
          ui->label_3->setText("SPI ready (programming mode)");
+         usb->status = PROGRAMMING_MODE;
+         break;
     case 0x82:
          ui->label_3->setText("SPI ready (debugging mode)");
+         usb->status = DEBUG_MODE;
+         break;
     case 0x83:
          ui->label_3->setText("SPI not working in background ");
+         usb->status = SPI_SLOW_MODE;
+         break;
     case 0xFF:
          ui->label_3->setText("SPI not working (HW error)");
+         usb->status = NO_MODULE_ON_USB;
+         break;
     default:
-         if (buff[1] >= 0x40 && buff[1] <= 0x63)
+         if (buff[1] >= 0x40 && buff[1] <= 0x63) {
               ui->label_3->setText("SPI data ready");
+              usb->status = SPI_DATA_READY;
+         } else {
+            printf("Unkown SPI response!\n");
+         }
+         break;
     }
 
 }

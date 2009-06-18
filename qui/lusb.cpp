@@ -13,7 +13,7 @@ lusb::lusb()
 /* destructor */
 lusb::~lusb()
 {
-
+    usb_close(this->dev_handle);
 }
 
 /* observer to get device preset status */
