@@ -3,6 +3,8 @@
 #include <QFileDialog>
 #include <QDebug>
 #include <QTime>
+#include <QProcess>
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::MainWindow)
 {
@@ -59,7 +61,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->ResetButton, SIGNAL(clicked(bool)), this, SLOT(resetModule()));
     connect(ui->EnterProgButton, SIGNAL(clicked(bool)), this, SLOT(enterProgMode()));
 
-    /* connectio to custom signals */
+    /* connections to custom signals */
     connect(this, SIGNAL(my_signal()), this, SLOT(test_signal()));
 
 }
@@ -189,10 +191,11 @@ void MainWindow::update_spi_status()
 void MainWindow::on_OpenFileButton_clicked(bool checked)
 {
     parser->hexfile = QFileDialog::getOpenFileName(this, tr("Open file"), "",
-                                            tr("Hex file (*.hex);;All Files (*)"));
+                                            tr("Hex file (*.hex);;C file (*.c);;All Files (*)"));
     if (parser->hexfile.isEmpty())
          return;
-    else {
+
+    else if (parser->hexfile.endsWith(".hex")) {
         if (!parser->read_file()) {
             ui->UploadTextEdit->insertPlainText("Error opening file "+parser->hexfile+'\n');
             return;
@@ -201,7 +204,21 @@ void MainWindow::on_OpenFileButton_clicked(bool checked)
         ui->UploadButton->setEnabled(true);
         ui->ApplicationCheckBox->setEnabled(true);
         ui->EepromCheckBox->setEnabled(true);
-     }
+        ui->CompileButton->setDisabled(true);
+
+    } else if(parser->hexfile.endsWith(".c")) {
+        ui->UploadTextEdit->insertPlainText("Opened file "+parser->hexfile+'\n');
+        ui->UploadButton->setDisabled(true);
+        ui->ApplicationCheckBox->setDisabled(true);
+        ui->EepromCheckBox->setDisabled(true);
+        ui->CompileButton->setEnabled(true);
+
+    } else {
+        ui->UploadTextEdit->insertPlainText("Unsupported file format!\n");
+        return;
+    }
+
+    ui->file_label->setText(parser->hexfile.rightRef(parser->hexfile.size() - parser->hexfile.lastIndexOf("/") - 1).toString());
 }
 
 void MainWindow::on_checkBox_stateChanged(int )
@@ -221,3 +238,48 @@ void MainWindow::on_pushButton_clicked()
 {
     ui->term_text_edit->clear();
 }
+
+// Compile c program for iqrf
+void MainWindow::on_CompileButton_clicked(bool checked)
+{
+    QProcess compile_process;
+    QStringList arguments;
+    QString directory;          // working directory
+    QString filename;           // name of file being compiled
+
+    if ((!parser->hexfile.isEmpty()) && (parser->hexfile.endsWith(".c"))) {
+
+        // get separate file name and directory
+        int dir_index = parser->hexfile.lastIndexOf("/");
+        QStringRef reference = parser->hexfile.leftRef(dir_index);
+        directory = reference.toString();
+        ui->UploadTextEdit->insertPlainText("working dir is "+directory+'\n');
+        reference = parser->hexfile.rightRef(parser->hexfile.size() - dir_index - 1);
+        filename = reference.toString();
+        ui->UploadTextEdit->insertPlainText("file is "+filename+'\n');
+
+        // setup and run compile process
+        arguments << "CC5x.exe" << "-a" << "-bu" << "-Q" <<
+                "-Vn" << "-p16F88" << filename;
+        ui->UploadTextEdit->insertPlainText("args are "+arguments.join(" ")+'\n');
+        compile_process.setWorkingDirectory(directory);
+        compile_process.start("wine", arguments);
+
+        if (!compile_process.waitForStarted()) {
+            fprintf(stderr, "Compile error.\n");
+            return;
+        }
+
+        if (!compile_process.waitForFinished())
+            return;
+
+        // print output of compile process
+        QByteArray output;
+        output = compile_process.readAllStandardOutput();
+        ui->UploadTextEdit->insertPlainText(QString(output));
+        output = compile_process.readAllStandardError();
+        ui->UploadTextEdit->insertPlainText(QString(output));
+
+    }
+}
+

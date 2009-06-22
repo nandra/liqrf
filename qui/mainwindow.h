@@ -35,6 +35,7 @@ public slots:
      void on_checkBox_stateChanged(int);
      void deviceAdded();
 private slots:
+    void on_CompileButton_clicked(bool checked);
     void on_pushButton_clicked();
     void on_clear_upload_btn_clicked();
     void on_OpenFileButton_clicked(bool checked);
