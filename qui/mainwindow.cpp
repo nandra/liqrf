@@ -1,22 +1,25 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include <QFileDialog>
-
+#include <QDebug>
+#include <QTime>
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::MainWindow)
 {
     QStringList arguments;
 
     ui->setupUi(this);
-
+    /* read only text edits*/
+    ui->UploadTextEdit->setReadOnly(true);
+    ui->term_text_edit->setReadOnly(true);
+    /* programmer instance */
+    prog = new programmer();
+    /* parser instance */
     parser = new hex_parser();
 
-    // usb setup
-    usb = new lusb();
+    prog->dev->usb->init_usb();
 
-    usb->init_usb();
-
-    if (usb->usb_dev_found()) {
+    if (prog->dev->usb->usb_dev_found()) {
         ui->UploadTextEdit->insertPlainText("USB device found\n");
 
     } else {
@@ -25,7 +28,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     }
 
-    if (usb->open_usb()) {
+    if (prog->dev->usb->open_usb()) {
         QMessageBox::about(this, tr("USB device could't be opened!"),
                        tr("Please check USB connection!"));
     } else {
@@ -38,8 +41,8 @@ MainWindow::MainWindow(QWidget *parent)
 
     /* start checking if device is presented */
     if (ui->checkBox->isChecked()) {
-        if (usb->usb_dev_found()) {
-            timer->start(1000);
+        if (prog->dev->usb->usb_dev_found()) {
+            timer->start(500);
         } else {
             ui->label_3->setText("No USB device found");
             /* disable enter prog button */
@@ -55,9 +58,21 @@ MainWindow::MainWindow(QWidget *parent)
     // button connections
     connect(ui->ResetButton, SIGNAL(clicked(bool)), this, SLOT(resetModule()));
     connect(ui->EnterProgButton, SIGNAL(clicked(bool)), this, SLOT(enterProgMode()));
+
+    /* connectio to custom signals */
+    connect(this, SIGNAL(my_signal()), this, SLOT(test_signal()));
+
 }
 
+void MainWindow::deviceAdded()
+{
+    printf("device added\n");
+}
 
+void MainWindow::test_signal()
+{
+    printf("Test signal emitted %x\n",prog->dev->usb->status);
+}
 void MainWindow::about()
 {
     QMessageBox::about(this, tr("About QTLiqrf"),
@@ -75,83 +90,100 @@ void MainWindow::resetModule()
 void MainWindow::enterProgMode()
 {
     /* maybee needs to be extended for other SPI statuses */
-    if ((usb->status != NO_MODULE_ON_USB) && (usb->status != SPI_DISABLED)) {
-        // send command to enter prog mode
+    if ((prog->dev->usb->status != NO_MODULE_ON_USB) && (prog->dev->usb->status != SPI_DISABLED)) {
 
+        prog->enter_prog_mode();
+        /* stop timer to avoid get data to wrong place */
+        timer->stop();
+        while (prog->dev->get_spi_status() != PROGRAMMING_MODE)
+            sleep(1);
+
+        if (!prog->request_module_id()) {
+            qDebug() << "Internal error : request_module_id";
+            goto exit;
+        }
+        if (!prog->get_module_id()) {
+            qDebug() << "Internal error : get_module_id";
+            goto exit;
+        }
+        /*
+        FIXME: Add correct printout for module info
+        QString str;
+        str.append((char *)&prog->module_id[0]);
+        str.sprintf((char *)&prog->module_id[0], "%X");
+        ui->label_mod_id->setText(str);
+        */
+
+        /* disable upload button */
+        ui->EnterProgButton->setDisabled(true);
         // enable open file button
         ui->OpenFileButton->setEnabled(true);
     }
-
-
+exit:
+    sleep(1);
 }
 
 MainWindow::~MainWindow()
 {
-    /* close usb */
     delete parser;
-    delete usb;
-    delete ui;
+    delete prog;
+    delete timer;
 }
 
 void MainWindow::update_spi_status()
 {
-    /* just for test purposes */
-    unsigned char buff[64] = {1,0,0,0,0};
-    int len = 0;
+    int stat = 0, len;
+    unsigned char buff[36];
+    stat = prog->dev->get_spi_status();
 
-    usb->set_tx_len(5);
-    usb->set_rx_len(4);
-    usb->write_tx_buff(buff, 5);
-    usb->send_receive_packet();
-    len = usb->read_rx_buff(buff);
-
-    switch(buff[1]) {
+    switch(stat) {
     case 0x00:
          ui->label_3->setText("SPI not working");
-         usb->status = SPI_DISABLED;
          break;
     case 0x07:
          ui->label_3->setText("SPI suspended");
-         usb->status = SPI_USER_STOP;
          break;
     case 0x3F:
          ui->label_3->setText("SPI not ready last CRCM O.K.)");
-         usb->status = SPI_CRCM_OK;
          break;
     case 0x3E:
          ui->label_3->setText("SPI not ready last CRCM error)");
-         usb->status = SPI_CRCM_ERR;
          break;
     case 0x80:
          ui->label_3->setText("SPI ready (communication mode)");
-         usb->status = COMMUNICATION_MODE;
          break;
     case 0x81:
          ui->label_3->setText("SPI ready (programming mode)");
-         usb->status = PROGRAMMING_MODE;
          break;
     case 0x82:
          ui->label_3->setText("SPI ready (debugging mode)");
-         usb->status = DEBUG_MODE;
          break;
     case 0x83:
          ui->label_3->setText("SPI not working in background ");
-         usb->status = SPI_SLOW_MODE;
          break;
     case 0xFF:
          ui->label_3->setText("SPI not working (HW error)");
-         usb->status = NO_MODULE_ON_USB;
          break;
     default:
-         if (buff[1] >= 0x40 && buff[1] <= 0x63) {
+         if (stat >= 0x40 && stat <= 0x63) {
               ui->label_3->setText("SPI data ready");
-              usb->status = SPI_DATA_READY;
+              /* if data are ready print to text array in Terminal label */
+              len = prog->dev->get_spi_cmd_data(buff, stat & 0x3F, 0, 0);
+              buff[len] = '\0';
+              QString str;
+              QTime tm;
+              str.append(tm.currentTime().toString());
+              str.append(" : \"");
+              str.append((char *)&buff[0]);
+              str.append("\"");
+
+              ui->term_text_edit->insertPlainText(str);
+
          } else {
             printf("Unkown SPI response!\n");
          }
          break;
     }
-
 }
 
 void MainWindow::on_OpenFileButton_clicked(bool checked)
@@ -178,4 +210,14 @@ void MainWindow::on_checkBox_stateChanged(int )
         timer->start(1000);
     else
         timer->stop();
+}
+
+void MainWindow::on_clear_upload_btn_clicked()
+{
+    ui->UploadTextEdit->clear();
+}
+
+void MainWindow::on_pushButton_clicked()
+{
+    ui->term_text_edit->clear();
 }

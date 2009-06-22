@@ -5,13 +5,14 @@
 #include "hex_parser.h"
 
 #define MAX_DATA 32
+#define DEBUG
 
 /* debugging with global verbose */
-#define debug_parser(format, arg...) \
-        //if (verbose) {\
-                printf("parser:" format , ## arg); \
-        //} else {}\
-
+#ifdef DEBUG
+#define debug_parser(format, arg...) printf("parser:" format, ## arg);
+#else
+#define debug_parser(format, arg...) {}
+#endif
 
 hex_parser::hex_parser()
 {
@@ -41,7 +42,7 @@ bool hex_parser::read_file()
     // open hex file
     hex = fopen(hexfile.toLatin1(), "r");
     if (hex == NULL) {
-        fprintf(stderr, "Cannot open file %s\n", hexfile);
+        fprintf(stderr, "Cannot open file %s\n", hexfile.toLatin1());
         return false;
     }
 

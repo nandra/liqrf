@@ -7,11 +7,14 @@ SOURCES += main.cpp \
     mainwindow.cpp \
     lusb.cpp \
     hex_parser.cpp \
+    iqrf_dev.cpp \
     spi.cpp \
-    spi.cpp
+    programmer.cpp
 HEADERS += mainwindow.h \
     usb.h \
     lusb.h \
     hex_parser.h \
-    spi.h
+    iqrf_dev.h \
+    spi.h \
+    programmer.h
 FORMS += mainwindow.ui

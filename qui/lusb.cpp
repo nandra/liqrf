@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include <string.h>
 #include "lusb.h"
 
@@ -122,5 +123,7 @@ int lusb::read_rx_buff(unsigned char * buff)
 void lusb::write_tx_buff(unsigned char *buff, int len)
 {
     memcpy(this->tx_buff, buff, len);
+    /* clean rx buff */
+    memset(this->rx_buff, 0, sizeof(this->rx_buff));
 }
 
