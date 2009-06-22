@@ -67,8 +67,8 @@ int programmer::get_module_id(void)
 
     printf("Module ID:");
     for (i = 0; i < 4; i++) {
-        printf("%02X ", buff[i+4]);
-        this->module_id[i] = buff[i+4];
+        printf("%02X ", buff[i+2]);
+        this->module_id[i] = buff[i+2];
     }
     this->module_id[4] = '\0';
     printf("\n");

@@ -106,13 +106,13 @@ void MainWindow::enterProgMode()
             qDebug() << "Internal error : get_module_id";
             goto exit;
         }
-        /*
-        FIXME: Add correct printout for module info
+
         QString str;
-        str.append((char *)&prog->module_id[0]);
-        str.sprintf((char *)&prog->module_id[0], "%X");
+        int i;
+        for (i = 0; i < 4; i++)
+           str.append(str.number(prog->module_id[i],16).toUpper());
+
         ui->label_mod_id->setText(str);
-        */
 
         /* disable upload button */
         ui->EnterProgButton->setDisabled(true);
