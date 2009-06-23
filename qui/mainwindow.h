@@ -5,6 +5,7 @@
 #include <QtGui/QMessageBox>
 #include <QTimer>
 #include <QCheckBox>
+#include <QThread>
 
 #include "lusb.h"
 #include "hex_parser.h"
@@ -16,6 +17,13 @@ namespace Ui
     class MainWindow;
 }
 
+class Thread : public QThread
+{
+    Q_OBJECT
+
+    public:
+        void run(QString filename);
+};
 
 class MainWindow : public QMainWindow
 {
@@ -30,11 +38,14 @@ private:
     hex_parser *parser;
     programmer *prog;
     QTimer *timer;
+    Thread *editor_thread;
+    QString opened_file;
 
 public slots:
      void on_checkBox_stateChanged(int);
      void deviceAdded();
 private slots:
+    void on_EditFileButton_clicked(bool checked);
     void on_CompileButton_clicked(bool checked);
     void on_pushButton_clicked();
     void on_clear_upload_btn_clicked();
@@ -48,7 +59,6 @@ signals:
     void my_signal();
 
 };
-
 
 
 #endif // MAINWINDOW_H

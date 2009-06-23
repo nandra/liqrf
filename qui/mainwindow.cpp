@@ -18,6 +18,8 @@ MainWindow::MainWindow(QWidget *parent)
     prog = new programmer();
     /* parser instance */
     parser = new hex_parser();
+    /* thread for editor instance */
+    editor_thread = new Thread();
 
     prog->dev->usb->init_usb();
 
@@ -52,6 +54,7 @@ MainWindow::MainWindow(QWidget *parent)
         }
 
     }
+
     // menu connections
     connect(ui->action_Exit, SIGNAL(triggered(bool)), this, SLOT(close()));
     connect(ui->actionAbout, SIGNAL(triggered(bool)), this, SLOT(about()));
@@ -130,6 +133,7 @@ MainWindow::~MainWindow()
     delete parser;
     delete prog;
     delete timer;
+    delete editor_thread;
 }
 
 void MainWindow::update_spi_status()
@@ -190,35 +194,44 @@ void MainWindow::update_spi_status()
 
 void MainWindow::on_OpenFileButton_clicked(bool checked)
 {
-    parser->hexfile = QFileDialog::getOpenFileName(this, tr("Open file"), "",
+    opened_file = QFileDialog::getOpenFileName(this, tr("Open file"), "",
                                             tr("Hex file (*.hex);;C file (*.c);;All Files (*)"));
-    if (parser->hexfile.isEmpty())
+    if (opened_file.isEmpty())
          return;
-
-    else if (parser->hexfile.endsWith(".hex")) {
+    // HEX files
+    else if (opened_file.endsWith(".hex")) {
+        parser->hexfile = opened_file;
         if (!parser->read_file()) {
             ui->UploadTextEdit->insertPlainText("Error opening file "+parser->hexfile+'\n');
             return;
         }
-        ui->UploadTextEdit->insertPlainText("Opened file "+parser->hexfile+'\n');
         ui->UploadButton->setEnabled(true);
         ui->ApplicationCheckBox->setEnabled(true);
         ui->EepromCheckBox->setEnabled(true);
         ui->CompileButton->setDisabled(true);
-
-    } else if(parser->hexfile.endsWith(".c")) {
-        ui->UploadTextEdit->insertPlainText("Opened file "+parser->hexfile+'\n');
+        ui->EditFileButton->setDisabled(true);
+    // C files
+    } else if(opened_file.endsWith(".c")) {
         ui->UploadButton->setDisabled(true);
         ui->ApplicationCheckBox->setDisabled(true);
         ui->EepromCheckBox->setDisabled(true);
         ui->CompileButton->setEnabled(true);
-
+        ui->EditFileButton->setEnabled(true);
+    // Other
     } else {
         ui->UploadTextEdit->insertPlainText("Unsupported file format!\n");
+        ui->UploadButton->setDisabled(true);
+        ui->ApplicationCheckBox->setDisabled(true);
+        ui->EepromCheckBox->setDisabled(true);
+        ui->CompileButton->setDisabled(true);
+        ui->EditFileButton->setDisabled(true);
+         ui->file_label->setText(" ");
         return;
     }
 
-    ui->file_label->setText(parser->hexfile.rightRef(parser->hexfile.size() - parser->hexfile.lastIndexOf("/") - 1).toString());
+    ui->UploadTextEdit->insertPlainText("Opened file "+opened_file+'\n');
+    ui->file_label->setText(opened_file.rightRef(opened_file.size() - opened_file.lastIndexOf("/") - 1).toString());
+
 }
 
 void MainWindow::on_checkBox_stateChanged(int )
@@ -247,21 +260,21 @@ void MainWindow::on_CompileButton_clicked(bool checked)
     QString directory;          // working directory
     QString filename;           // name of file being compiled
 
-    if ((!parser->hexfile.isEmpty()) && (parser->hexfile.endsWith(".c"))) {
+    if ((!opened_file.isEmpty()) && (opened_file.endsWith(".c"))) {
 
         // get separate file name and directory
-        int dir_index = parser->hexfile.lastIndexOf("/");
-        QStringRef reference = parser->hexfile.leftRef(dir_index);
+        int dir_index = opened_file.lastIndexOf("/");
+        QStringRef reference = opened_file.leftRef(dir_index);
         directory = reference.toString();
         ui->UploadTextEdit->insertPlainText("working dir is "+directory+'\n');
-        reference = parser->hexfile.rightRef(parser->hexfile.size() - dir_index - 1);
+        reference = opened_file.rightRef(opened_file.size() - dir_index - 1);
         filename = reference.toString();
         ui->UploadTextEdit->insertPlainText("file is "+filename+'\n');
 
         // setup and run compile process
         arguments << "CC5x.exe" << "-a" << "-bu" << "-Q" <<
                 "-Vn" << "-p16F88" << filename;
-        ui->UploadTextEdit->insertPlainText("args are "+arguments.join(" ")+'\n');
+        //ui->UploadTextEdit->insertPlainText("args are "+arguments.join(" ")+'\n');
         compile_process.setWorkingDirectory(directory);
         compile_process.start("wine", arguments);
 
@@ -283,3 +296,30 @@ void MainWindow::on_CompileButton_clicked(bool checked)
     }
 }
 
+// start editor
+void MainWindow::on_EditFileButton_clicked(bool checked)
+{
+    editor_thread->run(opened_file);
+}
+
+// run editor in thread
+void Thread::run(QString filename)
+{
+    QProcess editor_process;
+    QStringList arguments;
+    QString editor_name;
+
+    editor_name = "kate";
+
+    if ((!filename.isEmpty()) && (filename.endsWith(".c"))) {
+        arguments << filename;
+        editor_process.start(editor_name, arguments);
+        if (!editor_process.waitForStarted()) {
+            fprintf(stderr, "Editor error.\n");
+            return;
+        }
+        if (!editor_process.waitForFinished())
+            return;
+    }
+
+}
