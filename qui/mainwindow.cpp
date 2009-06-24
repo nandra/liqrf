@@ -318,8 +318,11 @@ void Thread::run(QString filename)
             fprintf(stderr, "Editor error.\n");
             return;
         }
+        exec();
+        /*
         if (!editor_process.waitForFinished())
             return;
+            */
     }
 
 }
