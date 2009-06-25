@@ -220,33 +220,33 @@
      <rect>
       <x>10</x>
       <y>0</y>
-      <width>251</width>
+      <width>271</width>
       <height>71</height>
      </rect>
     </property>
     <property name="title">
      <string>Module Info</string>
     </property>
-    <widget class="QLabel" name="label_2">
+    <widget class="QLabel" name="label_os">
      <property name="geometry">
       <rect>
        <x>10</x>
        <y>20</y>
-       <width>71</width>
+       <width>251</width>
        <height>17</height>
       </rect>
      </property>
      <property name="text">
-      <string>Module ID:</string>
+      <string/>
      </property>
     </widget>
     <widget class="QLabel" name="label_mod_id">
      <property name="geometry">
       <rect>
-       <x>80</x>
-       <y>20</y>
-       <width>111</width>
-       <height>17</height>
+       <x>10</x>
+       <y>37</y>
+       <width>251</width>
+       <height>20</height>
       </rect>
      </property>
      <property name="text">
@@ -354,7 +354,7 @@
      <x>0</x>
      <y>0</y>
      <width>651</width>
-     <height>24</height>
+     <height>25</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">

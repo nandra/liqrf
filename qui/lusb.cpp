@@ -2,6 +2,13 @@
 #include <string.h>
 #include "lusb.h"
 
+/* table of supported devices */
+static struct iqrf_usb devices[] = {
+    {CKUSB02_VENDOR_ID_OLD, CKUSB02_PRODUCT_ID_OLD},
+    {CKUSB02_VENDOR_ID, CKUSB02_PRODUCT_ID},
+    {0, 0},
+};
+
 /* constructor */
 lusb::lusb()
 {
@@ -27,6 +34,7 @@ int lusb::usb_dev_found()
 void lusb::init_usb()
 {
     found = 0;
+    int i = 0;
     usb_bus = usb_get_busses();
     struct usb_device *device;
     usb_init();
@@ -34,14 +42,21 @@ void lusb::init_usb()
     usb_find_devices();
     for (usb_bus = usb_busses; usb_bus; usb_bus = usb_bus->next) {
                 for (device = usb_bus->devices; device; device = device->next) {
-                        if ((device->descriptor.idVendor == IQRF_VENDOR_ID) &&
-                            (device->descriptor.idProduct == IQRF_PRODUCT_ID)) {
+                        for (i = 0; i < sizeof(devices); i++) {
+                            if ((device->descriptor.idVendor == devices[i].vendor_id) &&
+                               (device->descriptor.idProduct == devices[i].product_id)) {
 
                                 if (device != NULL) {
                                     this->found = 1;
                                     this->dev = device;
+                                    printf("USB device found:%x:%x\n", devices[i].vendor_id, devices[i].product_id);
+                                    /*TODO: for multi-instance handling remove break*/
+                                    break;
                                 }
+
+                            }
                         }
+
                 }
         }
 

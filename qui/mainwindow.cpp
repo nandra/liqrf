@@ -94,6 +94,9 @@ void MainWindow::resetModule()
 
 void MainWindow::enterProgMode()
 {
+    QString str, str1;
+    int i;
+
     /* maybee needs to be extended for other SPI statuses */
     if ((prog->dev->usb->status != NO_MODULE_ON_USB) && (prog->dev->usb->status != SPI_DISABLED)) {
 
@@ -112,12 +115,40 @@ void MainWindow::enterProgMode()
             goto exit;
         }
 
-        QString str;
-        int i;
-        for (i = 0; i < 4; i++)
-           str.append(str.number(prog->module_id[i],16).toUpper());
+        if (prog->module_id[3] > 0)
+            str.append("Coordinator:");
+        else
+            str.append("Node:");
 
-        ui->label_mod_id->setText(str);
+        QString t = str.number((prog->module_id[4] & 0xF0)>>4, 16);
+        QString s = str.number((prog->module_id[4] & 0x0F), 16);
+        if(s.size() < 2)
+            s = "0"+s;
+        str.append("IQRF OS ver "+t+"."+s);
+
+        str1.append("ID:");
+        for (i = 0; i < 4; i++) {
+            QString t = str1.number(prog->module_id[i],16).toUpper();
+            if (t.size() < 2)
+                t = "0" + t;
+            str1.append(t);
+        }
+
+        if (prog->module_id[5] == 0x02)
+            str1.append(" MCU PIC16LF88");
+        else
+            str1.append(" MCU PIC16LF886");
+
+        t = str.number(prog->module_id[6], 16);
+        if (t.size() < 2)
+            t = "0"+t;
+        s = str.number(prog->module_id[7], 16);
+            if (s.size() < 2)
+        s = "0"+s;
+
+        str.append(" (0x"+s+t+")");
+        ui->label_os->setText(str);
+        ui->label_mod_id->setText(str1);
 
         /* disable upload button */
         ui->EnterProgButton->setDisabled(true);

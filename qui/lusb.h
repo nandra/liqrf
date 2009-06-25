@@ -3,16 +3,26 @@
 
 #include <usb.h>
 
-/* usb device has only 1 configuration
- * and only 1 interface which consist
- * from 2 interrupt endpoints */
 
-#define IQRF_VENDOR_ID 0x04D8
-#define IQRF_PRODUCT_ID 0x000C
+/* devices identification */
+#define CKUSB02_VENDOR_ID_OLD 0x04D8
+#define CKUSB02_PRODUCT_ID_OLD 0x000C
+
+#define CKUSB02_VENDOR_ID 0x1DE6
+#define CKUSB02_PRODUCT_ID 0x0001
+
+struct iqrf_usb {
+    unsigned short vendor_id;
+    unsigned short product_id;
+};
+
+
 /* maximum length for rx and tx buffer */
 #define BUF_LEN 64
 
-/* endpoint numbers */
+/* usb device has only 1 configuration
+ * and only 1 interface which consist
+ * from 2 interrupt endpoints */
 #define OUT_EP_NR (0x01)
 #define IN_EP_NR (0x81)
 

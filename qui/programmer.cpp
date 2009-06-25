@@ -66,11 +66,11 @@ int programmer::get_module_id(void)
         ret_val = 1;
 
     printf("Module ID:");
-    for (i = 0; i < 4; i++) {
+    for (i = 0; i < len; i++) {
         printf("%02X ", buff[i+2]);
         this->module_id[i] = buff[i+2];
     }
-    this->module_id[4] = '\0';
+
     printf("\n");
 
     return ret_val;

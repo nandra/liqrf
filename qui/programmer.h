@@ -24,7 +24,7 @@ public:
     void enter_prog_mode();
     int request_module_id(void);
     int get_module_id(void);
-    char module_id[5];
+    unsigned char module_id[20];
 private:
 
 };
