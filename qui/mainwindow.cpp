@@ -59,6 +59,8 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->action_Exit, SIGNAL(triggered(bool)), this, SLOT(close()));
     connect(ui->actionAbout, SIGNAL(triggered(bool)), this, SLOT(about()));
     connect(ui->actionAboutQt, SIGNAL(triggered(bool)), qApp, SLOT(aboutQt()));
+    connect(ui->actionPIC_16F88, SIGNAL(triggered(bool)), this, SLOT(mcu_16f88()));
+    connect(ui->actionPIC_16F886, SIGNAL(triggered(bool)), this, SLOT(mcu_16f886()));
 
     // button connections
     connect(ui->ResetButton, SIGNAL(clicked(bool)), this, SLOT(resetModule()));
@@ -67,6 +69,8 @@ MainWindow::MainWindow(QWidget *parent)
     /* connections to custom signals */
     connect(this, SIGNAL(my_signal()), this, SLOT(test_signal()));
 
+    /* default values */
+    this->mcu = MCU_16F88;
 }
 
 void MainWindow::deviceAdded()
@@ -90,6 +94,17 @@ void MainWindow::about()
 void MainWindow::resetModule()
 {
     //send usb command reset
+}
+
+/* mcu type selction for compilation */
+void MainWindow::mcu_16f88()
+{
+    this->mcu = MCU_16F88;
+}
+
+void MainWindow::mcu_16f886()
+{
+    this->mcu = MCU_16F886;
 }
 
 /*
@@ -320,7 +335,14 @@ void MainWindow::on_CompileButton_clicked(bool checked)
 
         // setup and run compile process
         arguments << "CC5x.exe" << "-a" << "-bu" << "-Q" <<
-                "-Vn" << "-p16F88" << filename;
+                "-Vn";
+        if (this->mcu == MCU_16F88)
+            arguments << "-p16F88";
+        else
+            arguments << "-p16F886";
+        arguments << filename;
+
+        qDebug() << arguments;
         //ui->UploadTextEdit->insertPlainText("args are "+arguments.join(" ")+'\n');
         compile_process.setWorkingDirectory(directory);
         compile_process.start("wine", arguments);

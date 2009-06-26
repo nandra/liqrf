@@ -367,8 +367,23 @@
     <property name="title">
      <string>Settings</string>
     </property>
+    <widget class="QMenu" name="menuSettings">
+     <property name="title">
+      <string>Settings</string>
+     </property>
+     <widget class="QMenu" name="menuMCU_type">
+      <property name="title">
+       <string>MCU type</string>
+      </property>
+      <addaction name="actionPIC_16F88"/>
+      <addaction name="actionPIC_16F886"/>
+     </widget>
+     <addaction name="menuMCU_type"/>
+    </widget>
     <addaction name="actionUpload_Beep"/>
     <addaction name="actionDebug_Beep"/>
+    <addaction name="separator"/>
+    <addaction name="menuSettings"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
     <property name="title">
@@ -407,6 +422,21 @@
   <action name="actionDebug_Beep">
    <property name="text">
     <string>Debug Beep</string>
+   </property>
+  </action>
+  <action name="actionMCU_type">
+   <property name="text">
+    <string>MCU type</string>
+   </property>
+  </action>
+  <action name="actionPIC_16F88">
+   <property name="text">
+    <string>PIC 16F88</string>
+   </property>
+  </action>
+  <action name="actionPIC_16F886">
+   <property name="text">
+    <string>PIC 16F886</string>
    </property>
   </action>
  </widget>
