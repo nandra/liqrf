@@ -401,6 +401,9 @@ void MainWindow::on_UploadButton_clicked()
     int block_count, c, len;
     int flash_addr = FLASH_BASE_ADDR;
 
+    while (prog->dev->spi_status != PROGRAMMING_MODE)
+        prog->dev->get_spi_status();
+
     if (prog->parser->usr_eeprom_size) {
         if (!prog->send_prog_data(EEPROM_USER, prog->parser->usr_eeprom, prog->parser->usr_eeprom_size,
                                     USR_EEPROM_BASE_ADDR)) {
@@ -439,5 +442,11 @@ void MainWindow::on_UploadButton_clicked()
 
         flash_addr += FLASH_ADDR_STEP;
     }
+
+    prog->enter_endprog_mode();
+    /* star timer for checking SPI */
+    timer->start(1000);
+
+    prog->dev->usb->reset_usb();
 
 }

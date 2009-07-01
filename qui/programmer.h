@@ -34,6 +34,7 @@ public:
     iqrf_dev *dev;
     hex_parser *parser;
     void enter_prog_mode();
+    void enter_endprog_mode();
     int request_module_id(void);
     int get_module_id(void);
     unsigned char module_id[20];

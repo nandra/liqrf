@@ -21,6 +21,7 @@ lusb::lusb()
 /* destructor */
 lusb::~lusb()
 {
+    usb_release_interface(this->dev_handle, 0);
     usb_close(this->dev_handle);
 }
 
@@ -72,6 +73,12 @@ int lusb::open_usb()
         if (this->dev_handle != NULL)
            ret_val = 0;
     }
+    /* claim interface must be done before every
+     * write or read to interface
+     */
+    if (usb_claim_interface(this->dev_handle, 0) < 0) {
+        perror("usb_claim_interface");
+    }
     return ret_val;
 }
 
@@ -82,11 +89,13 @@ int lusb::retrieve_packet()
 
     ret_val = usb_interrupt_read(this->dev_handle, IN_EP_NR,
                                      this->rx_buff, this->rx_len,
-                                     200);
-    if (ret_val > 0)
+                                     1000);
+    if (ret_val > 0) {
         this->rx_len = ret_val;
-    else
+    } else {
         this->rx_len = 0;
+        perror("usb_irq_read");
+    }
 
     return ret_val;
 }
@@ -98,7 +107,11 @@ int lusb::send_packet()
 
     ret_val = usb_interrupt_write(this->dev_handle, OUT_EP_NR,
                                       this->tx_buff, this->tx_len,
-                                      200);
+                                      1000);
+    if (ret_val < 0) {
+        printf("%s\n", __FUNCTION__);
+        perror("usb_irq_write");
+    }
     return ret_val;
 }
 
@@ -142,3 +155,7 @@ void lusb::write_tx_buff(unsigned char *buff, int len)
     memset(this->rx_buff, 0, sizeof(this->rx_buff));
 }
 
+void lusb::reset_usb()
+{
+    usb_reset(this->dev_handle);
+}

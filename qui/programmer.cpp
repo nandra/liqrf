@@ -27,6 +27,25 @@ void programmer::enter_prog_mode()
     this->dev->write_data(buff, 3, 3, 0);
 }
 
+void programmer::enter_endprog_mode()
+{
+    unsigned char buff[64];
+
+    memset(buff, 0, sizeof(buff));
+    buff[0] = CMD_FOR_CK;
+    buff[1] = 0xF3;
+    buff[2] = 0x83;
+    buff[3] = 0xDE;
+    buff[4] = 0x01;
+    buff[5] = 0xFF;
+    buff[6] = this->dev->spi->count_crc_tx(&buff[1], sizeof(buff) - 1);
+
+    this->dev->write_data(buff, 9, 8, 1);
+
+
+}
+
+
 /* send command for request module id and os version */
 int programmer::request_module_id(void)
 {
@@ -85,6 +104,7 @@ int programmer::send_prog_data(int data_type, unsigned char *data, int data_len,
     int i, data_fill = 0, ret_val = 0;
     unsigned char buff[64];
 
+    memset(buff, 0, sizeof(buff));
     switch (data_type) {
     case EEPROM_USER:
         buff[0] = CMD_PROG;
