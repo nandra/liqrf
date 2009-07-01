@@ -1,6 +1,8 @@
 #ifndef HEX_PARSER_H
 #define HEX_PARSER_H
 
+#include <QString>
+
 // define supported hex format
 #define	HEX88
 

@@ -7,9 +7,9 @@
 #include <QCheckBox>
 #include <QThread>
 
-#include "lusb.h"
-#include "hex_parser.h"
-#include "iqrf_dev.h"
+//#include "lusb.h"
+//#include "hex_parser.h"
+//#include "iqrf_dev.h"
 #include "programmer.h"
 
 enum mcu_type {
@@ -51,6 +51,7 @@ public slots:
      void on_checkBox_stateChanged(int);
      void deviceAdded();
 private slots:
+    void on_UploadButton_clicked();
     void on_EditFileButton_clicked(bool checked);
     void on_CompileButton_clicked(bool checked);
     void on_pushButton_clicked();

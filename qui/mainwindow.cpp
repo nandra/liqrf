@@ -16,8 +16,8 @@ MainWindow::MainWindow(QWidget *parent)
     ui->term_text_edit->setReadOnly(true);
     /* programmer instance */
     prog = new programmer();
-    /* parser instance */
-    parser = new hex_parser();
+    /* prog->parser instance */
+    //prog->parser = new hex_prog->parser();
     /* thread for editor instance */
     editor_thread = new Thread();
 
@@ -192,7 +192,7 @@ exit:
 
 MainWindow::~MainWindow()
 {
-    delete parser;
+    //delete prog->parser;
     delete prog;
     delete timer;
     delete editor_thread;
@@ -262,9 +262,9 @@ void MainWindow::on_OpenFileButton_clicked(bool checked)
          return;
     // HEX files
     else if (opened_file.endsWith(".hex")) {
-        parser->hexfile = opened_file;
-        if (!parser->read_file()) {
-            ui->UploadTextEdit->insertPlainText("Error opening file "+parser->hexfile+'\n');
+        prog->parser->hexfile = opened_file;
+        if (!prog->parser->read_file()) {
+            ui->UploadTextEdit->insertPlainText("Error opening file "+prog->parser->hexfile+'\n');
             return;
         }
         ui->UploadButton->setEnabled(true);
@@ -392,6 +392,52 @@ void Thread::run(QString filename)
         if (!editor_process.waitForFinished())
             return;
             */
+    }
+
+}
+
+void MainWindow::on_UploadButton_clicked()
+{
+    int block_count, c, len;
+    int flash_addr = FLASH_BASE_ADDR;
+
+    if (prog->parser->usr_eeprom_size) {
+        if (!prog->send_prog_data(EEPROM_USER, prog->parser->usr_eeprom, prog->parser->usr_eeprom_size,
+                                    USR_EEPROM_BASE_ADDR)) {
+            qDebug() << "Error occured";
+            return;
+        }
+        printf("Programming user eeprom (%d)\n", prog->parser->usr_eeprom_size);
+    }
+
+    if (prog->parser->app_eeprom_size) {
+        if (!prog->send_prog_data(EEPROM_APP, prog->parser->app_eeprom, prog->parser->app_eeprom_size,
+                                    APP_EEPROM_BASE_ADDR)) {
+            qDebug() << "Error occured";
+            return;
+        }
+        printf("Programming app eeprom (%d)\n", prog->parser->app_eeprom_size);
+    }
+
+    /* prepare flash data by 32 bytes blocks */
+    block_count = prog->parser->flash_size / FLASH_BLOCK_SIZE;
+
+    if (prog->parser->flash_size % FLASH_BLOCK_SIZE)
+        block_count++;
+
+    for (c = 0; c < block_count; c++) {
+        if ((prog->parser->flash_size - (c * FLASH_BLOCK_SIZE)) < FLASH_BLOCK_SIZE)
+            len = prog->parser->flash_size - (c * FLASH_BLOCK_SIZE);
+        else
+            len = FLASH_BLOCK_SIZE;
+
+        if (!prog->send_prog_data(FLASH_PROG, &prog->parser->flash[c*FLASH_BLOCK_SIZE], len,
+                                    flash_addr)) {
+            qDebug() << "Error occured";
+            return;
+        }
+
+        flash_addr += FLASH_ADDR_STEP;
     }
 
 }

@@ -13,14 +13,6 @@
   <value type="QString" >QTliqrf</value>
  </data>
  <data>
-  <variable>RunConfiguration0-UseDyldImageSuffix</variable>
-  <value type="bool" >false</value>
- </data>
- <data>
-  <variable>RunConfiguration0-UseTerminal</variable>
-  <value type="bool" >false</value>
- </data>
- <data>
   <variable>RunConfiguration0-UserSetName</variable>
   <value type="bool" >false</value>
  </data>
@@ -42,7 +34,7 @@
    <value key="ProjectExplorer.BuildConfiguration.DisplayName" type="QString" >Debug</value>
    <value key="QtVersionId" type="int" >0</value>
    <value key="addQDumper" type="" ></value>
-   <value key="buildDirectory" type="QString" >/home/mato/projects/liqtest/liqrf/qui</value>
+   <value key="buildDirectory" type="QString" >/home/marek.nandra/projects/liqrf/qui</value>
    <valuelist key="userEnvironmentChanges" type="QVariantList" >
     <value type="QString" >LUSB=-lusb</value>
     <value type="QString" >k=&lt;VALUE></value>
@@ -66,6 +58,7 @@
   <valuemap type="QVariantMap" >
    <value key="ProjectExplorer.BuildConfiguration.DisplayName" type="QString" >Debug</value>
    <valuelist key="abstractProcess.Environment" type="QVariantList" >
+    <value type="QString" >BBPATH=/home/marek.nandra/oe/stuff/build/:/home/marek.nandra/oe/stuff/openembedded/</value>
     <value type="QString" >COLORTERM=1</value>
     <value type="QString" >CPU=i686</value>
     <value type="QString" >CSHEDIT=emacs</value>
@@ -73,86 +66,86 @@
     <value type="QString" >DESKTOP_LAUNCH=kde-open</value>
     <value type="QString" >DESKTOP_SESSION=default</value>
     <value type="QString" >DESKTOP_STARTUP_ID=</value>
-    <value type="QString" >DISPLAY=:0</value>
+    <value type="QString" >DISPLAY=:0.0</value>
     <value type="QString" >DM_CONTROL=/var/run/xdmctl</value>
     <value type="QString" >ENV=/etc/bash.bashrc</value>
     <value type="QString" >FROM_HEADER=</value>
-    <value type="QString" >GS_LIB=/home/mato/.fonts</value>
-    <value type="QString" >GTK2_RC_FILES=/etc/gtk-2.0/gtkrc:/usr/share/themes//QtCurve/gtk-2.0/gtkrc:/home/mato/.gtkrc-2.0-qtengine:/home/mato/.gtkrc-2.0</value>
-    <value type="QString" >GTK_IM_MODULE=cedilla</value>
+    <value type="QString" >GROFF_NO_SGR=yes</value>
+    <value type="QString" >GS_LIB=/home/marek.nandra/.fonts</value>
+    <value type="QString" >GTK2_RC_FILES=/etc/gtk-2.0/gtkrc:/usr/share/themes//QtCurve/gtk-2.0/gtkrc:/home/marek.nandra/.gtkrc-2.0-qtengine:/home/marek.nandra/.gtkrc-2.0:/home/marek.nandra/.kde/share/config/gtkrc-2.0</value>
+    <value type="QString" >GTK_RC_FILES=/etc/gtk/gtkrc:/home/marek.nandra/.gtkrc:/home/marek.nandra/.kde/share/config/gtkrc</value>
     <value type="QString" >G_BROKEN_FILENAMES=1</value>
     <value type="QString" >G_FILENAME_ENCODING=@locale,UTF-8,ISO-8859-15,CP1252</value>
     <value type="QString" >HISTSIZE=1000</value>
-    <value type="QString" >HOME=/home/mato</value>
-    <value type="QString" >HOST=linux-2g5r</value>
-    <value type="QString" >HOSTNAME=linux-2g5r</value>
+    <value type="QString" >HOME=/home/marek.nandra</value>
+    <value type="QString" >HOST=linux-nandra</value>
+    <value type="QString" >HOSTNAME=linux-nandra</value>
     <value type="QString" >HOSTTYPE=i386</value>
     <value type="QString" >INFODIR=/usr/local/info:/usr/share/info:/usr/info</value>
     <value type="QString" >INFOPATH=/usr/local/info:/usr/share/info:/usr/info</value>
-    <value type="QString" >INPUTRC=/home/mato/.inputrc</value>
+    <value type="QString" >INPUTRC=/home/marek.nandra/.inputrc</value>
     <value type="QString" >JAVA_BINDIR=/usr/lib/jvm/jre/bin</value>
     <value type="QString" >JAVA_HOME=/usr/lib/jvm/jre</value>
     <value type="QString" >JAVA_ROOT=/usr/lib/jvm/jre</value>
     <value type="QString" >JRE_HOME=/usr/lib/jvm/jre</value>
     <value type="QString" >KDE_FULL_SESSION=true</value>
+    <value type="QString" >KDE_MULTIHEAD=false</value>
     <value type="QString" >KDE_SESSION_UID=1000</value>
-    <value type="QString" >KDM_AUTOLOGIN=mato</value>
-    <value type="QString" >LADSPA_PATH=/usr/lib/ladspa</value>
+    <value type="QString" >KDM_AUTOLOGIN=marek.nandra</value>
     <value type="QString" >LANG=en_US.UTF-8</value>
     <value type="QString" >LESS=-M -I</value>
     <value type="QString" >LESSCLOSE=lessclose.sh %s %s</value>
     <value type="QString" >LESSKEY=/etc/lesskey.bin</value>
     <value type="QString" >LESSOPEN=lessopen.sh %s</value>
     <value type="QString" >LESS_ADVANCED_PREPROCESSOR=no</value>
-    <value type="QString" >LOGNAME=mato</value>
-    <value type="QString" >LS_COLORS=no=00:fi=00:di=01;34:ln=00;36:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=41;33;01:ex=00;32:*.cmd=00;32:*.exe=01;32:*.com=01;32:*.bat=01;32:*.btm=01;32:*.dll=01;32:*.tar=00;31:*.tbz=00;31:*.tgz=00;31:*.rpm=00;31:*.deb=00;31:*.arj=00;31:*.taz=00;31:*.lzh=00;31:*.lzma=00;31:*.zip=00;31:*.zoo=00;31:*.z=00;31:*.Z=00;31:*.gz=00;31:*.bz2=00;31:*.tb2=00;31:*.tz2=00;31:*.tbz2=00;31:*.xz=00;31:*.avi=01;35:*.bmp=01;35:*.fli=01;35:*.gif=01;35:*.jpg=01;35:*.jpeg=01;35:*.mng=01;35:*.mov=01;35:*.mpg=01;35:*.pcx=01;35:*.pbm=01;35:*.pgm=01;35:*.png=01;35:*.ppm=01;35:*.tga=01;35:*.tif=01;35:*.xbm=01;35:*.xpm=01;35:*.dl=01;35:*.gl=01;35:*.wmv=01;35:*.aiff=00;32:*.au=00;32:*.mid=00;32:*.mp3=00;32:*.ogg=00;32:*.voc=00;32:*.wav=00;32:</value>
+    <value type="QString" >LOGNAME=marek.nandra</value>
+    <value type="QString" >LS_COLORS=no=00:fi=00:di=01;34:ln=00;36:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=41;33;01:ex=00;32:*.cmd=00;32:*.exe=01;32:*.com=01;32:*.bat=01;32:*.btm=01;32:*.dll=01;32:*.tar=00;31:*.tbz=00;31:*.tgz=00;31:*.rpm=00;31:*.deb=00;31:*.arj=00;31:*.taz=00;31:*.lzh=00;31:*.lzma=00;31:*.zip=00;31:*.zoo=00;31:*.z=00;31:*.Z=00;31:*.gz=00;31:*.bz2=00;31:*.tb2=00;31:*.tz2=00;31:*.tbz2=00;31:*.avi=01;35:*.bmp=01;35:*.fli=01;35:*.gif=01;35:*.jpg=01;35:*.jpeg=01;35:*.mng=01;35:*.mov=01;35:*.mpg=01;35:*.pcx=01;35:*.pbm=01;35:*.pgm=01;35:*.png=01;35:*.ppm=01;35:*.tga=01;35:*.tif=01;35:*.xbm=01;35:*.xpm=01;35:*.dl=01;35:*.gl=01;35:*.wmv=01;35:*.aiff=00;32:*.au=00;32:*.mid=00;32:*.mp3=00;32:*.ogg=00;32:*.voc=00;32:*.wav=00;32:</value>
     <value type="QString" >LS_OPTIONS=-N --color=tty -T 0</value>
     <value type="QString" >LUSB=-lusb</value>
     <value type="QString" >MACHTYPE=i686-suse-linux</value>
-    <value type="QString" >MAIL=/var/spool/mail/mato</value>
-    <value type="QString" >MANPATH=/usr/local/man:/usr/share/man:/usr/man</value>
+    <value type="QString" >MAIL=/var/spool/mail/marek.nandra</value>
+    <value type="QString" >MANPATH=/usr/local/man:/usr/share/man</value>
     <value type="QString" >MINICOM=-c on</value>
     <value type="QString" >MORE=-sl</value>
     <value type="QString" >NNTPSERVER=news</value>
-    <value type="QString" >ORBIT_SOCKETDIR=/tmp/orbit-mato</value>
+    <value type="QString" >OPERADIR=/usr/share/opera</value>
     <value type="QString" >OSTYPE=linux</value>
     <value type="QString" >PAGER=less</value>
-    <value type="QString" >PATH=/usr/bin:/opt/kde3/bin:/home/mato/bin:/usr/local/bin:/usr/bin:/bin:/usr/bin/X11:/usr/X11R6/bin:/usr/games:/usr/lib/jvm/jre/bin:/usr/lib/mit/bin:/usr/lib/mit/sbin:/usr/lib/qt3/bin</value>
+    <value type="QString" >PATH=/usr/bin:/opt/kde3/bin:/home/marek.nandra/bin:/usr/local/bin:/usr/bin:/bin:/usr/bin/X11:/usr/X11R6/bin:/usr/games:/usr/lib/jvm/jre/bin:/usr/lib/mit/bin:/usr/lib/mit/sbin:.:/usr/lib/qt3/bin:/opt/arm-angstrom/bin:/opt/arm/3.3.2/bin:/home/marek.nandra/bin:/home/marek.nandra/bin/bin:/opt/arm-2009q1/bin</value>
     <value type="QString" >PROFILEREAD=true</value>
-    <value type="QString" >PWD=/home/mato</value>
+    <value type="QString" >PWD=/home/marek.nandra</value>
     <value type="QString" >PYTHONSTARTUP=/etc/pythonstart</value>
     <value type="QString" >QTDIR=/usr</value>
-    <value type="QString" >QT_IM_MODULE=xim</value>
-    <value type="QString" >QT_IM_SWITCHER=imsw-multi</value>
     <value type="QString" >QT_SYSTEM_DIR=/usr/share/desktop-data</value>
-    <value type="QString" >SESSION_MANAGER=local/linux-2g5r:@/tmp/.ICE-unix/2870,unix/linux-2g5r:/tmp/.ICE-unix/2870</value>
+    <value type="QString" >SESSION_MANAGER=local/linux-nandra:@/tmp/.ICE-unix/2639,unix/linux-nandra:/tmp/.ICE-unix/2639</value>
     <value type="QString" >SHELL=/bin/bash</value>
     <value type="QString" >SHLVL=1</value>
-    <value type="QString" >SSH_AGENT_PID=2816</value>
+    <value type="QString" >SSH_AGENT_PID=2355</value>
     <value type="QString" >SSH_ASKPASS=/usr/lib/ssh/x11-ssh-askpass</value>
-    <value type="QString" >SSH_AUTH_SOCK=/tmp/ssh-Onrnj2715/agent.2715</value>
+    <value type="QString" >SSH_AUTH_SOCK=/tmp/ssh-zWKKk2221/agent.2221</value>
     <value type="QString" >TERM=xterm</value>
+    <value type="QString" >TEXINPUTS=:/home/marek.nandra/.TeX:/usr/share/doc/.TeX:/usr/doc/.TeX</value>
     <value type="QString" >TMPDIR=/tmp</value>
-    <value type="QString" >USER=mato</value>
+    <value type="QString" >USER=marek.nandra</value>
     <value type="QString" >USE_FAM=</value>
     <value type="QString" >WINDOWMANAGER=/usr/bin/kde</value>
-    <value type="QString" >XAUTHLOCALHOSTNAME=linux-2g5r</value>
+    <value type="QString" >XAUTHLOCALHOSTNAME=linux-nandra</value>
     <value type="QString" >XCURSOR_THEME=DMZ</value>
     <value type="QString" >XDG_CONFIG_DIRS=/etc/xdg</value>
     <value type="QString" >XDG_DATA_DIRS=/usr/share:/etc/opt/kde3/share:/opt/kde3/share</value>
-    <value type="QString" >XDG_SESSION_COOKIE=37cb60afddb6c78588aa2c894993ab88-1245827825.450452-217637246</value>
+    <value type="QString" >XDG_SESSION_COOKIE=8811480313ff892c8ba9c5e2484e626d-1245909800.66310-342246550</value>
     <value type="QString" >XDM_MANAGED=/var/run/xdmctl/xdmctl-:0,maysd,mayfn,sched,rsvd,method=classic,auto</value>
     <value type="QString" >XKEYSYMDB=/usr/share/X11/XKeysymDB</value>
     <value type="QString" >XMODIFIERS=@im=local</value>
     <value type="QString" >XNLSPATH=/usr/share/X11/nls</value>
     <value type="QString" >XSESSION_IS_UP=yes</value>
-    <value type="QString" >_=/opt/kde3/bin/kwrapper</value>
+    <value type="QString" >_=/opt/kde3/bin/start_kdeinit_wrapper</value>
     <value type="QString" >k=&lt;VALUE></value>
     <value type="QString" >mc=() {  . /usr/share/mc/bin/mc-wrapper.sh
 }</value>
    </valuelist>
    <valuelist key="abstractProcess.arguments" type="QVariantList" >
-    <value type="QString" >/home/mato/projects/liqtest/liqrf/qui/QTliqrf.pro</value>
+    <value type="QString" >/home/marek.nandra/projects/liqrf/qui/QTliqrf.pro</value>
     <value type="QString" >-spec</value>
     <value type="QString" >/usr/share/qt4/mkspecs/linux-g++</value>
     <value type="QString" >-r</value>
@@ -160,7 +153,7 @@
    </valuelist>
    <value key="abstractProcess.command" type="QString" >/usr/bin/qmake</value>
    <value key="abstractProcess.enabled" type="bool" >false</value>
-   <value key="abstractProcess.workingDirectory" type="QString" >/home/mato/projects/liqtest/liqrf/qui</value>
+   <value key="abstractProcess.workingDirectory" type="QString" >/home/marek.nandra/projects/liqrf/qui</value>
    <value key="buildConfiguration" type="int" >2</value>
   </valuemap>
  </data>
@@ -169,6 +162,7 @@
   <valuemap type="QVariantMap" >
    <value key="ProjectExplorer.BuildConfiguration.DisplayName" type="QString" >Debug</value>
    <valuelist key="abstractProcess.Environment" type="QVariantList" >
+    <value type="QString" >BBPATH=/home/marek.nandra/oe/stuff/build/:/home/marek.nandra/oe/stuff/openembedded/</value>
     <value type="QString" >COLORTERM=1</value>
     <value type="QString" >CPU=i686</value>
     <value type="QString" >CSHEDIT=emacs</value>
@@ -176,80 +170,80 @@
     <value type="QString" >DESKTOP_LAUNCH=kde-open</value>
     <value type="QString" >DESKTOP_SESSION=default</value>
     <value type="QString" >DESKTOP_STARTUP_ID=</value>
-    <value type="QString" >DISPLAY=:0</value>
+    <value type="QString" >DISPLAY=:0.0</value>
     <value type="QString" >DM_CONTROL=/var/run/xdmctl</value>
     <value type="QString" >ENV=/etc/bash.bashrc</value>
     <value type="QString" >FROM_HEADER=</value>
-    <value type="QString" >GS_LIB=/home/mato/.fonts</value>
-    <value type="QString" >GTK2_RC_FILES=/etc/gtk-2.0/gtkrc:/usr/share/themes//QtCurve/gtk-2.0/gtkrc:/home/mato/.gtkrc-2.0-qtengine:/home/mato/.gtkrc-2.0</value>
-    <value type="QString" >GTK_IM_MODULE=cedilla</value>
+    <value type="QString" >GROFF_NO_SGR=yes</value>
+    <value type="QString" >GS_LIB=/home/marek.nandra/.fonts</value>
+    <value type="QString" >GTK2_RC_FILES=/etc/gtk-2.0/gtkrc:/usr/share/themes//QtCurve/gtk-2.0/gtkrc:/home/marek.nandra/.gtkrc-2.0-qtengine:/home/marek.nandra/.gtkrc-2.0:/home/marek.nandra/.kde/share/config/gtkrc-2.0</value>
+    <value type="QString" >GTK_RC_FILES=/etc/gtk/gtkrc:/home/marek.nandra/.gtkrc:/home/marek.nandra/.kde/share/config/gtkrc</value>
     <value type="QString" >G_BROKEN_FILENAMES=1</value>
     <value type="QString" >G_FILENAME_ENCODING=@locale,UTF-8,ISO-8859-15,CP1252</value>
     <value type="QString" >HISTSIZE=1000</value>
-    <value type="QString" >HOME=/home/mato</value>
-    <value type="QString" >HOST=linux-2g5r</value>
-    <value type="QString" >HOSTNAME=linux-2g5r</value>
+    <value type="QString" >HOME=/home/marek.nandra</value>
+    <value type="QString" >HOST=linux-nandra</value>
+    <value type="QString" >HOSTNAME=linux-nandra</value>
     <value type="QString" >HOSTTYPE=i386</value>
     <value type="QString" >INFODIR=/usr/local/info:/usr/share/info:/usr/info</value>
     <value type="QString" >INFOPATH=/usr/local/info:/usr/share/info:/usr/info</value>
-    <value type="QString" >INPUTRC=/home/mato/.inputrc</value>
+    <value type="QString" >INPUTRC=/home/marek.nandra/.inputrc</value>
     <value type="QString" >JAVA_BINDIR=/usr/lib/jvm/jre/bin</value>
     <value type="QString" >JAVA_HOME=/usr/lib/jvm/jre</value>
     <value type="QString" >JAVA_ROOT=/usr/lib/jvm/jre</value>
     <value type="QString" >JRE_HOME=/usr/lib/jvm/jre</value>
     <value type="QString" >KDE_FULL_SESSION=true</value>
+    <value type="QString" >KDE_MULTIHEAD=false</value>
     <value type="QString" >KDE_SESSION_UID=1000</value>
-    <value type="QString" >KDM_AUTOLOGIN=mato</value>
-    <value type="QString" >LADSPA_PATH=/usr/lib/ladspa</value>
+    <value type="QString" >KDM_AUTOLOGIN=marek.nandra</value>
     <value type="QString" >LANG=en_US.UTF-8</value>
     <value type="QString" >LESS=-M -I</value>
     <value type="QString" >LESSCLOSE=lessclose.sh %s %s</value>
     <value type="QString" >LESSKEY=/etc/lesskey.bin</value>
     <value type="QString" >LESSOPEN=lessopen.sh %s</value>
     <value type="QString" >LESS_ADVANCED_PREPROCESSOR=no</value>
-    <value type="QString" >LOGNAME=mato</value>
-    <value type="QString" >LS_COLORS=no=00:fi=00:di=01;34:ln=00;36:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=41;33;01:ex=00;32:*.cmd=00;32:*.exe=01;32:*.com=01;32:*.bat=01;32:*.btm=01;32:*.dll=01;32:*.tar=00;31:*.tbz=00;31:*.tgz=00;31:*.rpm=00;31:*.deb=00;31:*.arj=00;31:*.taz=00;31:*.lzh=00;31:*.lzma=00;31:*.zip=00;31:*.zoo=00;31:*.z=00;31:*.Z=00;31:*.gz=00;31:*.bz2=00;31:*.tb2=00;31:*.tz2=00;31:*.tbz2=00;31:*.xz=00;31:*.avi=01;35:*.bmp=01;35:*.fli=01;35:*.gif=01;35:*.jpg=01;35:*.jpeg=01;35:*.mng=01;35:*.mov=01;35:*.mpg=01;35:*.pcx=01;35:*.pbm=01;35:*.pgm=01;35:*.png=01;35:*.ppm=01;35:*.tga=01;35:*.tif=01;35:*.xbm=01;35:*.xpm=01;35:*.dl=01;35:*.gl=01;35:*.wmv=01;35:*.aiff=00;32:*.au=00;32:*.mid=00;32:*.mp3=00;32:*.ogg=00;32:*.voc=00;32:*.wav=00;32:</value>
+    <value type="QString" >LOGNAME=marek.nandra</value>
+    <value type="QString" >LS_COLORS=no=00:fi=00:di=01;34:ln=00;36:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=41;33;01:ex=00;32:*.cmd=00;32:*.exe=01;32:*.com=01;32:*.bat=01;32:*.btm=01;32:*.dll=01;32:*.tar=00;31:*.tbz=00;31:*.tgz=00;31:*.rpm=00;31:*.deb=00;31:*.arj=00;31:*.taz=00;31:*.lzh=00;31:*.lzma=00;31:*.zip=00;31:*.zoo=00;31:*.z=00;31:*.Z=00;31:*.gz=00;31:*.bz2=00;31:*.tb2=00;31:*.tz2=00;31:*.tbz2=00;31:*.avi=01;35:*.bmp=01;35:*.fli=01;35:*.gif=01;35:*.jpg=01;35:*.jpeg=01;35:*.mng=01;35:*.mov=01;35:*.mpg=01;35:*.pcx=01;35:*.pbm=01;35:*.pgm=01;35:*.png=01;35:*.ppm=01;35:*.tga=01;35:*.tif=01;35:*.xbm=01;35:*.xpm=01;35:*.dl=01;35:*.gl=01;35:*.wmv=01;35:*.aiff=00;32:*.au=00;32:*.mid=00;32:*.mp3=00;32:*.ogg=00;32:*.voc=00;32:*.wav=00;32:</value>
     <value type="QString" >LS_OPTIONS=-N --color=tty -T 0</value>
     <value type="QString" >LUSB=-lusb</value>
     <value type="QString" >MACHTYPE=i686-suse-linux</value>
-    <value type="QString" >MAIL=/var/spool/mail/mato</value>
-    <value type="QString" >MANPATH=/usr/local/man:/usr/share/man:/usr/man</value>
+    <value type="QString" >MAIL=/var/spool/mail/marek.nandra</value>
+    <value type="QString" >MANPATH=/usr/local/man:/usr/share/man</value>
     <value type="QString" >MINICOM=-c on</value>
     <value type="QString" >MORE=-sl</value>
     <value type="QString" >NNTPSERVER=news</value>
-    <value type="QString" >ORBIT_SOCKETDIR=/tmp/orbit-mato</value>
+    <value type="QString" >OPERADIR=/usr/share/opera</value>
     <value type="QString" >OSTYPE=linux</value>
     <value type="QString" >PAGER=less</value>
-    <value type="QString" >PATH=/usr/bin:/opt/kde3/bin:/home/mato/bin:/usr/local/bin:/usr/bin:/bin:/usr/bin/X11:/usr/X11R6/bin:/usr/games:/usr/lib/jvm/jre/bin:/usr/lib/mit/bin:/usr/lib/mit/sbin:/usr/lib/qt3/bin</value>
+    <value type="QString" >PATH=/usr/bin:/opt/kde3/bin:/home/marek.nandra/bin:/usr/local/bin:/usr/bin:/bin:/usr/bin/X11:/usr/X11R6/bin:/usr/games:/usr/lib/jvm/jre/bin:/usr/lib/mit/bin:/usr/lib/mit/sbin:.:/usr/lib/qt3/bin:/opt/arm-angstrom/bin:/opt/arm/3.3.2/bin:/home/marek.nandra/bin:/home/marek.nandra/bin/bin:/opt/arm-2009q1/bin</value>
     <value type="QString" >PROFILEREAD=true</value>
-    <value type="QString" >PWD=/home/mato</value>
+    <value type="QString" >PWD=/home/marek.nandra</value>
     <value type="QString" >PYTHONSTARTUP=/etc/pythonstart</value>
     <value type="QString" >QTDIR=/usr</value>
-    <value type="QString" >QT_IM_MODULE=xim</value>
-    <value type="QString" >QT_IM_SWITCHER=imsw-multi</value>
     <value type="QString" >QT_SYSTEM_DIR=/usr/share/desktop-data</value>
-    <value type="QString" >SESSION_MANAGER=local/linux-2g5r:@/tmp/.ICE-unix/2870,unix/linux-2g5r:/tmp/.ICE-unix/2870</value>
+    <value type="QString" >SESSION_MANAGER=local/linux-nandra:@/tmp/.ICE-unix/2639,unix/linux-nandra:/tmp/.ICE-unix/2639</value>
     <value type="QString" >SHELL=/bin/bash</value>
     <value type="QString" >SHLVL=1</value>
-    <value type="QString" >SSH_AGENT_PID=2816</value>
+    <value type="QString" >SSH_AGENT_PID=2355</value>
     <value type="QString" >SSH_ASKPASS=/usr/lib/ssh/x11-ssh-askpass</value>
-    <value type="QString" >SSH_AUTH_SOCK=/tmp/ssh-Onrnj2715/agent.2715</value>
+    <value type="QString" >SSH_AUTH_SOCK=/tmp/ssh-zWKKk2221/agent.2221</value>
     <value type="QString" >TERM=xterm</value>
+    <value type="QString" >TEXINPUTS=:/home/marek.nandra/.TeX:/usr/share/doc/.TeX:/usr/doc/.TeX</value>
     <value type="QString" >TMPDIR=/tmp</value>
-    <value type="QString" >USER=mato</value>
+    <value type="QString" >USER=marek.nandra</value>
     <value type="QString" >USE_FAM=</value>
     <value type="QString" >WINDOWMANAGER=/usr/bin/kde</value>
-    <value type="QString" >XAUTHLOCALHOSTNAME=linux-2g5r</value>
+    <value type="QString" >XAUTHLOCALHOSTNAME=linux-nandra</value>
     <value type="QString" >XCURSOR_THEME=DMZ</value>
     <value type="QString" >XDG_CONFIG_DIRS=/etc/xdg</value>
     <value type="QString" >XDG_DATA_DIRS=/usr/share:/etc/opt/kde3/share:/opt/kde3/share</value>
-    <value type="QString" >XDG_SESSION_COOKIE=37cb60afddb6c78588aa2c894993ab88-1245827825.450452-217637246</value>
+    <value type="QString" >XDG_SESSION_COOKIE=8811480313ff892c8ba9c5e2484e626d-1245909800.66310-342246550</value>
     <value type="QString" >XDM_MANAGED=/var/run/xdmctl/xdmctl-:0,maysd,mayfn,sched,rsvd,method=classic,auto</value>
     <value type="QString" >XKEYSYMDB=/usr/share/X11/XKeysymDB</value>
     <value type="QString" >XMODIFIERS=@im=local</value>
     <value type="QString" >XNLSPATH=/usr/share/X11/nls</value>
     <value type="QString" >XSESSION_IS_UP=yes</value>
-    <value type="QString" >_=/opt/kde3/bin/kwrapper</value>
+    <value type="QString" >_=/opt/kde3/bin/start_kdeinit_wrapper</value>
     <value type="QString" >k=&lt;VALUE></value>
     <value type="QString" >mc=() {  . /usr/share/mc/bin/mc-wrapper.sh
 }</value>
@@ -259,7 +253,7 @@
    </valuelist>
    <value key="abstractProcess.command" type="QString" >/usr/bin/make</value>
    <value key="abstractProcess.enabled" type="bool" >true</value>
-   <value key="abstractProcess.workingDirectory" type="QString" >/home/mato/projects/liqtest/liqrf/qui</value>
+   <value key="abstractProcess.workingDirectory" type="QString" >/home/marek.nandra/projects/liqrf/qui</value>
   </valuemap>
  </data>
  <data>

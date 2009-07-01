@@ -2,7 +2,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include <QFile>
+#include <QDebug>
 #include "hex_parser.h"
+
 
 #define MAX_DATA 32
 #define DEBUG
@@ -42,7 +44,7 @@ bool hex_parser::read_file()
     // open hex file
     hex = fopen(hexfile.toLatin1(), "r");
     if (hex == NULL) {
-        fprintf(stderr, "Cannot open file %s\n", hexfile.toLatin1());
+        qDebug() <<"Cannot open file" << hexfile.toLatin1();
         return false;
     }
 
