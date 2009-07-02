@@ -260,6 +260,7 @@ void MainWindow::on_OpenFileButton_clicked(bool checked)
                                             tr("Hex file (*.hex);;C file (*.c);;All Files (*)"));
     if (opened_file.isEmpty())
          return;
+
     // HEX files
     else if (opened_file.endsWith(".hex")) {
         prog->parser->hexfile = opened_file;
@@ -267,11 +268,20 @@ void MainWindow::on_OpenFileButton_clicked(bool checked)
             ui->UploadTextEdit->insertPlainText("Error opening file "+prog->parser->hexfile+'\n');
             return;
         }
-        ui->UploadButton->setEnabled(true);
+        if (prog->dev->spi_status == PROGRAMMING_MODE)
+            ui->UploadButton->setEnabled(true);
+
         ui->ApplicationCheckBox->setEnabled(true);
+        ui->ApplicationCheckBox->setChecked(true);
+        QString text =  QString::number(parser->flash_size);
+        ui->ApplicationCheckBox->setText("APPLICATION   " + text + " instructions");
+
         ui->EepromCheckBox->setEnabled(true);
+        ui->EepromCheckBox->setChecked(true);
+
         ui->CompileButton->setDisabled(true);
         ui->EditFileButton->setDisabled(true);
+
     // C files
     } else if(opened_file.endsWith(".c")) {
         ui->UploadButton->setDisabled(true);
@@ -279,6 +289,7 @@ void MainWindow::on_OpenFileButton_clicked(bool checked)
         ui->EepromCheckBox->setDisabled(true);
         ui->CompileButton->setEnabled(true);
         ui->EditFileButton->setEnabled(true);
+
     // Other
     } else {
         ui->UploadTextEdit->insertPlainText("Unsupported file format!\n");
@@ -448,5 +459,7 @@ void MainWindow::on_UploadButton_clicked()
     timer->start(1000);
 
     prog->dev->usb->reset_usb();
+
+    ui->UploadButton->setDisabled(true);
 
 }
