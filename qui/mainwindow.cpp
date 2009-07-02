@@ -16,8 +16,8 @@ MainWindow::MainWindow(QWidget *parent)
     ui->term_text_edit->setReadOnly(true);
     /* programmer instance */
     prog = new programmer();
-    /* parser instance */
-    parser = new hex_parser();
+    /* prog->parser instance */
+    //prog->parser = new hex_prog->parser();
     /* thread for editor instance */
     editor_thread = new Thread();
 
@@ -59,6 +59,8 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->action_Exit, SIGNAL(triggered(bool)), this, SLOT(close()));
     connect(ui->actionAbout, SIGNAL(triggered(bool)), this, SLOT(about()));
     connect(ui->actionAboutQt, SIGNAL(triggered(bool)), qApp, SLOT(aboutQt()));
+    connect(ui->actionPIC_16F88, SIGNAL(triggered(bool)), this, SLOT(mcu_16f88()));
+    connect(ui->actionPIC_16F886, SIGNAL(triggered(bool)), this, SLOT(mcu_16f886()));
 
     // button connections
     connect(ui->ResetButton, SIGNAL(clicked(bool)), this, SLOT(resetModule()));
@@ -67,6 +69,8 @@ MainWindow::MainWindow(QWidget *parent)
     /* connections to custom signals */
     connect(this, SIGNAL(my_signal()), this, SLOT(test_signal()));
 
+    /* default values */
+    this->mcu = MCU_16F88;
 }
 
 void MainWindow::deviceAdded()
@@ -92,10 +96,69 @@ void MainWindow::resetModule()
     //send usb command reset
 }
 
+/* mcu type selction for compilation */
+void MainWindow::mcu_16f88()
+{
+    this->mcu = MCU_16F88;
+}
+
+void MainWindow::mcu_16f886()
+{
+    this->mcu = MCU_16F886;
+}
+
+/*
+   parse data to retrieve modele info
+   data[0-3] = module id
+   data[4] = os version
+   data[5] = mcu type
+   data[6-7] = build number
+*/
+void parse_module_info(unsigned char *data, QString *str_out, QString *str1_out)
+{
+    QString str, str1, t, s ;
+    int i;
+
+    if (data[3] > 0)
+        str.append("Coordinator: ");
+    else
+        str.append("Node: ");
+
+    t = str.number((data[4] & 0xF0)>>4, 16);
+    s = str.number((data[4] & 0x0F), 16);
+    if(s.size() < 2)
+        s = "0"+s;
+    str.append("IQRF OS ver "+t+"."+s);
+
+    str1.append("ID:");
+    for (i = 0; i < 4; i++) {
+        QString t = str1.number(data[i],16).toUpper();
+        if (t.size() < 2)
+            t = "0" + t;
+        str1.append(t);
+    }
+    str1.append(" ");
+    if (data[5] == 0x02)
+        str1.append(" MCU PIC16LF88");
+    else
+        str1.append(" MCU PIC16LF886");
+
+    t = str.number(data[6], 16);
+    if (t.size() < 2)
+        t = "0"+t;
+    s = str.number(data[7], 16);
+    if (s.size() < 2)
+        s = "0"+s;
+
+    str.append(" (0x"+s+t+")");
+
+    *str_out = str;
+    *str1_out = str1;
+}
+
 void MainWindow::enterProgMode()
 {
     QString str, str1;
-    int i;
 
     /* maybee needs to be extended for other SPI statuses */
     if ((prog->dev->usb->status != NO_MODULE_ON_USB) && (prog->dev->usb->status != SPI_DISABLED)) {
@@ -114,39 +177,7 @@ void MainWindow::enterProgMode()
             qDebug() << "Internal error : get_module_id";
             goto exit;
         }
-
-        if (prog->module_id[3] > 0)
-            str.append("Coordinator:");
-        else
-            str.append("Node:");
-
-        QString t = str.number((prog->module_id[4] & 0xF0)>>4, 16);
-        QString s = str.number((prog->module_id[4] & 0x0F), 16);
-        if(s.size() < 2)
-            s = "0"+s;
-        str.append("IQRF OS ver "+t+"."+s);
-
-        str1.append("ID:");
-        for (i = 0; i < 4; i++) {
-            QString t = str1.number(prog->module_id[i],16).toUpper();
-            if (t.size() < 2)
-                t = "0" + t;
-            str1.append(t);
-        }
-
-        if (prog->module_id[5] == 0x02)
-            str1.append(" MCU PIC16LF88");
-        else
-            str1.append(" MCU PIC16LF886");
-
-        t = str.number(prog->module_id[6], 16);
-        if (t.size() < 2)
-            t = "0"+t;
-        s = str.number(prog->module_id[7], 16);
-            if (s.size() < 2)
-        s = "0"+s;
-
-        str.append(" (0x"+s+t+")");
+        parse_module_info(prog->module_id, &str, &str1);
         ui->label_os->setText(str);
         ui->label_mod_id->setText(str1);
 
@@ -161,7 +192,7 @@ exit:
 
 MainWindow::~MainWindow()
 {
-    delete parser;
+    //delete prog->parser;
     delete prog;
     delete timer;
     delete editor_thread;
@@ -231,9 +262,9 @@ void MainWindow::on_OpenFileButton_clicked(bool checked)
          return;
     // HEX files
     else if (opened_file.endsWith(".hex")) {
-        parser->hexfile = opened_file;
-        if (!parser->read_file()) {
-            ui->UploadTextEdit->insertPlainText("Error opening file "+parser->hexfile+'\n');
+        prog->parser->hexfile = opened_file;
+        if (!prog->parser->read_file()) {
+            ui->UploadTextEdit->insertPlainText("Error opening file "+prog->parser->hexfile+'\n');
             return;
         }
         ui->UploadButton->setEnabled(true);
@@ -304,7 +335,14 @@ void MainWindow::on_CompileButton_clicked(bool checked)
 
         // setup and run compile process
         arguments << "CC5x.exe" << "-a" << "-bu" << "-Q" <<
-                "-Vn" << "-p16F88" << filename;
+                "-Vn";
+        if (this->mcu == MCU_16F88)
+            arguments << "-p16F88";
+        else
+            arguments << "-p16F886";
+        arguments << filename;
+
+        qDebug() << arguments;
         //ui->UploadTextEdit->insertPlainText("args are "+arguments.join(" ")+'\n');
         compile_process.setWorkingDirectory(directory);
         compile_process.start("wine", arguments);
@@ -355,5 +393,60 @@ void Thread::run(QString filename)
             return;
             */
     }
+
+}
+
+void MainWindow::on_UploadButton_clicked()
+{
+    int block_count, c, len;
+    int flash_addr = FLASH_BASE_ADDR;
+
+    while (prog->dev->spi_status != PROGRAMMING_MODE)
+        prog->dev->get_spi_status();
+
+    if (prog->parser->usr_eeprom_size) {
+        if (!prog->send_prog_data(EEPROM_USER, prog->parser->usr_eeprom, prog->parser->usr_eeprom_size,
+                                    USR_EEPROM_BASE_ADDR)) {
+            qDebug() << "Error occured";
+            return;
+        }
+        printf("Programming user eeprom (%d)\n", prog->parser->usr_eeprom_size);
+    }
+
+    if (prog->parser->app_eeprom_size) {
+        if (!prog->send_prog_data(EEPROM_APP, prog->parser->app_eeprom, prog->parser->app_eeprom_size,
+                                    APP_EEPROM_BASE_ADDR)) {
+            qDebug() << "Error occured";
+            return;
+        }
+        printf("Programming app eeprom (%d)\n", prog->parser->app_eeprom_size);
+    }
+
+    /* prepare flash data by 32 bytes blocks */
+    block_count = prog->parser->flash_size / FLASH_BLOCK_SIZE;
+
+    if (prog->parser->flash_size % FLASH_BLOCK_SIZE)
+        block_count++;
+
+    for (c = 0; c < block_count; c++) {
+        if ((prog->parser->flash_size - (c * FLASH_BLOCK_SIZE)) < FLASH_BLOCK_SIZE)
+            len = prog->parser->flash_size - (c * FLASH_BLOCK_SIZE);
+        else
+            len = FLASH_BLOCK_SIZE;
+
+        if (!prog->send_prog_data(FLASH_PROG, &prog->parser->flash[c*FLASH_BLOCK_SIZE], len,
+                                    flash_addr)) {
+            qDebug() << "Error occured";
+            return;
+        }
+
+        flash_addr += FLASH_ADDR_STEP;
+    }
+
+    prog->enter_endprog_mode();
+    /* star timer for checking SPI */
+    timer->start(1000);
+
+    prog->dev->usb->reset_usb();
 
 }

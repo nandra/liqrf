@@ -37,6 +37,7 @@ class lusb{
         void init_usb();
         int open_usb();
         int send_receive_packet();
+        void reset_usb();
         void set_tx_len(int);
         void set_rx_len(int);
         int read_rx_buff(unsigned char *buff);
