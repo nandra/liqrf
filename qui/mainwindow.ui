@@ -16,6 +16,28 @@
   <property name="layoutDirection">
    <enum>Qt::LeftToRight</enum>
   </property>
+  <property name="styleSheet">
+   <string notr="true">QProgressBar,
+QTabWidget,
+QTextEdit,
+QPlainTextEdit {	
+	border: 1px groove gray;
+	border-radius: 4px;
+	padding: 2px 2px;
+}
+
+QPushButton {
+	border-style: outset;
+	border-width: 16px;
+	border: 2px groove gray;
+	border-radius: 4px;
+	padding: 2px 4px;
+}
+
+QPushButton:pressed {
+	border-style: inset;
+}</string>
+  </property>
   <widget class="QWidget" name="centralWidget">
    <widget class="QTabWidget" name="TabWidget">
     <property name="enabled">
@@ -354,7 +376,7 @@
      <x>0</x>
      <y>0</y>
      <width>651</width>
-     <height>25</height>
+     <height>24</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
