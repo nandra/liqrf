@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>651</width>
-    <height>442</height>
+    <width>730</width>
+    <height>498</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -47,8 +47,8 @@ QPushButton:pressed {
      <rect>
       <x>10</x>
       <y>80</y>
-      <width>631</width>
-      <height>301</height>
+      <width>701</width>
+      <height>351</height>
      </rect>
     </property>
     <property name="sizePolicy">
@@ -100,10 +100,10 @@ QPushButton:pressed {
      <widget class="QPlainTextEdit" name="UploadTextEdit">
       <property name="geometry">
        <rect>
-        <x>210</x>
+        <x>270</x>
         <y>30</y>
         <width>411</width>
-        <height>241</height>
+        <height>281</height>
        </rect>
       </property>
       <property name="sizePolicy">
@@ -125,7 +125,7 @@ QPushButton:pressed {
      <widget class="QLabel" name="label">
       <property name="geometry">
        <rect>
-        <x>210</x>
+        <x>270</x>
         <y>10</y>
         <width>71</width>
         <height>16</height>
@@ -138,7 +138,7 @@ QPushButton:pressed {
      <widget class="QPushButton" name="clear_upload_btn">
       <property name="geometry">
        <rect>
-        <x>300</x>
+        <x>360</x>
         <y>0</y>
         <width>83</width>
         <height>27</height>
@@ -148,92 +148,163 @@ QPushButton:pressed {
        <string>Clear</string>
       </property>
      </widget>
-     <widget class="QWidget" name="layoutWidget">
+     <widget class="QPushButton" name="OpenFileButton">
       <property name="geometry">
        <rect>
-        <x>22</x>
-        <y>12</y>
-        <width>170</width>
-        <height>221</height>
+        <x>10</x>
+        <y>30</y>
+        <width>116</width>
+        <height>25</height>
        </rect>
       </property>
-      <layout class="QVBoxLayout" name="verticalLayout">
-       <item>
-        <widget class="QPushButton" name="EnterProgButton">
-         <property name="text">
-          <string>Enter Prog Mode</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="OpenFileButton">
-         <property name="text">
-          <string>Open File</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_3">
-         <item>
-          <widget class="QPushButton" name="CompileButton">
-           <property name="enabled">
-            <bool>false</bool>
-           </property>
-           <property name="text">
-            <string>Compile</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="EditFileButton">
-           <property name="enabled">
-            <bool>false</bool>
-           </property>
-           <property name="text">
-            <string>Edit File</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <widget class="QLabel" name="file_label">
-         <property name="text">
-          <string/>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QCheckBox" name="ApplicationCheckBox">
-         <property name="enabled">
-          <bool>false</bool>
-         </property>
-         <property name="text">
-          <string>APPLICATION</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QCheckBox" name="EepromCheckBox">
-         <property name="enabled">
-          <bool>false</bool>
-         </property>
-         <property name="text">
-          <string>EEPROM</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="UploadButton">
-         <property name="enabled">
-          <bool>false</bool>
-         </property>
-         <property name="text">
-          <string>Upload</string>
-         </property>
-        </widget>
-       </item>
-      </layout>
+      <property name="text">
+       <string>Open File</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="EditFileButton">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
+      <property name="geometry">
+       <rect>
+        <x>140</x>
+        <y>30</y>
+        <width>101</width>
+        <height>25</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Edit File</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="CompileButton">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
+      <property name="geometry">
+       <rect>
+        <x>60</x>
+        <y>130</y>
+        <width>131</width>
+        <height>25</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Compile</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="file_label">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>60</y>
+        <width>231</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="EnterProgButton">
+      <property name="geometry">
+       <rect>
+        <x>60</x>
+        <y>200</y>
+        <width>131</width>
+        <height>25</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Enter Prog Mode</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="UploadButton">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
+      <property name="geometry">
+       <rect>
+        <x>60</x>
+        <y>290</y>
+        <width>131</width>
+        <height>25</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Upload</string>
+      </property>
+     </widget>
+     <widget class="QCheckBox" name="ApplicationCheckBox">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>230</y>
+        <width>239</width>
+        <height>23</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>APPLICATION</string>
+      </property>
+     </widget>
+     <widget class="QCheckBox" name="EepromCheckBox">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>250</y>
+        <width>239</width>
+        <height>23</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>EEPROM</string>
+      </property>
+     </widget>
+     <widget class="Line" name="line">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>110</y>
+        <width>231</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+     </widget>
+     <widget class="Line" name="line_2">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>180</y>
+        <width>231</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_mcu">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>160</y>
+        <width>191</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
      </widget>
     </widget>
    </widget>
@@ -242,7 +313,7 @@ QPushButton:pressed {
      <rect>
       <x>10</x>
       <y>0</y>
-      <width>271</width>
+      <width>291</width>
       <height>71</height>
      </rect>
     </property>
@@ -279,7 +350,7 @@ QPushButton:pressed {
    <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
-      <x>290</x>
+      <x>330</x>
       <y>10</y>
       <width>277</width>
       <height>29</height>
@@ -322,7 +393,7 @@ QPushButton:pressed {
     <property name="geometry">
      <rect>
       <x>420</x>
-      <y>390</y>
+      <y>450</y>
       <width>95</width>
       <height>16</height>
      </rect>
@@ -343,8 +414,8 @@ QPushButton:pressed {
    <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
-      <x>11</x>
-      <y>385</y>
+      <x>10</x>
+      <y>440</y>
       <width>406</width>
       <height>27</height>
      </rect>
@@ -375,8 +446,8 @@ QPushButton:pressed {
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>651</width>
-     <height>24</height>
+     <width>730</width>
+     <height>25</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">

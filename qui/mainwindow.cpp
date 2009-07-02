@@ -71,6 +71,12 @@ MainWindow::MainWindow(QWidget *parent)
 
     /* default values */
     this->mcu = MCU_16F88;
+    QString str;
+    if (this->mcu == MCU_16F88)
+        str.append("MCU 16F88");
+    else
+        str.append("MCU 16F886");
+    ui->label_mcu->setText(str);
 }
 
 void MainWindow::deviceAdded()
@@ -100,11 +106,20 @@ void MainWindow::resetModule()
 void MainWindow::mcu_16f88()
 {
     this->mcu = MCU_16F88;
+    QString str;
+
+    str.append("MCU 16F88");
+
+    ui->label_mcu->setText(str);
 }
 
 void MainWindow::mcu_16f886()
 {
     this->mcu = MCU_16F886;
+    QString str;
+
+    str.append("MCU 16F886");
+    ui->label_mcu->setText(str);
 }
 
 /*
