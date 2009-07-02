@@ -287,7 +287,7 @@ void MainWindow::on_OpenFileButton_clicked(bool checked)
         ui->EepromCheckBox->setDisabled(true);
         ui->CompileButton->setDisabled(true);
         ui->EditFileButton->setDisabled(true);
-         ui->file_label->setText(" ");
+        ui->file_label->setText(" ");
         return;
     }
 
