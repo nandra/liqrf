@@ -21,8 +21,10 @@ lusb::lusb()
 /* destructor */
 lusb::~lusb()
 {
-    usb_release_interface(this->dev_handle, 0);
-    usb_close(this->dev_handle);
+    if (this->dev_handle != NULL) {
+        usb_release_interface(this->dev_handle, 0);
+        usb_close(this->dev_handle);
+    }
 }
 
 /* observer to get device preset status */
@@ -70,15 +72,19 @@ int lusb::open_usb()
 
     if (this->dev != NULL) {
         this->dev_handle = usb_open(this->dev);
-        if (this->dev_handle != NULL)
-           ret_val = 0;
+        if (this->dev_handle != NULL) {
+            /* claim interface must be done before every
+             * write or read to interface
+             */
+            ret_val = usb_claim_interface(this->dev_handle, 0);
+            if (ret_val < 0) {
+                perror("usb_claim_interface");
+            } else {
+                ret_val = 0;
+            }
+        }
     }
-    /* claim interface must be done before every
-     * write or read to interface
-     */
-    if (usb_claim_interface(this->dev_handle, 0) < 0) {
-        perror("usb_claim_interface");
-    }
+
     return ret_val;
 }
 
