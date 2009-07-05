@@ -5,7 +5,6 @@
 #include <QDebug>
 #include "hex_parser.h"
 
-
 #define MAX_DATA 32
 #define DEBUG
 
@@ -28,18 +27,62 @@ hex_parser::~hex_parser()
 
 }
 
+/*
+   setup hex format
+   return: true if setup was OK
+           false if setup was NOK
+*/
+bool hex_parser::set_hex_format(hex_format format)
+{
+    if (format == HEX88) {
+        USR_EEPROM_MAX_SIZE = 160*2;
+        APP_EEPROM_MAX_SIZE = 32*2;
+        FLASH_MAX_SIZE = 1024;
+
+        FLASH_START_ADR = 0x1c00;
+        FLASH_END_ADR = FLASH_START_ADR+FLASH_MAX_SIZE;
+        USR_EEPROM_START_ADR = 0X4200;
+        USR_EEPROM_END_ADR = USR_EEPROM_START_ADR+USR_EEPROM_MAX_SIZE;
+        APP_EEPROM_START_ADR = 0x4340;
+        APP_EEPROM_END_ADR = APP_EEPROM_START_ADR+APP_EEPROM_MAX_SIZE;
+
+    } else if (format == HEX886) {
+        USR_EEPROM_MAX_SIZE = 160*2;
+        APP_EEPROM_MAX_SIZE = 32*2;
+        FLASH_MAX_SIZE = 2048;
+
+        FLASH_START_ADR = 0x3800;
+        FLASH_END_ADR = FLASH_START_ADR+FLASH_MAX_SIZE;
+        USR_EEPROM_START_ADR = 0X4200;
+        USR_EEPROM_END_ADR = USR_EEPROM_START_ADR+USR_EEPROM_MAX_SIZE;
+        APP_EEPROM_START_ADR = 0x4340;
+        APP_EEPROM_END_ADR = APP_EEPROM_START_ADR+APP_EEPROM_MAX_SIZE;
+
+    } else
+        //unsupported hex format
+        return false;
+
+    return true;
+}
+
 
 /*
    read and parse data from hex file
+   parameter: format of hex file
    return: true if read was OK
            false if read was NOK
 */
-bool hex_parser::read_file()
+bool hex_parser::read_file(hex_format format)
 {
     FILE *hex;
-    int	len, adr, type;
+    unsigned int len, adr, type;
     unsigned int data;	// temporary buffer for data
-    int i;
+    unsigned int i;
+
+    // reset parser
+    app_eeprom_size = 0;
+    usr_eeprom_size = 0;
+    flash_size = 0;
 
     // open hex file
     hex = fopen(hexfile.toLatin1(), "r");
@@ -47,6 +90,10 @@ bool hex_parser::read_file()
         qDebug() <<"Cannot open file" << hexfile.toLatin1();
         return false;
     }
+
+    // setup hex format
+    if (!this->set_hex_format(format))
+        return false;
 
     // read hex file
     while (1) {

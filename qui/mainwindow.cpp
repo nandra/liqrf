@@ -88,6 +88,7 @@ void MainWindow::test_signal()
 {
     printf("Test signal emitted %x\n",prog->dev->usb->status);
 }
+
 void MainWindow::about()
 {
     QMessageBox::about(this, tr("About QTLiqrf"),
@@ -109,8 +110,15 @@ void MainWindow::mcu_16f88()
     QString str;
 
     str.append("MCU 16F88");
-
     ui->label_mcu->setText(str);
+
+    // reread hex file if opened
+    if (!prog->parser->hexfile.isEmpty())
+        if(!prog->parser->read_file(HEX88)) {
+            ui->UploadTextEdit->insertPlainText("Error opening file "+prog->parser->hexfile+'\n');
+            return;
+        }
+
 }
 
 void MainWindow::mcu_16f886()
@@ -120,6 +128,14 @@ void MainWindow::mcu_16f886()
 
     str.append("MCU 16F886");
     ui->label_mcu->setText(str);
+
+    // reread hex file if opened
+    if (!prog->parser->hexfile.isEmpty())
+        if(!prog->parser->read_file(HEX886)) {
+            ui->UploadTextEdit->insertPlainText("Error opening file "+prog->parser->hexfile+'\n');
+            return;
+        }
+
 }
 
 /*
@@ -175,7 +191,7 @@ void MainWindow::enterProgMode()
 {
     QString str, str1;
 
-    /* maybee needs to be extended for other SPI statuses */
+    /* maybe needs to be extended for other SPI statuses */
     if ((prog->dev->usb->status != NO_MODULE_ON_USB) && (prog->dev->usb->status != SPI_DISABLED)) {
 
         prog->enter_prog_mode();
@@ -271,6 +287,8 @@ void MainWindow::update_spi_status()
 
 void MainWindow::on_OpenFileButton_clicked(bool checked)
 {
+    bool result;
+
     opened_file = QFileDialog::getOpenFileName(this, tr("Open file"), "",
                                             tr("Hex file (*.hex);;C file (*.c);;All Files (*)"));
     if (opened_file.isEmpty())
@@ -279,20 +297,32 @@ void MainWindow::on_OpenFileButton_clicked(bool checked)
     // HEX files
     else if (opened_file.endsWith(".hex")) {
         prog->parser->hexfile = opened_file;
-        if (!prog->parser->read_file()) {
+
+        // read with correct hex format
+        if (this->mcu == MCU_16F88)
+            result = prog->parser->read_file(HEX88);
+        else if (this->mcu == MCU_16F886)
+            result = prog->parser->read_file(HEX886);
+        else
+            result = false;
+
+        if (!result) {
             ui->UploadTextEdit->insertPlainText("Error opening file "+prog->parser->hexfile+'\n');
             return;
         }
+
         if (prog->dev->spi_status == PROGRAMMING_MODE)
             ui->UploadButton->setEnabled(true);
 
         ui->ApplicationCheckBox->setEnabled(true);
         ui->ApplicationCheckBox->setChecked(true);
-        QString text =  QString::number(parser->flash_size);
+        QString text = QString::number(prog->parser->flash_size/2);
         ui->ApplicationCheckBox->setText("APPLICATION   " + text + " instructions");
 
         ui->EepromCheckBox->setEnabled(true);
         ui->EepromCheckBox->setChecked(true);
+        text = QString::number(prog->parser->app_eeprom_size + prog->parser->usr_eeprom_size);
+        ui->EepromCheckBox->setText("EEPROM         " + text + " bytes");
 
         ui->CompileButton->setDisabled(true);
         ui->EditFileButton->setDisabled(true);
