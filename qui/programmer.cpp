@@ -160,3 +160,20 @@ int programmer::send_prog_data(int data_type, unsigned char *data, int data_len,
             ret_val = 1;
     return ret_val;
 }
+
+/* reset module command */
+int programmer::reset_module()
+{
+    int ret_val = 0, len;
+    unsigned char buff[64];
+
+    memset(buff, 0, sizeof(buff));
+
+    buff[0] = CMD_ENTER_PROG;
+    buff[1] = 0x8B;
+    buff[2] = this->dev->spi->count_crc_tx(&buff[1], sizeof(buff) -1);;
+
+    if ((len = this->dev->write_data(buff, 3, 3, 1)))
+        ret_val = 1;
+
+}

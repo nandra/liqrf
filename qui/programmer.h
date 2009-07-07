@@ -40,6 +40,7 @@ public:
     unsigned char module_id[20];
     int send_prog_data(int data_type, unsigned char *data, int data_len,
                         unsigned short addr);
+    int reset_module();
 private:
 
 };

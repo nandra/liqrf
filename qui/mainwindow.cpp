@@ -103,9 +103,13 @@ void MainWindow::about()
                           "<p><a href=\"http://open-nandra.com\">open-nandra.com</a>"));
 }
 
+/* reset module command */
 void MainWindow::resetModule()
 {
-    //send usb command reset
+    prog->reset_module();
+    /* start SPI status check after module reset */
+    if (!ui->checkBox->isChecked())
+        ui->checkBox->setChecked(true);
 }
 
 /* mcu type selection for compilation */
