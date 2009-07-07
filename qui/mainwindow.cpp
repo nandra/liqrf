@@ -5,24 +5,29 @@
 #include <QTime>
 #include <QProcess>
 
+
+/* window contructor */
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::MainWindow)
 {
     QStringList arguments;
+    QString str;
 
     ui->setupUi(this);
+    this->window = new PreviewWindow();
     /* read only text edits*/
     ui->UploadTextEdit->setReadOnly(true);
     ui->term_text_edit->setReadOnly(true);
     /* programmer instance */
     prog = new programmer();
-    /* prog->parser instance */
-    //prog->parser = new hex_prog->parser();
+
     /* thread for editor instance */
     editor_thread = new Thread();
 
+    /* usb initialization */
     prog->dev->usb->init_usb();
 
+    /* check if usb device was found */
     if (prog->dev->usb->usb_dev_found()) {
         ui->UploadTextEdit->insertPlainText("USB device found\n");
 
@@ -32,6 +37,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     }
 
+    /* open usb and also clain interface */
     if (prog->dev->usb->open_usb()) {
         QMessageBox::about(this, tr("USB device could't be opened!"),
                        tr("Please check USB connection!"));
@@ -39,11 +45,11 @@ MainWindow::MainWindow(QWidget *parent)
         ui->UploadTextEdit->insertPlainText("USB device opened\n");
     }
 
-    // create timer for checking SPI status
+    /* create timer for checking SPI status */
     timer = new QTimer(this);
     connect(timer, SIGNAL(timeout()), this, SLOT(update_spi_status()));
 
-    /* start checking if device is presented */
+    /* start checking spi status device is presented */
     if (ui->checkBox->isChecked()) {
         if (prog->dev->usb->usb_dev_found()) {
             timer->start(500);
@@ -52,26 +58,25 @@ MainWindow::MainWindow(QWidget *parent)
             /* disable enter prog button */
             ui->EnterProgButton->setDisabled(true);
         }
-
     }
 
-    // menu connections
+    /* menu connections */
     connect(ui->action_Exit, SIGNAL(triggered(bool)), this, SLOT(close()));
     connect(ui->actionAbout, SIGNAL(triggered(bool)), this, SLOT(about()));
     connect(ui->actionAboutQt, SIGNAL(triggered(bool)), qApp, SLOT(aboutQt()));
     connect(ui->actionPIC_16F88, SIGNAL(triggered(bool)), this, SLOT(mcu_16f88()));
     connect(ui->actionPIC_16F886, SIGNAL(triggered(bool)), this, SLOT(mcu_16f886()));
 
-    // button connections
+    /* button connections */
     connect(ui->ResetButton, SIGNAL(clicked(bool)), this, SLOT(resetModule()));
     connect(ui->EnterProgButton, SIGNAL(clicked(bool)), this, SLOT(enterProgMode()));
 
     /* connections to custom signals */
     connect(this, SIGNAL(my_signal()), this, SLOT(test_signal()));
 
-    /* default values */
+    /* default values for MCU */
     this->mcu = MCU_16F88;
-    QString str;
+
     if (this->mcu == MCU_16F88)
         str.append("MCU 16F88");
     else
@@ -103,7 +108,7 @@ void MainWindow::resetModule()
     //send usb command reset
 }
 
-/* mcu type selction for compilation */
+/* mcu type selection for compilation */
 void MainWindow::mcu_16f88()
 {
     this->mcu = MCU_16F88;
@@ -112,7 +117,7 @@ void MainWindow::mcu_16f88()
     str.append("MCU 16F88");
     ui->label_mcu->setText(str);
 
-    // reread hex file if opened
+    /* reread hex file if opened */
     if (!prog->parser->hexfile.isEmpty())
         if(!prog->parser->read_file(HEX88)) {
             ui->UploadTextEdit->insertPlainText("Error opening file "+prog->parser->hexfile+'\n');
@@ -187,6 +192,7 @@ void parse_module_info(unsigned char *data, QString *str_out, QString *str1_out)
     *str1_out = str1;
 }
 
+/* enter programming mode */
 void MainWindow::enterProgMode()
 {
     QString str, str1;
@@ -194,16 +200,20 @@ void MainWindow::enterProgMode()
     /* maybe needs to be extended for other SPI statuses */
     if ((prog->dev->usb->status != NO_MODULE_ON_USB) && (prog->dev->usb->status != SPI_DISABLED)) {
 
-        prog->enter_prog_mode();
         /* stop timer to avoid get data to wrong place */
         timer->stop();
+        /* send some data to negotiate prog. mode */
+        prog->enter_prog_mode();
+
+        /* unti status == programming */
         while (prog->dev->get_spi_status() != PROGRAMMING_MODE)
             sleep(1);
-
+        /* ask for module id (checksums are wrong don't know why)*/
         if (!prog->request_module_id()) {
             qDebug() << "Internal error : request_module_id";
             goto exit;
         }
+        /* read module id and other info */
         if (!prog->get_module_id()) {
             qDebug() << "Internal error : get_module_id";
             goto exit;
@@ -214,20 +224,23 @@ void MainWindow::enterProgMode()
 
         /* disable upload button */
         ui->EnterProgButton->setDisabled(true);
-        // enable open file button
+        /* enable open file button */
+        ui->UploadButton->setEnabled(true);
     }
 exit:
-    sleep(1);
+    return;
 }
 
+/* main destructor */
 MainWindow::~MainWindow()
 {
-    //delete prog->parser;
     delete prog;
     delete timer;
     delete editor_thread;
+    delete window;
 }
 
+/* timer slot (check for spi status) */
 void MainWindow::update_spi_status()
 {
     int stat = 0, len;
@@ -256,7 +269,6 @@ void MainWindow::update_spi_status()
           * programming (disable enter prog mode btn, enable upload btn)
           */
          ui->EnterProgButton->setDisabled(true);
-         ui->OpenFileButton->setEnabled(true);
          /* avoid overwriting status */
          timer->stop();
          break;
@@ -280,7 +292,7 @@ void MainWindow::update_spi_status()
               str.append(tm.currentTime().toString());
               str.append(" : \"");
               str.append((char *)&buff[0]);
-              str.append("\"");
+              str.append("\"\n");
 
               ui->term_text_edit->insertPlainText(str);
 
@@ -291,6 +303,7 @@ void MainWindow::update_spi_status()
     }
 }
 
+
 void MainWindow::on_OpenFileButton_clicked(bool checked)
 {
     bool result;
@@ -300,11 +313,11 @@ void MainWindow::on_OpenFileButton_clicked(bool checked)
     if (opened_file.isEmpty())
          return;
 
-    // HEX files
+    /* HEX files */
     else if (opened_file.endsWith(".hex")) {
         prog->parser->hexfile = opened_file;
 
-        // read with correct hex format
+        /* read with correct hex format */
         if (this->mcu == MCU_16F88)
             result = prog->parser->read_file(HEX88);
         else if (this->mcu == MCU_16F886)
@@ -317,12 +330,10 @@ void MainWindow::on_OpenFileButton_clicked(bool checked)
             return;
         }
 
-        if (prog->dev->spi_status == PROGRAMMING_MODE)
-            ui->UploadButton->setEnabled(true);
 
         ui->ApplicationCheckBox->setEnabled(true);
         ui->ApplicationCheckBox->setChecked(true);
-        QString text = QString::number(prog->parser->flash_size/2);
+        QString text = QString::number(prog->parser->flash_size);
         ui->ApplicationCheckBox->setText("APPLICATION   " + text + " instructions");
 
         ui->EepromCheckBox->setEnabled(true);
@@ -361,7 +372,7 @@ void MainWindow::on_OpenFileButton_clicked(bool checked)
 void MainWindow::on_checkBox_stateChanged(int )
 {
   if (ui->checkBox->isChecked())
-        timer->start(1000);
+        timer->start(500);
     else
         timer->stop();
 }
@@ -384,16 +395,19 @@ void MainWindow::on_CompileButton_clicked(bool checked)
     QString directory;          // working directory
     QString filename;           // name of file being compiled
 
+    /* display compilation output in separate window */
+    this->window->show();
+
     if ((!opened_file.isEmpty()) && (opened_file.endsWith(".c"))) {
 
         // get separate file name and directory
         int dir_index = opened_file.lastIndexOf("/");
         QStringRef reference = opened_file.leftRef(dir_index);
         directory = reference.toString();
-        ui->UploadTextEdit->insertPlainText("working dir is "+directory+'\n');
+        this->window->textEdit->insertPlainText("working dir is "+directory+'\n');
         reference = opened_file.rightRef(opened_file.size() - dir_index - 1);
         filename = reference.toString();
-        ui->UploadTextEdit->insertPlainText("file is "+filename+'\n');
+        this->window->textEdit->insertPlainText("file is "+filename+'\n');
 
         // setup and run compile process
         arguments << "CC5x.exe" << "-a" << "-bu" << "-Q" <<
@@ -405,12 +419,14 @@ void MainWindow::on_CompileButton_clicked(bool checked)
         arguments << filename;
 
         qDebug() << arguments;
-        //ui->UploadTextEdit->insertPlainText("args are "+arguments.join(" ")+'\n');
+        this->window->textEdit->insertPlainText("args are "+arguments.join(" ")+'\n');
         compile_process.setWorkingDirectory(directory);
         compile_process.start("wine", arguments);
 
         if (!compile_process.waitForStarted()) {
             fprintf(stderr, "Compile error.\n");
+            this->window->textEdit->insertPlainText("Compilation error. Please chcek wine and CC5X compiler.\n");
+
             return;
         }
 
@@ -420,10 +436,10 @@ void MainWindow::on_CompileButton_clicked(bool checked)
         // print output of compile process
         QByteArray output;
         output = compile_process.readAllStandardOutput();
-        ui->UploadTextEdit->insertPlainText(QString(output));
+        this->window->textEdit->insertPlainText(QString(output));
         output = compile_process.readAllStandardError();
-        ui->UploadTextEdit->insertPlainText(QString(output));
-
+        this->window->textEdit->insertPlainText(QString(output));
+        this->window->textEdit->insertPlainText("\n\n\n");
     }
 }
 
@@ -507,10 +523,11 @@ void MainWindow::on_UploadButton_clicked()
 
     prog->enter_endprog_mode();
     /* star timer for checking SPI */
-    timer->start(1000);
+    timer->start(500);
 
     prog->dev->usb->reset_usb();
 
     ui->UploadButton->setDisabled(true);
+    ui->EnterProgButton->setEnabled(true);
 
 }

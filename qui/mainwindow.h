@@ -7,10 +7,8 @@
 #include <QCheckBox>
 #include <QThread>
 
-//#include "lusb.h"
-//#include "hex_parser.h"
-//#include "iqrf_dev.h"
 #include "programmer.h"
+#include "compile_window.h"
 
 enum mcu_type {
     MCU_16F88 = 1,
@@ -41,6 +39,7 @@ public:
 
 private:
     Ui::MainWindow *ui;
+    PreviewWindow *window;
     hex_parser *parser;
     programmer *prog;
     QTimer *timer;
