@@ -9,12 +9,14 @@ SOURCES += main.cpp \
     hex_parser.cpp \
     iqrf_dev.cpp \
     spi.cpp \
-    programmer.cpp
+    programmer.cpp \
+    compile_window.cpp
 HEADERS += mainwindow.h \
     usb.h \
     lusb.h \
     hex_parser.h \
     iqrf_dev.h \
     spi.h \
-    programmer.h
+    programmer.h \
+    compile_window.h
 FORMS += mainwindow.ui
