@@ -50,7 +50,7 @@ MainWindow::MainWindow(QWidget *parent)
         } else {
             ui->label_3->setText("No USB device found");
             /* disable enter prog button */
-            ui->EnterProgButton->setEnabled(false);
+            ui->EnterProgButton->setDisabled(true);
         }
 
     }
@@ -215,7 +215,6 @@ void MainWindow::enterProgMode()
         /* disable upload button */
         ui->EnterProgButton->setDisabled(true);
         // enable open file button
-        ui->OpenFileButton->setEnabled(true);
     }
 exit:
     sleep(1);
@@ -253,6 +252,13 @@ void MainWindow::update_spi_status()
          break;
     case 0x81:
          ui->label_3->setText("SPI ready (programming mode)");
+         /* if user press on CKUSB02 button it must also trigger
+          * programming (disable enter prog mode btn, enable upload btn)
+          */
+         ui->EnterProgButton->setDisabled(true);
+         ui->OpenFileButton->setEnabled(true);
+         /* avoid overwriting status */
+         timer->stop();
          break;
     case 0x82:
          ui->label_3->setText("SPI ready (debugging mode)");
