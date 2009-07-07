@@ -398,6 +398,7 @@ void MainWindow::on_CompileButton_clicked(bool checked)
     QStringList arguments;
     QString directory;          // working directory
     QString filename;           // name of file being compiled
+    bool result;
 
     /* display compilation output in separate window */
     this->window->show();
@@ -438,13 +439,46 @@ void MainWindow::on_CompileButton_clicked(bool checked)
             return;
 
         // print output of compile process
-        QByteArray output;
+        QByteArray output, test = "marek123";
         output = compile_process.readAllStandardOutput();
         this->window->textEdit->insertPlainText(QString(output));
-        output = compile_process.readAllStandardError();
+        output.append(compile_process.readAllStandardError());
         this->window->textEdit->insertPlainText(QString(output));
         this->window->textEdit->insertPlainText("\n\n\n");
+        /* check if compilation contain errors*/
+        if (output.contains("Error")) {
+            printf("Error in compilation ( hex file not created )\n");
+        } else {
+            /* this is maybee hack and using same code 2 times */
+            prog->parser->hexfile = directory+"/"+filename.remove(".c").append(".hex");
+            ui->UploadTextEdit->insertPlainText("File openned after compilation "+prog->parser->hexfile+'\n');
+            /* read with correct hex format */
+            if (this->mcu == MCU_16F88)
+                result = prog->parser->read_file(HEX88);
+            else if (this->mcu == MCU_16F886)
+                result = prog->parser->read_file(HEX886);
+            else
+                result = false;
+            if (!result) {
+                ui->UploadTextEdit->insertPlainText("Error opening file "+prog->parser->hexfile+'\n');
+                return;
+            }
+            ui->ApplicationCheckBox->setEnabled(true);
+            ui->ApplicationCheckBox->setChecked(true);
+            QString text = QString::number(prog->parser->flash_size);
+            ui->ApplicationCheckBox->setText("APPLICATION   " + text + " instructions");
+
+            ui->EepromCheckBox->setEnabled(true);
+            ui->EepromCheckBox->setChecked(true);
+            text = QString::number(prog->parser->app_eeprom_size + prog->parser->usr_eeprom_size);
+            ui->EepromCheckBox->setText("EEPROM         " + text + " bytes");
+
+
+        }
+
     }
+    ui->UploadButton->setEnabled(true);
+
 }
 
 // start editor
