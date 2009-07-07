@@ -10,6 +10,18 @@
     <height>498</height>
    </rect>
   </property>
+  <property name="minimumSize">
+   <size>
+    <width>730</width>
+    <height>498</height>
+   </size>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>730</width>
+    <height>498</height>
+   </size>
+  </property>
   <property name="windowTitle">
    <string>QTLiqrf</string>
   </property>
