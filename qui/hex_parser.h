@@ -4,9 +4,9 @@
 #include <QString>
 
 // supported hex formats
-typedef enum {
-    HEX88,
-    HEX886
+typedef enum mcu_type {
+    MCU_16F88 = 1,
+    MCU_16F886,
 }hex_format;
 
 // types of hex records

@@ -34,7 +34,7 @@ hex_parser::~hex_parser()
 */
 bool hex_parser::set_hex_format(hex_format format)
 {
-    if (format == HEX88) {
+    if (format == MCU_16F88) {
         USR_EEPROM_MAX_SIZE = 160*2;
         APP_EEPROM_MAX_SIZE = 32*2;
         FLASH_MAX_SIZE = 1024;
@@ -46,7 +46,7 @@ bool hex_parser::set_hex_format(hex_format format)
         APP_EEPROM_START_ADR = 0x4340;
         APP_EEPROM_END_ADR = APP_EEPROM_START_ADR+APP_EEPROM_MAX_SIZE;
 
-    } else if (format == HEX886) {
+    } else if (format == MCU_16F886) {
         USR_EEPROM_MAX_SIZE = 160*2;
         APP_EEPROM_MAX_SIZE = 32*2;
         FLASH_MAX_SIZE = 2048;

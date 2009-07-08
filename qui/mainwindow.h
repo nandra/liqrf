@@ -10,11 +10,6 @@
 #include "programmer.h"
 #include "compile_window.h"
 
-enum mcu_type {
-    MCU_16F88 = 1,
-    MCU_16F886,
-};
-
 namespace Ui
 {
     class MainWindow;

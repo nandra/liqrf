@@ -123,7 +123,7 @@ void MainWindow::mcu_16f88()
 
     /* reread hex file if opened */
     if (!prog->parser->hexfile.isEmpty())
-        if(!prog->parser->read_file(HEX88)) {
+        if(!prog->parser->read_file(this->mcu)) {
             ui->UploadTextEdit->insertPlainText("Error opening file "+prog->parser->hexfile+'\n');
             return;
         }
@@ -140,7 +140,7 @@ void MainWindow::mcu_16f886()
 
     // reread hex file if opened
     if (!prog->parser->hexfile.isEmpty())
-        if(!prog->parser->read_file(HEX886)) {
+        if(!prog->parser->read_file(this->mcu)) {
             ui->UploadTextEdit->insertPlainText("Error opening file "+prog->parser->hexfile+'\n');
             return;
         }
@@ -254,6 +254,7 @@ void MainWindow::update_spi_status()
     switch(stat) {
     case 0x00:
          ui->label_3->setText("SPI not working");
+         ui->indicatorSPI->setStyleSheet("QLineEdit { background-color: grey; }");
          break;
     case 0x07:
          ui->label_3->setText("SPI suspended");
@@ -266,6 +267,7 @@ void MainWindow::update_spi_status()
          break;
     case 0x80:
          ui->label_3->setText("SPI ready (communication mode)");
+         ui->indicatorSPI->setStyleSheet("QLineEdit { background-color: green; }");
          break;
     case 0x81:
          ui->label_3->setText("SPI ready (programming mode)");
@@ -284,6 +286,7 @@ void MainWindow::update_spi_status()
          break;
     case 0xFF:
          ui->label_3->setText("SPI not working (HW error)");
+         ui->indicatorSPI->setStyleSheet("QLineEdit { background-color: red; }");
          break;
     default:
          if (stat >= 0x40 && stat <= 0x63) {
@@ -322,18 +325,10 @@ void MainWindow::on_OpenFileButton_clicked(bool checked)
         prog->parser->hexfile = opened_file;
 
         /* read with correct hex format */
-        if (this->mcu == MCU_16F88)
-            result = prog->parser->read_file(HEX88);
-        else if (this->mcu == MCU_16F886)
-            result = prog->parser->read_file(HEX886);
-        else
-            result = false;
-
-        if (!result) {
+        if (!prog->parser->read_file(this->mcu)) {
             ui->UploadTextEdit->insertPlainText("Error opening file "+prog->parser->hexfile+'\n');
             return;
         }
-
 
         ui->ApplicationCheckBox->setEnabled(true);
         ui->ApplicationCheckBox->setChecked(true);
@@ -398,7 +393,6 @@ void MainWindow::on_CompileButton_clicked(bool checked)
     QStringList arguments;
     QString directory;          // working directory
     QString filename;           // name of file being compiled
-    bool result;
 
     /* display compilation output in separate window */
     this->window->show();
@@ -445,21 +439,16 @@ void MainWindow::on_CompileButton_clicked(bool checked)
         output.append(compile_process.readAllStandardError());
         this->window->textEdit->insertPlainText(QString(output));
         this->window->textEdit->insertPlainText("\n\n\n");
+
         /* check if compilation contain errors*/
         if (output.contains("Error")) {
             printf("Error in compilation ( hex file not created )\n");
         } else {
-            /* this is maybee hack and using same code 2 times */
+            /* this is maybe hack and using same code 2 times */
             prog->parser->hexfile = directory+"/"+filename.remove(".c").append(".hex");
             ui->UploadTextEdit->insertPlainText("File openned after compilation "+prog->parser->hexfile+'\n');
             /* read with correct hex format */
-            if (this->mcu == MCU_16F88)
-                result = prog->parser->read_file(HEX88);
-            else if (this->mcu == MCU_16F886)
-                result = prog->parser->read_file(HEX886);
-            else
-                result = false;
-            if (!result) {
+            if (!prog->parser->read_file(this->mcu)) {
                 ui->UploadTextEdit->insertPlainText("Error opening file "+prog->parser->hexfile+'\n');
                 return;
             }
@@ -472,7 +461,6 @@ void MainWindow::on_CompileButton_clicked(bool checked)
             ui->EepromCheckBox->setChecked(true);
             text = QString::number(prog->parser->app_eeprom_size + prog->parser->usr_eeprom_size);
             ui->EepromCheckBox->setText("EEPROM         " + text + " bytes");
-
 
         }
 

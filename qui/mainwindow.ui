@@ -404,7 +404,7 @@ QPushButton:pressed {
     </property>
     <property name="geometry">
      <rect>
-      <x>420</x>
+      <x>500</x>
       <y>450</y>
       <width>95</width>
       <height>16</height>
@@ -452,6 +452,25 @@ QPushButton:pressed {
      </item>
     </layout>
    </widget>
+   <widget class="QLineEdit" name="indicatorSPI">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>420</x>
+      <y>443</y>
+      <width>10</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true"/>
+    </property>
+    <property name="readOnly">
+     <bool>true</bool>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
@@ -459,7 +478,7 @@ QPushButton:pressed {
      <x>0</x>
      <y>0</y>
      <width>730</width>
-     <height>25</height>
+     <height>24</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
