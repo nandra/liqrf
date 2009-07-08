@@ -176,4 +176,5 @@ int programmer::reset_module()
     if ((len = this->dev->write_data(buff, 3)))
         ret_val = 1;
 
+    return ret_val;
 }

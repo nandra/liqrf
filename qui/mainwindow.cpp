@@ -12,6 +12,7 @@ MainWindow::MainWindow(QWidget *parent)
 {
     QStringList arguments;
     QString str;
+    int max_setup = 3;
 
     ui->setupUi(this);
     this->window = new PreviewWindow();
@@ -24,25 +25,25 @@ MainWindow::MainWindow(QWidget *parent)
     /* thread for editor instance */
     editor_thread = new Thread();
 
-    /* usb initialization */
-    prog->dev->usb->init_usb();
+    /* user has 2 possibilities to conect usb */
+    while (max_setup) {
+        /* usb initialization */
+        prog->dev->usb->init_usb();
 
-    /* check if usb device was found */
-    if (prog->dev->usb->usb_dev_found()) {
-        ui->UploadTextEdit->insertPlainText("USB device found\n");
-
-    } else {
-         QMessageBox::about(this, tr("USB device not found!"),
-                       tr("Please connect a device and press OK."));
-
-    }
-
-    /* open usb and also clain interface */
-    if (prog->dev->usb->open_usb()) {
-        QMessageBox::about(this, tr("USB device could't be opened!"),
-                       tr("Please check USB connection!"));
-    } else {
-        ui->UploadTextEdit->insertPlainText("USB device opened\n");
+        /* check if usb device was found */
+        if (prog->dev->usb->usb_dev_found()) {
+            ui->UploadTextEdit->insertPlainText("USB device found\n");
+             /* open usb and also clain interface */
+            if (prog->dev->usb->open_usb()) {
+                ui->UploadTextEdit->insertPlainText("USB device opened\n");
+                break;
+            }
+        } else {
+            if (max_setup != 1)
+                QMessageBox::about(this, tr("USB device not found!"),
+                               tr("Please connect a device and press OK."));
+        }
+        max_setup--;
     }
 
     /* create timer for checking SPI status */
@@ -55,6 +56,7 @@ MainWindow::MainWindow(QWidget *parent)
             timer->start(500);
         } else {
             ui->label_3->setText("No USB device found");
+            ui->indicatorSPI->setStyleSheet("QLineEdit { background-color: red; }");
             /* disable enter prog button */
             ui->EnterProgButton->setDisabled(true);
         }
@@ -313,7 +315,6 @@ void MainWindow::update_spi_status()
 
 void MainWindow::on_OpenFileButton_clicked(bool checked)
 {
-    bool result;
 
     opened_file = QFileDialog::getOpenFileName(this, tr("Open file"), "",
                                             tr("Hex file (*.hex);;C file (*.c);;All Files (*)"));

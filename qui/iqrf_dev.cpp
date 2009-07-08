@@ -151,7 +151,7 @@ int iqrf_dev::write_read_data(unsigned char *data_buff, int tx_len, int rx_len, 
 int iqrf_dev::write_data(unsigned char *data_buff, int tx_len)
 {
     unsigned char buff[64];
-    int len, crc_rx, i;
+    int i;
 
     memset(buff, 0, sizeof(buff));
     memcpy(buff, data_buff, tx_len);

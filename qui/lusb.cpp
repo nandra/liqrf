@@ -68,7 +68,7 @@ void lusb::init_usb()
 /* opening usb device */
 int lusb::open_usb()
 {
-    int ret_val = -1;
+    int ret_val = 0;
 
     if (this->dev != NULL) {
         this->dev_handle = usb_open(this->dev);
@@ -80,7 +80,7 @@ int lusb::open_usb()
             if (ret_val < 0) {
                 perror("usb_claim_interface");
             } else {
-                ret_val = 0;
+                ret_val = 1;
             }
         }
     }
