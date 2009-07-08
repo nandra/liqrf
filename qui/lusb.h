@@ -42,8 +42,9 @@ class lusb{
         void set_rx_len(int);
         int read_rx_buff(unsigned char *buff);
         void write_tx_buff(unsigned char *buff, int len);
-    private:
         int send_packet();
+    private:
+
         int retrieve_packet();
         struct usb_bus *usb_bus;
         struct usb_dev_handle *dev_handle;

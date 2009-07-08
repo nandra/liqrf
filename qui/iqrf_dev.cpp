@@ -120,8 +120,8 @@ int iqrf_dev::get_spi_cmd_data(unsigned char *data_buff, int data_len, int read_
     return 0;
 }
 
-/* write data to spi */
-int iqrf_dev::write_data(unsigned char *data_buff, int tx_len, int rx_len, int check_crc)
+/* write and reading data to/from spi */
+int iqrf_dev::write_read_data(unsigned char *data_buff, int tx_len, int rx_len, int check_crc)
 {
     unsigned char buff[64], PTYPE;
     int len, crc_rx, i;
@@ -146,7 +146,23 @@ int iqrf_dev::write_data(unsigned char *data_buff, int tx_len, int rx_len, int c
         memcpy(data_buff, buff, len);
     }
     return len;
+}
+
+int iqrf_dev::write_data(unsigned char *data_buff, int tx_len)
+{
+    unsigned char buff[64];
+    int len, crc_rx, i;
+
+    memset(buff, 0, sizeof(buff));
+    memcpy(buff, data_buff, tx_len);
+    for (i=0; i < tx_len; i++)
+        printf("[%d]=0x%X ", i, buff[i]);
+    printf("\n");
+
+    this->usb->set_tx_len(tx_len);
 
 
+    this->usb->write_tx_buff(buff, tx_len);
+    return this->usb->send_packet();
 
 }

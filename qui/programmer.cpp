@@ -24,7 +24,7 @@ void programmer::enter_prog_mode()
     buff[1] = UNKNOWN_PROG;
     buff[2] = this->dev->spi->count_crc_tx(&buff[1], sizeof(buff) - 1);
 
-    this->dev->write_data(buff, 3, 3, 0);
+    this->dev->write_data(buff, 3);
 }
 
 void programmer::enter_endprog_mode()
@@ -40,7 +40,7 @@ void programmer::enter_endprog_mode()
     buff[5] = 0xFF;
     buff[6] = this->dev->spi->count_crc_tx(&buff[1], sizeof(buff) - 1);
 
-    this->dev->write_data(buff, 9, 8, 1);
+    this->dev->write_read_data(buff, 9, 8, 1);
 
 
 }
@@ -60,7 +60,7 @@ int programmer::request_module_id(void)
     buff[3] = 0x00;
     buff[4] = this->dev->spi->count_crc_tx(&buff[1], sizeof(buff) -1);
 
-    if (this->dev->write_data(buff, 11, 10, 1))
+    if (this->dev->write_read_data(buff, 11, 10, 1))
         ret_val = 1;
 
     return ret_val;
@@ -83,7 +83,7 @@ int programmer::get_module_id(void)
     buff[2] = 0x08;
     buff[11] = this->dev->spi->count_crc_tx(&buff[1], sizeof(buff) -1);
 
-    if ((len = this->dev->write_data(buff, 14, 13, 1)))
+    if ((len = this->dev->write_read_data(buff, 14, 13, 1)))
         ret_val = 1;
 
     printf("Module ID:");
@@ -156,7 +156,7 @@ int programmer::send_prog_data(int data_type, unsigned char *data, int data_len,
         break;
     }
 
-    if (this->dev->write_data(buff, BUF_LEN, BUF_LEN, 1))
+    if (this->dev->write_read_data(buff, BUF_LEN, BUF_LEN, 1))
             ret_val = 1;
     return ret_val;
 }
@@ -173,7 +173,7 @@ int programmer::reset_module()
     buff[1] = 0x8B;
     buff[2] = this->dev->spi->count_crc_tx(&buff[1], sizeof(buff) -1);;
 
-    if ((len = this->dev->write_data(buff, 3, 3, 1)))
+    if ((len = this->dev->write_data(buff, 3)))
         ret_val = 1;
 
 }
