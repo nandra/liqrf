@@ -37,7 +37,7 @@ int lusb::usb_dev_found()
 void lusb::init_usb()
 {
     found = 0;
-    int i = 0;
+    unsigned int i = 0;
     usb_bus = usb_get_busses();
     struct usb_device *device;
     usb_init();

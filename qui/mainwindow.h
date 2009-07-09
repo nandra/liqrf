@@ -46,11 +46,11 @@ public slots:
      void deviceAdded();
 private slots:
     void on_UploadButton_clicked();
-    void on_EditFileButton_clicked(bool checked);
-    void on_CompileButton_clicked(bool checked);
+    void on_EditFileButton_clicked();
+    void on_CompileButton_clicked();
     void on_pushButton_clicked();
     void on_clear_upload_btn_clicked();
-    void on_OpenFileButton_clicked(bool checked);
+    void on_OpenFileButton_clicked();
     void about();
     void enterProgMode();
     void resetModule();
