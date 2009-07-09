@@ -313,7 +313,7 @@ void MainWindow::update_spi_status()
 }
 
 
-void MainWindow::on_OpenFileButton_clicked(bool checked)
+void MainWindow::on_OpenFileButton_clicked()
 {
 
     opened_file = QFileDialog::getOpenFileName(this, tr("Open file"), "",
@@ -388,7 +388,7 @@ void MainWindow::on_pushButton_clicked()
 }
 
 // Compile c program for iqrf
-void MainWindow::on_CompileButton_clicked(bool checked)
+void MainWindow::on_CompileButton_clicked()
 {
     QProcess compile_process;
     QStringList arguments;
@@ -471,7 +471,7 @@ void MainWindow::on_CompileButton_clicked(bool checked)
 }
 
 // start editor
-void MainWindow::on_EditFileButton_clicked(bool checked)
+void MainWindow::on_EditFileButton_clicked()
 {
     editor_thread->run(opened_file);
 }
