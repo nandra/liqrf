@@ -70,7 +70,7 @@ QPushButton:pressed {
      </sizepolicy>
     </property>
     <property name="currentIndex">
-     <number>6</number>
+     <number>3</number>
     </property>
     <widget class="QWidget" name="tab_4">
      <attribute name="title">
@@ -91,6 +91,710 @@ QPushButton:pressed {
      <attribute name="title">
       <string>System info</string>
      </attribute>
+     <widget class="QTableWidget" name="tableWidget">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>30</y>
+        <width>251</width>
+        <height>241</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>8</pointsize>
+       </font>
+      </property>
+      <property name="verticalScrollBarPolicy">
+       <enum>Qt::ScrollBarAsNeeded</enum>
+      </property>
+      <property name="horizontalScrollBarPolicy">
+       <enum>Qt::ScrollBarAsNeeded</enum>
+      </property>
+      <property name="showGrid">
+       <bool>true</bool>
+      </property>
+      <property name="gridStyle">
+       <enum>Qt::SolidLine</enum>
+      </property>
+      <attribute name="horizontalHeaderVisible">
+       <bool>false</bool>
+      </attribute>
+      <attribute name="horizontalHeaderDefaultSectionSize">
+       <number>60</number>
+      </attribute>
+      <attribute name="horizontalHeaderMinimumSectionSize">
+       <number>32</number>
+      </attribute>
+      <attribute name="verticalHeaderDefaultSectionSize">
+       <number>15</number>
+      </attribute>
+      <attribute name="verticalHeaderDefaultSectionSize">
+       <number>15</number>
+      </attribute>
+      <attribute name="horizontalHeaderVisible">
+       <bool>false</bool>
+      </attribute>
+      <attribute name="horizontalHeaderMinimumSectionSize">
+       <number>32</number>
+      </attribute>
+      <attribute name="horizontalHeaderDefaultSectionSize">
+       <number>60</number>
+      </attribute>
+      <row>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+        </font>
+       </property>
+       <property name="textAlignment">
+        <set>AlignHCenter|AlignVCenter|AlignCenter</set>
+       </property>
+      </row>
+      <row>
+       <property name="text">
+        <string/>
+       </property>
+      </row>
+      <row>
+       <property name="text">
+        <string/>
+       </property>
+      </row>
+      <row>
+       <property name="text">
+        <string/>
+       </property>
+      </row>
+      <row>
+       <property name="text">
+        <string/>
+       </property>
+      </row>
+      <row>
+       <property name="text">
+        <string/>
+       </property>
+      </row>
+      <row>
+       <property name="text">
+        <string/>
+       </property>
+      </row>
+      <row>
+       <property name="text">
+        <string/>
+       </property>
+      </row>
+      <row>
+       <property name="text">
+        <string/>
+       </property>
+      </row>
+      <row>
+       <property name="text">
+        <string/>
+       </property>
+      </row>
+      <row>
+       <property name="text">
+        <string/>
+       </property>
+      </row>
+      <row>
+       <property name="text">
+        <string/>
+       </property>
+      </row>
+      <row>
+       <property name="text">
+        <string/>
+       </property>
+      </row>
+      <row>
+       <property name="text">
+        <string/>
+       </property>
+      </row>
+      <column>
+       <property name="text">
+        <string>Address</string>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>6</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="background">
+        <color>
+         <red>170</red>
+         <green>255</green>
+         <blue>255</blue>
+        </color>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Register</string>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="background">
+        <color>
+         <red>170</red>
+         <green>255</green>
+         <blue>255</blue>
+        </color>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Hex</string>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="background">
+        <color>
+         <red>170</red>
+         <green>255</green>
+         <blue>255</blue>
+        </color>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Dec</string>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="background">
+        <color>
+         <red>170</red>
+         <green>255</green>
+         <blue>255</blue>
+        </color>
+       </property>
+      </column>
+      <item row="0" column="0">
+       <property name="text">
+        <string>0x03</string>
+       </property>
+      </item>
+      <item row="0" column="1">
+       <property name="text">
+        <string>STATUS</string>
+       </property>
+      </item>
+      <item row="1" column="0">
+       <property name="text">
+        <string>0x05</string>
+       </property>
+      </item>
+      <item row="1" column="1">
+       <property name="text">
+        <string>PORTA</string>
+       </property>
+      </item>
+      <item row="2" column="0">
+       <property name="text">
+        <string>0x06</string>
+       </property>
+      </item>
+      <item row="2" column="1">
+       <property name="text">
+        <string>PORTB</string>
+       </property>
+      </item>
+      <item row="3" column="0">
+       <property name="text">
+        <string>0x18</string>
+       </property>
+      </item>
+      <item row="3" column="1">
+       <property name="text">
+        <string>RCSTA</string>
+       </property>
+      </item>
+      <item row="4" column="0">
+       <property name="text">
+        <string>0x19</string>
+       </property>
+      </item>
+      <item row="4" column="1">
+       <property name="text">
+        <string>TXREG</string>
+       </property>
+      </item>
+      <item row="5" column="0">
+       <property name="text">
+        <string>0x1A</string>
+       </property>
+      </item>
+      <item row="5" column="1">
+       <property name="text">
+        <string>RCREG</string>
+       </property>
+      </item>
+      <item row="6" column="0">
+       <property name="text">
+        <string>0x1E</string>
+       </property>
+      </item>
+      <item row="6" column="1">
+       <property name="text">
+        <string>ADRESH</string>
+       </property>
+      </item>
+      <item row="7" column="0">
+       <property name="text">
+        <string>0x81</string>
+       </property>
+      </item>
+      <item row="7" column="1">
+       <property name="text">
+        <string>OPTION</string>
+       </property>
+      </item>
+      <item row="8" column="0">
+       <property name="text">
+        <string>0x85</string>
+       </property>
+      </item>
+      <item row="8" column="1">
+       <property name="text">
+        <string>TRISA</string>
+       </property>
+      </item>
+      <item row="9" column="0">
+       <property name="text">
+        <string>0x86</string>
+       </property>
+      </item>
+      <item row="9" column="1">
+       <property name="text">
+        <string>TRISB</string>
+       </property>
+      </item>
+      <item row="10" column="0">
+       <property name="text">
+        <string>0x98</string>
+       </property>
+      </item>
+      <item row="10" column="1">
+       <property name="text">
+        <string>TXSTA</string>
+       </property>
+      </item>
+      <item row="11" column="0">
+       <property name="text">
+        <string>0x99</string>
+       </property>
+      </item>
+      <item row="11" column="1">
+       <property name="text">
+        <string>SPBRG</string>
+       </property>
+      </item>
+      <item row="12" column="0">
+       <property name="text">
+        <string>0x9E</string>
+       </property>
+      </item>
+      <item row="12" column="1">
+       <property name="text">
+        <string>ADRESL</string>
+       </property>
+      </item>
+      <item row="13" column="0">
+       <property name="text">
+        <string>0x105</string>
+       </property>
+      </item>
+      <item row="13" column="1">
+       <property name="text">
+        <string>WDTCON</string>
+       </property>
+      </item>
+     </widget>
+     <widget class="QLabel" name="label_8">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>10</y>
+        <width>121</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>System Registers</string>
+      </property>
+     </widget>
+     <widget class="QTableWidget" name="tableWidget_2">
+      <property name="geometry">
+       <rect>
+        <x>340</x>
+        <y>30</y>
+        <width>251</width>
+        <height>241</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>8</pointsize>
+       </font>
+      </property>
+      <property name="verticalScrollBarPolicy">
+       <enum>Qt::ScrollBarAsNeeded</enum>
+      </property>
+      <property name="horizontalScrollBarPolicy">
+       <enum>Qt::ScrollBarAsNeeded</enum>
+      </property>
+      <property name="showGrid">
+       <bool>true</bool>
+      </property>
+      <property name="gridStyle">
+       <enum>Qt::SolidLine</enum>
+      </property>
+      <attribute name="horizontalHeaderVisible">
+       <bool>false</bool>
+      </attribute>
+      <attribute name="horizontalHeaderDefaultSectionSize">
+       <number>60</number>
+      </attribute>
+      <attribute name="horizontalHeaderMinimumSectionSize">
+       <number>32</number>
+      </attribute>
+      <attribute name="verticalHeaderDefaultSectionSize">
+       <number>15</number>
+      </attribute>
+      <row>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+        </font>
+       </property>
+       <property name="textAlignment">
+        <set>AlignHCenter|AlignVCenter|AlignCenter</set>
+       </property>
+      </row>
+      <row>
+       <property name="text">
+        <string/>
+       </property>
+      </row>
+      <row>
+       <property name="text">
+        <string/>
+       </property>
+      </row>
+      <row>
+       <property name="text">
+        <string/>
+       </property>
+      </row>
+      <row>
+       <property name="text">
+        <string/>
+       </property>
+      </row>
+      <row>
+       <property name="text">
+        <string/>
+       </property>
+      </row>
+      <row>
+       <property name="text">
+        <string/>
+       </property>
+      </row>
+      <row>
+       <property name="text">
+        <string/>
+       </property>
+      </row>
+      <row>
+       <property name="text">
+        <string/>
+       </property>
+      </row>
+      <row>
+       <property name="text">
+        <string/>
+       </property>
+      </row>
+      <row>
+       <property name="text">
+        <string/>
+       </property>
+      </row>
+      <row>
+       <property name="text">
+        <string/>
+       </property>
+      </row>
+      <row>
+       <property name="text">
+        <string/>
+       </property>
+      </row>
+      <row>
+       <property name="text">
+        <string/>
+       </property>
+      </row>
+      <column>
+       <property name="text">
+        <string>Address</string>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="background">
+        <color>
+         <red>170</red>
+         <green>255</green>
+         <blue>255</blue>
+        </color>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Register</string>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="background">
+        <color>
+         <red>170</red>
+         <green>255</green>
+         <blue>255</blue>
+        </color>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Hex</string>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="background">
+        <color>
+         <red>170</red>
+         <green>255</green>
+         <blue>255</blue>
+        </color>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Dec</string>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="background">
+        <color>
+         <red>170</red>
+         <green>255</green>
+         <blue>255</blue>
+        </color>
+       </property>
+      </column>
+      <item row="0" column="0">
+       <property name="text">
+        <string>0x4C</string>
+       </property>
+      </item>
+      <item row="0" column="1">
+       <property name="text">
+        <string>toutRF</string>
+       </property>
+      </item>
+      <item row="1" column="0">
+       <property name="text">
+        <string>0x153</string>
+       </property>
+      </item>
+      <item row="1" column="1">
+       <property name="text">
+        <string>PIN</string>
+       </property>
+      </item>
+      <item row="2" column="0">
+       <property name="text">
+        <string>0x154</string>
+       </property>
+      </item>
+      <item row="2" column="1">
+       <property name="text">
+        <string>DLEN</string>
+       </property>
+      </item>
+      <item row="3" column="0">
+       <property name="text">
+        <string>0x156</string>
+       </property>
+      </item>
+      <item row="3" column="1">
+       <property name="text">
+        <string>RX</string>
+       </property>
+      </item>
+      <item row="4" column="0">
+       <property name="text">
+        <string>0x157</string>
+       </property>
+      </item>
+      <item row="4" column="1">
+       <property name="text">
+        <string>TX</string>
+       </property>
+      </item>
+      <item row="5" column="0">
+       <property name="text">
+        <string>0x15C</string>
+       </property>
+      </item>
+      <item row="5" column="1">
+       <property name="text">
+        <string>RTDEF</string>
+       </property>
+      </item>
+      <item row="6" column="0">
+       <property name="text">
+        <string>0x15D</string>
+       </property>
+      </item>
+      <item row="6" column="1">
+       <property name="text">
+        <string>RTV0</string>
+       </property>
+      </item>
+      <item row="7" column="0">
+       <property name="text">
+        <string>0x15E</string>
+       </property>
+      </item>
+      <item row="7" column="1">
+       <property name="text">
+        <string>RTV1</string>
+       </property>
+      </item>
+      <item row="8" column="0">
+       <property name="text">
+        <string>0x15F</string>
+       </property>
+      </item>
+      <item row="8" column="1">
+       <property name="text">
+        <string>RTV2</string>
+       </property>
+      </item>
+      <item row="9" column="0">
+       <property name="text">
+        <string>0x160</string>
+       </property>
+      </item>
+      <item row="9" column="1">
+       <property name="text">
+        <string>RTV3</string>
+       </property>
+      </item>
+      <item row="10" column="0">
+       <property name="text">
+        <string>0x161</string>
+       </property>
+      </item>
+      <item row="10" column="1">
+       <property name="text">
+        <string>MPRV0</string>
+       </property>
+      </item>
+      <item row="11" column="0">
+       <property name="text">
+        <string>0x162</string>
+       </property>
+      </item>
+      <item row="11" column="1">
+       <property name="text">
+        <string>MPRV1</string>
+       </property>
+      </item>
+      <item row="12" column="0">
+       <property name="text">
+        <string>0x163</string>
+       </property>
+      </item>
+      <item row="12" column="1">
+       <property name="text">
+        <string>MPRV2</string>
+       </property>
+      </item>
+      <item row="13" column="0">
+       <property name="text">
+        <string>0x166</string>
+       </property>
+      </item>
+      <item row="13" column="1">
+       <property name="text">
+        <string>TIME</string>
+       </property>
+      </item>
+     </widget>
+     <widget class="QLabel" name="label_9">
+      <property name="geometry">
+       <rect>
+        <x>340</x>
+        <y>10</y>
+        <width>121</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Network Registers</string>
+      </property>
+     </widget>
     </widget>
     <widget class="QWidget" name="SPITestTab">
      <attribute name="title">
