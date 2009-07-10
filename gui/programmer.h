@@ -24,7 +24,8 @@
 #define FLASH_BLOCK_SIZE (32)
 #define APP_EEPROM_BASE_ADDR (0xA0)
 #define USR_EEPROM_BASE_ADDR (0x00)
-#define FLASH_BASE_ADDR (0x0E00)
+#define FLASH_BASE_ADDR_16F88 (0x0E00)
+#define FLASH_BASE_ADDR_16F886 (0x1C00)
 #define FLASH_ADDR_STEP (0x10)
 
 class programmer {

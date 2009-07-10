@@ -615,7 +615,7 @@ void Thread::run(QString filename)
 void MainWindow::on_UploadButton_clicked()
 {
     int block_count, c, len;
-    int flash_addr = FLASH_BASE_ADDR;
+    int flash_addr = (this->mcu == MCU_16F88) ? FLASH_BASE_ADDR_16F88 : FLASH_BASE_ADDR_16F886;
 
     while (prog->dev->spi_status != PROGRAMMING_MODE)
         prog->dev->get_spi_status();
