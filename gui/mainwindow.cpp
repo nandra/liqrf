@@ -616,6 +616,12 @@ void MainWindow::on_UploadButton_clicked()
 {
     int block_count, c, len;
     int flash_addr = (this->mcu == MCU_16F88) ? FLASH_BASE_ADDR_16F88 : FLASH_BASE_ADDR_16F886;
+    int size = 0;
+
+    ui->progressBar->setMinimum(0);
+    ui->progressBar->setMaximum(prog->parser->usr_eeprom_size +
+                                prog->parser->app_eeprom_size +
+                                prog->parser->flash_size);
 
     while (prog->dev->spi_status != PROGRAMMING_MODE)
         prog->dev->get_spi_status();
@@ -627,6 +633,8 @@ void MainWindow::on_UploadButton_clicked()
             return;
         }
         printf("Programming user eeprom (%d)\n", prog->parser->usr_eeprom_size);
+        size += prog->parser->usr_eeprom_size;
+        ui->progressBar->setValue(size);
     }
 
     if (prog->parser->app_eeprom_size) {
@@ -636,6 +644,8 @@ void MainWindow::on_UploadButton_clicked()
             return;
         }
         printf("Programming app eeprom (%d)\n", prog->parser->app_eeprom_size);
+        size += prog->parser->app_eeprom_size;
+        ui->progressBar->setValue(size);
     }
 
     /* prepare flash data by 32 bytes blocks */
@@ -655,6 +665,8 @@ void MainWindow::on_UploadButton_clicked()
             qDebug() << "Error occured";
             return;
         }
+        size += len;
+        ui->progressBar->setValue(size);
 
         flash_addr += FLASH_ADDR_STEP;
     }
