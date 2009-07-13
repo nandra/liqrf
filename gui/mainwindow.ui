@@ -70,7 +70,7 @@ QPushButton:pressed {
      </sizepolicy>
     </property>
     <property name="currentIndex">
-     <number>6</number>
+     <number>3</number>
     </property>
     <widget class="QWidget" name="tab_4">
      <attribute name="title">
@@ -100,6 +100,12 @@ QPushButton:pressed {
         <height>241</height>
        </rect>
       </property>
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
       <property name="font">
        <font>
         <pointsize>8</pointsize>
@@ -128,18 +134,6 @@ QPushButton:pressed {
       </attribute>
       <attribute name="verticalHeaderDefaultSectionSize">
        <number>15</number>
-      </attribute>
-      <attribute name="verticalHeaderDefaultSectionSize">
-       <number>15</number>
-      </attribute>
-      <attribute name="horizontalHeaderVisible">
-       <bool>false</bool>
-      </attribute>
-      <attribute name="horizontalHeaderMinimumSectionSize">
-       <number>32</number>
-      </attribute>
-      <attribute name="horizontalHeaderDefaultSectionSize">
-       <number>60</number>
       </attribute>
       <row>
        <property name="text">
@@ -1391,11 +1385,13 @@ QPushButton:pressed {
       <addaction name="actionPIC_16F886"/>
      </widget>
      <addaction name="menuMCU_type"/>
+     <addaction name="actionTools"/>
     </widget>
     <addaction name="actionUpload_Beep"/>
     <addaction name="actionDebug_Beep"/>
     <addaction name="separator"/>
     <addaction name="menuSettings"/>
+    <addaction name="actionTools_Settings"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
     <property name="title">
@@ -1449,6 +1445,16 @@ QPushButton:pressed {
   <action name="actionPIC_16F886">
    <property name="text">
     <string>PIC 16F886</string>
+   </property>
+  </action>
+  <action name="actionTools">
+   <property name="text">
+    <string>tools</string>
+   </property>
+  </action>
+  <action name="actionTools_Settings">
+   <property name="text">
+    <string>Tools Settings</string>
    </property>
   </action>
  </widget>

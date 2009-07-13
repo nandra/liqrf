@@ -11,12 +11,15 @@ SOURCES += main.cpp \
     lusb.cpp \
     iqrf_dev.cpp \
     hex_parser.cpp \
-    compile_window.cpp
+    compile_window.cpp \
+    setup_dialog.cpp
 HEADERS += mainwindow.h \
     spi.h \
     programmer.h \
     lusb.h \
     iqrf_dev.h \
     hex_parser.h \
-    compile_window.h
-FORMS += mainwindow.ui
+    compile_window.h \
+    setup_dialog.h
+FORMS += mainwindow.ui \
+    setup_dialog.ui

@@ -9,6 +9,7 @@
 
 #include "programmer.h"
 #include "compile_window.h"
+#include "setup_dialog.h"
 
 namespace Ui
 {
@@ -31,9 +32,10 @@ public:
     MainWindow(QWidget *parent = 0);
     ~MainWindow();
     enum mcu_type mcu;
-
+    setup_dialog *setup_win;
 private:
     Ui::MainWindow *ui;
+
     PreviewWindow *window;
     hex_parser *parser;
     programmer *prog;
@@ -60,6 +62,8 @@ private slots:
     void mcu_16f886();
     void deviceAdded(const QString &udi);
     void deviceRemoved(const QString &udi);
+    void toolsSetting();
+
 signals:
     void my_signal();
 
