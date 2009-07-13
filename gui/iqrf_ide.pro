@@ -19,4 +19,5 @@ HEADERS += mainwindow.h \
     iqrf_dev.h \
     hex_parser.h \
     compile_window.h
-FORMS += mainwindow.ui
+FORMS += mainwindow.ui \
+    tools_dialog.ui

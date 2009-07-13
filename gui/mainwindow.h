@@ -60,6 +60,8 @@ private slots:
     void mcu_16f886();
     void deviceAdded(const QString &udi);
     void deviceRemoved(const QString &udi);
+    void toolsSetting();
+
 signals:
     void my_signal();
 

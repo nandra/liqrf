@@ -27,6 +27,7 @@
 #include <QDBusConnection>
 #include <QtDBus>
 
+
 /* window contructor */
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::MainWindow)
@@ -83,12 +84,26 @@ MainWindow::MainWindow(QWidget *parent)
         }
     }
 
+    /* set table parameters */
+    for (int i=0; i < ui->tableWidget->rowCount(); i++) {
+        ui->tableWidget->setRowHeight(i, 15);
+    }
+    ui->tableWidget->resizeColumnsToContents();
+    //ui->tableWidget->resizeRowsToContents();
+    for (int i=0; i < ui->tableWidget_2->rowCount(); i++) {
+        ui->tableWidget_2->setRowHeight(i, 15);
+    }
+    ui->tableWidget_2->resizeColumnsToContents();
+    //ui->tableWidget_2->resizeRowsToContents();
+
+
     /* menu connections */
     connect(ui->action_Exit, SIGNAL(triggered(bool)), this, SLOT(close()));
     connect(ui->actionAbout, SIGNAL(triggered(bool)), this, SLOT(about()));
     connect(ui->actionAboutQt, SIGNAL(triggered(bool)), qApp, SLOT(aboutQt()));
     connect(ui->actionPIC_16F88, SIGNAL(triggered(bool)), this, SLOT(mcu_16f88()));
     connect(ui->actionPIC_16F886, SIGNAL(triggered(bool)), this, SLOT(mcu_16f886()));
+    connect(ui->actionTools, SIGNAL(triggered(bool)), this, SLOT(toolsSetting()));
 
     /* button connections */
     connect(ui->ResetButton, SIGNAL(clicked(bool)), this, SLOT(resetModule()));
@@ -205,6 +220,11 @@ void MainWindow::deviceRemoved(const QString &udi)
 void MainWindow::test_signal()
 {
     printf("Test signal emitted %x\n",prog->dev->usb->status);
+}
+
+void MainWindow::toolsSetting()
+{
+
 }
 
 void MainWindow::about()
