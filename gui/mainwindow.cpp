@@ -105,8 +105,8 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->actionAboutQt, SIGNAL(triggered(bool)), qApp, SLOT(aboutQt()));
     connect(ui->actionPIC_16F88, SIGNAL(triggered(bool)), this, SLOT(mcu_16f88()));
     connect(ui->actionPIC_16F886, SIGNAL(triggered(bool)), this, SLOT(mcu_16f886()));
-    //connect(ui->actionTools, SIGNAL(triggered(bool)), this, SLOT(toolsSetting()));
-    connect(ui->actionTools_Settings, SIGNAL(triggered(bool)), this, SLOT(toolsSetting()));
+    connect(ui->actionTools, SIGNAL(triggered(bool)), this, SLOT(toolsSetting()));
+
 
     /* button connections */
     connect(ui->ResetButton, SIGNAL(clicked(bool)), this, SLOT(resetModule()));
