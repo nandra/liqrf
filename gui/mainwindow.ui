@@ -70,7 +70,7 @@ QPushButton:pressed {
      </sizepolicy>
     </property>
     <property name="currentIndex">
-     <number>3</number>
+     <number>6</number>
     </property>
     <widget class="QWidget" name="tab_4">
      <attribute name="title">
@@ -1360,7 +1360,7 @@ QPushButton:pressed {
      <x>0</x>
      <y>0</y>
      <width>730</width>
-     <height>24</height>
+     <height>25</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -1385,7 +1385,6 @@ QPushButton:pressed {
       <addaction name="actionPIC_16F886"/>
      </widget>
      <addaction name="menuMCU_type"/>
-     <addaction name="actionTools"/>
     </widget>
     <addaction name="actionUpload_Beep"/>
     <addaction name="actionDebug_Beep"/>
