@@ -60,10 +60,10 @@
      </property>
      <layout class="QHBoxLayout" name="horizontalLayout">
       <item>
-       <widget class="QLineEdit" name="lineEdit"/>
+       <widget class="QLineEdit" name="CompilerLocationEdit"/>
       </item>
       <item>
-       <widget class="QPushButton" name="pushButton">
+       <widget class="QPushButton" name="CompilerBrowseButton">
         <property name="text">
          <string>Browse</string>
         </property>
@@ -95,14 +95,14 @@
      </property>
      <layout class="QHBoxLayout" name="horizontalLayout_2">
       <item>
-       <widget class="QLineEdit" name="lineEdit_2">
+       <widget class="QLineEdit" name="OptionsEdit">
         <property name="text">
          <string>-a -bu -Q -Vn -cif</string>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="pushButton_2">
+       <widget class="QPushButton" name="SetDefaultButton">
         <property name="text">
          <string>Set Default</string>
         </property>
@@ -124,7 +124,7 @@
      <string>Select Microcontroller</string>
     </property>
    </widget>
-   <widget class="QComboBox" name="comboBox">
+   <widget class="QComboBox" name="SelectMicroBox">
     <property name="geometry">
      <rect>
       <x>10</x>
@@ -180,10 +180,10 @@
      </property>
      <layout class="QHBoxLayout" name="horizontalLayout_3">
       <item>
-       <widget class="QLineEdit" name="lineEdit_3"/>
+       <widget class="QLineEdit" name="EditorLocationEdit"/>
       </item>
       <item>
-       <widget class="QPushButton" name="pushButton_3">
+       <widget class="QPushButton" name="EditorBrowseButton">
         <property name="text">
          <string>Browse</string>
         </property>
@@ -193,7 +193,7 @@
     </widget>
    </widget>
   </widget>
-  <widget class="QPushButton" name="pushButton_4">
+  <widget class="QPushButton" name="SetupOkButton">
    <property name="geometry">
     <rect>
      <x>260</x>
@@ -206,7 +206,7 @@
     <string>OK</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="pushButton_5">
+  <widget class="QPushButton" name="SetupCancelButton">
    <property name="geometry">
     <rect>
      <x>470</x>
