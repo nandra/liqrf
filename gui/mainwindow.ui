@@ -1393,7 +1393,7 @@ QPushButton:pressed {
      <x>0</x>
      <y>0</y>
      <width>730</width>
-     <height>25</height>
+     <height>24</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
