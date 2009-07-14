@@ -26,6 +26,7 @@
 #include <QProcess>
 #include <QDBusConnection>
 #include <QtDBus>
+#include <QSettings>
 
 
 /* window contructor */
@@ -37,12 +38,15 @@ MainWindow::MainWindow(QWidget *parent)
     int max_setup = 3;
 
     ui->setupUi(this);
+
     /* setup dialog windows */
     setup_win = new setup_dialog();
     this->window = new PreviewWindow();
+
     /* read only text edits*/
     ui->UploadTextEdit->setReadOnly(true);
     ui->term_text_edit->setReadOnly(true);
+
     /* programmer instance */
     prog = new programmer();
 
@@ -98,6 +102,8 @@ MainWindow::MainWindow(QWidget *parent)
     ui->tableWidget_2->resizeColumnsToContents();
     //ui->tableWidget_2->resizeRowsToContents();
 
+    readSettings();
+    this->setup_win->reset();
 
     /* menu connections */
     connect(ui->action_Exit, SIGNAL(triggered(bool)), this, SLOT(close()));
@@ -115,7 +121,10 @@ MainWindow::MainWindow(QWidget *parent)
     connect(this, SIGNAL(my_signal()), this, SLOT(test_signal()));
 
     /* default values for MCU */
-    this->mcu = MCU_16F88;
+    if(this->setup_win->select_index == 0)
+        this->mcu = MCU_16F88;
+    else
+        this->mcu = MCU_16F886;
 
     if (this->mcu == MCU_16F88)
         str.append("MCU 16F88");
@@ -374,6 +383,8 @@ exit:
 /* main destructor */
 MainWindow::~MainWindow()
 {
+    writeSettings();
+
     delete prog;
     delete timer;
     delete editor_thread;
@@ -544,8 +555,8 @@ void MainWindow::on_CompileButton_clicked()
         this->window->textEdit->insertPlainText("file is "+filename+'\n');
 
         // setup and run compile process
-        arguments << "CC5x.exe" << "-a" << "-bu" << "-Q" <<
-                "-Vn";
+        arguments << this->setup_win->compiler_location
+                    << this->setup_win->compiler_options;
         if (this->mcu == MCU_16F88)
             arguments << "-p16F88";
         else
@@ -607,6 +618,11 @@ void MainWindow::on_CompileButton_clicked()
 // start editor
 void MainWindow::on_EditFileButton_clicked()
 {
+    if (this->setup_win->editor_location.isEmpty()) {
+        ui->UploadTextEdit->insertPlainText("Editor not set!");
+        return;
+    }
+    editor_thread->editor_name = this->setup_win->editor_location;
     editor_thread->run(opened_file);
 }
 
@@ -615,9 +631,6 @@ void Thread::run(QString filename)
 {
     QProcess editor_process;
     QStringList arguments;
-    QString editor_name;
-
-    editor_name = "kate";
 
     if ((!filename.isEmpty()) && (filename.endsWith(".c"))) {
         arguments << filename;
@@ -705,3 +718,26 @@ void MainWindow::on_UploadButton_clicked()
 
 }
 
+void MainWindow::writeSettings()
+{
+    QSettings settings("Open Nandra", "IQRF IDE");
+
+    settings.beginGroup("MainWindow");
+    settings.setValue("compiler location", this->setup_win->compiler_location);
+    settings.setValue("compiler options", this->setup_win->compiler_options);
+    settings.setValue("editor location", this->setup_win->editor_location);
+    settings.setValue("mcu selection", this->setup_win->select_index);
+    settings.endGroup();
+}
+
+void MainWindow::readSettings()
+{
+    QSettings settings("Open Nandra", "IQRF IDE");
+
+    settings.beginGroup("MainWindow");
+    this->setup_win->compiler_location = settings.value("compiler location").toString();
+    this->setup_win->compiler_options = settings.value("compiler options").toString();
+    this->setup_win->editor_location = settings.value("editor location").toString();
+    this->setup_win->select_index = settings.value("mcu selection").toInt();
+    settings.endGroup();
+}

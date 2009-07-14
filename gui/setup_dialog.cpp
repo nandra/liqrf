@@ -9,8 +9,10 @@ setup_dialog::setup_dialog(QWidget *parent) :
 {
     m_ui->setupUi(this);
     setWindowTitle(tr("Tools Settings"));
-    select_index = 0;                   // TODO: change to load from settings
-    compiler_options = OPTIONS_DEFAULT; // TODO: -||-
+
+    // default values
+    compiler_options = OPTIONS_DEFAULT;
+    select_index = 0;
 }
 
 setup_dialog::~setup_dialog()
@@ -76,4 +78,12 @@ void setup_dialog::on_SetDefaultButton_clicked()
 void setup_dialog::reject()
 {
     this->on_SetupCancelButton_clicked();
+}
+
+void setup_dialog::reset()
+{
+    m_ui->CompilerLocationEdit->setText(compiler_location);
+    m_ui->EditorLocationEdit->setText(editor_location);
+    m_ui->OptionsEdit->setText(compiler_options);
+    m_ui->SelectMicroBox->setCurrentIndex(select_index);
 }

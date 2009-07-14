@@ -1488,6 +1488,9 @@ QPushButton:pressed {
    <property name="text">
     <string>Tools Settings</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+T</string>
+   </property>
   </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
