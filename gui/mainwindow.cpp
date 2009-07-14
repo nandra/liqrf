@@ -86,7 +86,7 @@ MainWindow::MainWindow(QWidget *parent)
         }
     }
 
-    /* set table parameters */
+    /* set table parameters for system and network registers */
     for (int i=0; i < ui->tableWidget->rowCount(); i++) {
         ui->tableWidget->setRowHeight(i, 15);
     }
@@ -98,6 +98,21 @@ MainWindow::MainWindow(QWidget *parent)
     ui->tableWidget_2->resizeColumnsToContents();
     //ui->tableWidget_2->resizeRowsToContents();
 
+    /* set table parameters for buffers */
+    for (int i=0; i < ui->table_buff_info->rowCount(); i++) {
+        ui->table_buff_info->setRowHeight(i, 18);
+    }
+    ui->table_buff_info->resizeColumnsToContents();
+
+    for (int i=0; i < ui->table_buff_com->rowCount(); i++) {
+        ui->table_buff_com->setRowHeight(i, 18);
+    }
+    ui->table_buff_com->resizeColumnsToContents();
+
+    for (int i=0; i < ui->table_buff_RF->rowCount(); i++) {
+        ui->table_buff_RF->setRowHeight(i, 18);
+    }
+    ui->table_buff_RF->resizeColumnsToContents();
 
     /* menu connections */
     connect(ui->action_Exit, SIGNAL(triggered(bool)), this, SLOT(close()));
