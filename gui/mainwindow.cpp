@@ -87,10 +87,11 @@ MainWindow::MainWindow(QWidget *parent)
             ui->indicatorSPI->setStyleSheet("QLineEdit { background-color: red; }");
             /* disable enter prog button */
             ui->EnterProgButton->setDisabled(true);
+            ui->ResetButton->setDisabled(true);
         }
     }
 
-    /* set table parameters */
+    /* set table parameters for system and network registers */
     for (int i=0; i < ui->tableWidget->rowCount(); i++) {
         ui->tableWidget->setRowHeight(i, 15);
     }
@@ -104,6 +105,44 @@ MainWindow::MainWindow(QWidget *parent)
 
     readSettings();
     this->setup_win->reset();
+
+    /* set table parameters for buffers */
+    for (int i=0; i < ui->table_buff_info->rowCount(); i++) {
+        ui->table_buff_info->setRowHeight(i, 18);
+    }
+    ui->table_buff_info->resizeColumnsToContents();
+
+    for (int i=0; i < ui->table_buff_com->rowCount(); i++) {
+        ui->table_buff_com->setRowHeight(i, 18);
+    }
+    ui->table_buff_com->resizeColumnsToContents();
+
+    for (int i=0; i < ui->table_buff_RF->rowCount(); i++) {
+        ui->table_buff_RF->setRowHeight(i, 18);
+    }
+    ui->table_buff_RF->resizeColumnsToContents();
+
+    /* set table parameters for eeprom */
+    for (int i=0; i < ui->table_eeprom->rowCount(); i++) {
+        ui->table_eeprom->setRowHeight(i, 18);
+    }
+    ui->table_eeprom->resizeColumnsToContents();
+
+    for (int i=0; i < ui->table_app_info->rowCount(); i++) {
+        ui->table_app_info->setRowHeight(i, 18);
+    }
+    ui->table_app_info->resizeColumnsToContents();
+
+    /* set table parameters for user ram */
+    for (int i=0; i < ui->table_user_ram->rowCount(); i++) {
+        ui->table_user_ram->setRowHeight(i, 18);
+    }
+    ui->table_user_ram->resizeColumnsToContents();
+
+    for (int i=0; i < ui->table_user_ram_reg->rowCount(); i++) {
+        ui->table_user_ram_reg->setRowHeight(i, 15);
+    }
+    ui->table_user_ram_reg->resizeColumnsToContents();
 
     /* menu connections */
     connect(ui->action_Exit, SIGNAL(triggered(bool)), this, SLOT(close()));
@@ -193,6 +232,7 @@ void MainWindow::deviceAdded(const QString &udi)
          }
         timer->start();
         ui->EnterProgButton->setEnabled(true);
+        ui->ResetButton->setEnabled(true);
         ui->label_3->setStyleSheet("QLabel {}");
         ui->label_3->setText("USB device connected");
         ui->indicatorSPI->setStyleSheet("QLineEdit { background-color: green; }");
@@ -220,6 +260,7 @@ void MainWindow::deviceRemoved(const QString &udi)
             timer->stop();
             prog->release();
             ui->EnterProgButton->setDisabled(true);
+            ui->ResetButton->setDisabled(true);
             ui->label_3->setText("USB device disconnected");
             ui->label_3->setStyleSheet("QLabel {background-color: red;}");
             ui->indicatorSPI->setStyleSheet("QLineEdit { background-color: red; }");
