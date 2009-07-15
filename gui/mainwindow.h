@@ -47,6 +47,7 @@ public slots:
      void on_checkBox_stateChanged(int);
 
 private slots:
+    void on_btn_teminal_spi_send_clicked();
     void on_UploadButton_clicked();
     void on_EditFileButton_clicked();
     void on_CompileButton_clicked();

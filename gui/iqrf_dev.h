@@ -3,6 +3,7 @@
 
 #include "lusb.h"
 #include "spi.h"
+#include <semaphore.h>
 
 #define CMD_FOR_CK 0x01
 
@@ -17,6 +18,7 @@ class iqrf_dev {
     int write_read_data(unsigned char *data_buff, int tx_len, int rx_len, int check_crc);
     int write_data(unsigned char *data_buff, int tx_len);
     int spi_status;
+    sem_t sem;
   private:
 
 };

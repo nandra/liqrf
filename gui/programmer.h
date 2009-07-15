@@ -39,10 +39,12 @@ public:
     int request_module_id(void);
     int get_module_id(void);
     unsigned char module_id[20];
+    unsigned char spi_tx_data[35];
     int send_prog_data(int data_type, unsigned char *data, int data_len,
                         unsigned short addr);
     int reset_module();
     void release();
+    int write_read_spi_data(unsigned char *data, int data_len, int write_read);
 private:
 
 };

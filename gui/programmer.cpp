@@ -179,7 +179,23 @@ int programmer::reset_module()
     return ret_val;
 }
 
+/* release entries in programmer */
 void programmer::release()
 {
     this->dev->usb->release_usb();
+}
+
+/* send command for write/read SPI data */
+int programmer::write_read_spi_data(unsigned char *data, int data_len, int write_read)
+{
+    int ret_val = 0;
+    unsigned char buff[35];
+
+    memset(buff, 0, sizeof(buff));
+
+    memcpy(buff, data, data_len);
+
+    this->dev->get_spi_cmd_data(buff, data_len, write_read, 0);
+
+    return ret_val;
 }

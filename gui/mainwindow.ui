@@ -70,7 +70,7 @@ QPushButton:pressed {
      </sizepolicy>
     </property>
     <property name="currentIndex">
-     <number>2</number>
+     <number>5</number>
     </property>
     <widget class="QWidget" name="tab_4">
      <attribute name="title">
@@ -1920,7 +1920,7 @@ QPushButton:pressed {
        <string>Communication</string>
       </property>
      </widget>
-     <widget class="QLineEdit" name="lineEdit">
+     <widget class="QLineEdit" name="spi_data_tx">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -1946,7 +1946,7 @@ QPushButton:pressed {
        <string>TX Text</string>
       </property>
      </widget>
-     <widget class="QPushButton" name="pushButton_2">
+     <widget class="QPushButton" name="btn_teminal_spi_send">
       <property name="geometry">
        <rect>
         <x>460</x>

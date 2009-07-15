@@ -426,6 +426,7 @@ void MainWindow::update_spi_status()
 {
     int stat = 0, len;
     unsigned char buff[36];
+    memset(buff, 0 , sizeof(buff));
     stat = prog->dev->get_spi_status();
 
     switch(stat) {
@@ -469,12 +470,12 @@ void MainWindow::update_spi_status()
          if (stat >= 0x40 && stat <= 0x63) {
               ui->label_3->setText("SPI data ready");
               /* if data are ready print to text array in Terminal label */
-              len = prog->dev->get_spi_cmd_data(buff, stat & 0x3F, 0, 0);
+              len = prog->write_read_spi_data(buff, stat, 0);
               buff[len] = '\0';
               QString str;
               QTime tm;
               str.append(tm.currentTime().toString());
-              str.append(" : \"");
+              str.append(" RxD : \"");
               str.append((char *)&buff[0]);
               str.append("\"\n");
 
@@ -746,3 +747,25 @@ void MainWindow::on_UploadButton_clicked()
 
 }
 
+void MainWindow::on_btn_teminal_spi_send_clicked()
+{
+    QString data = ui->spi_data_tx->displayText();
+    if (data != "") {
+
+         /* if data are ready print to text array in Terminal label */
+        QString str;
+        QTime tm;
+        str.append(tm.currentTime().toString());
+        str.append(" TxD : \"");
+        str.append(data);
+        str.append("\"");
+        ui->term_text_edit->insertPlainText(str+'\n');
+
+        QByteArray arr = data.toAscii();
+        int i = arr.count();
+        unsigned char *data = (unsigned char *)arr.data();
+
+        this->prog->write_read_spi_data(data, i, 1);
+    }
+
+}
