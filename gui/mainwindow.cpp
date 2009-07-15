@@ -445,7 +445,7 @@ MainWindow::~MainWindow()
 void MainWindow::update_spi_status()
 {
     int stat = 0, len;
-    unsigned char buff[36];
+    unsigned char buff[35];
     memset(buff, 0 , sizeof(buff));
     stat = prog->dev->get_spi_status();
 
@@ -815,4 +815,93 @@ void MainWindow::readSettings()
     this->setup_win->editor_location = settings.value("editor location").toString();
     this->setup_win->select_index = settings.value("mcu selection").toInt();
     settings.endGroup();
+}
+
+/* send and receive raw spi data entered by user in spi test tab*/
+void MainWindow::on_send_spi_data_clicked()
+{
+    unsigned char buff[35];
+    bool ok;
+    int i = 0, len, temp;
+
+    QString data = ui->line_tx_data_spi->displayText();
+    if (data != "") {
+
+        QString str;
+
+        str.append(QTime::currentTime().toString());
+        str.append(" TxD : \"");
+        str.append(data);
+        str.append("\"");
+        ui->spi_text_edit->insertPlainText(str+'\n');
+        QStringList bytes = data.split(".");
+        len = bytes.count();
+
+        foreach (QString dta, bytes) {
+            //qDebug() << dta.toInt(&ok,16);
+            temp = dta.toInt(&ok,16);
+            if (ok) {
+                buff[i] = temp;
+            } else {
+                qDebug() << "Cannot convert dta.toInt(&ok,16)";
+                len --;
+            }
+            i++;
+        }
+
+
+
+        len = this->prog->write_read_test_spi_data(buff, len);
+
+        QString str_rx, t, s;
+
+        str_rx.append(QTime::currentTime().toString());
+        str_rx.append(" RxD : \"");
+        for (i = 0; i < len; i++) {
+            qDebug() << buff[i];
+            t = t.setNum(buff[i], 16);
+            str_rx.append(t);
+            s.append(t);
+
+            if (i < len - 1) {
+                s.append(".");
+                str_rx.append(".");
+            }
+        }
+
+
+        ui->line_rx_data_spi->setText(s);
+
+        str_rx.append("\"");
+
+        ui->spi_text_edit->insertPlainText(str_rx+'\n');
+
+    }
+}
+
+
+void MainWindow::on_btn_crcm_clicked()
+{
+    unsigned char buff[35];
+    int i = 0, crc;
+    bool ok;
+    QString str;
+
+    QString data = ui->line_tx_data_spi->displayText();
+    QStringList bytes = data.split(".");
+
+    foreach (QString dta, bytes) {
+        buff[i] = dta.toInt(&ok,16);
+            i++;
+    }
+
+    int len = bytes.count();
+    crc = prog->dev->spi->count_crc_tx(buff, len);
+
+    ui->line_tx_data_spi->insert("." + str.setNum(crc, 16) + ".");
+}
+
+void MainWindow::on_btn_add_00_clicked()
+{
+    ui->line_tx_data_spi->insert("00.");
 }

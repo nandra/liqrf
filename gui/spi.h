@@ -1,6 +1,7 @@
 #ifndef SPI_H
 #define SPI_H
 
+#define SPI_DATA_LENGTH        (35)
 #define SPI_CRC_DEFAULT        (0x5F)
 
 #define SPI_CMD 0xF0

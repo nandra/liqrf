@@ -72,7 +72,7 @@ QPushButton:pressed {
      </sizepolicy>
     </property>
     <property name="currentIndex">
-     <number>5</number>
+     <number>4</number>
     </property>
     <widget class="QWidget" name="tab_4">
      <attribute name="title">
@@ -1760,7 +1760,7 @@ QPushButton:pressed {
      <attribute name="title">
       <string>SPI Test</string>
      </attribute>
-     <widget class="QPushButton" name="pushButton_3">
+     <widget class="QPushButton" name="btn_crcm">
       <property name="geometry">
        <rect>
         <x>20</x>
@@ -1773,7 +1773,7 @@ QPushButton:pressed {
        <string>CRCM</string>
       </property>
      </widget>
-     <widget class="QPushButton" name="pushButton_4">
+     <widget class="QPushButton" name="btn_add_00">
       <property name="geometry">
        <rect>
         <x>110</x>
@@ -1825,7 +1825,7 @@ QPushButton:pressed {
        <string>RX Data</string>
       </property>
      </widget>
-     <widget class="QLineEdit" name="lineEdit_2">
+     <widget class="QLineEdit" name="line_tx_data_spi">
       <property name="geometry">
        <rect>
         <x>20</x>
@@ -1835,7 +1835,7 @@ QPushButton:pressed {
        </rect>
       </property>
      </widget>
-     <widget class="QLineEdit" name="lineEdit_3">
+     <widget class="QLineEdit" name="line_rx_data_spi">
       <property name="geometry">
        <rect>
         <x>20</x>
@@ -1845,7 +1845,7 @@ QPushButton:pressed {
        </rect>
       </property>
      </widget>
-     <widget class="QPushButton" name="pushButton_6">
+     <widget class="QPushButton" name="send_spi_data">
       <property name="geometry">
        <rect>
         <x>360</x>
@@ -1858,7 +1858,7 @@ QPushButton:pressed {
        <string>Send</string>
       </property>
      </widget>
-     <widget class="QTextEdit" name="textEdit">
+     <widget class="QTextEdit" name="spi_text_edit">
       <property name="geometry">
        <rect>
         <x>20</x>

@@ -185,17 +185,43 @@ void programmer::release()
     this->dev->usb->release_usb();
 }
 
-/* send command for write/read SPI data */
+/* send command for write/read SPI data
+ * it uis used when user send response
+ * for spi command
+ */
 int programmer::write_read_spi_data(unsigned char *data, int data_len, int write_read)
 {
     int ret_val = 0;
-    unsigned char buff[35];
 
-    memset(buff, 0, sizeof(buff));
+    if (data_len > SPI_DATA_LENGTH)
+        data_len = SPI_DATA_LENGTH;
 
-    memcpy(buff, data, data_len);
-
-    this->dev->get_spi_cmd_data(buff, data_len, write_read, 0);
+    ret_val = this->dev->get_spi_cmd_data(data, data_len, write_read, 0);
 
     return ret_val;
 }
+
+/* send command for write/read SPI data
+ * all bytes are defined by user
+ */
+int programmer::write_read_test_spi_data(unsigned char *data, int data_len)
+{
+    int ret_val = 0;
+    unsigned char buff[64];
+
+    buff[0] = CMD_FOR_CK;
+    /* spi data len = 35 + 0xF0 + CRC */
+    if (data_len > SPI_DATA_LENGTH + 2)
+        data_len = SPI_DATA_LENGTH + 2;
+
+    memcpy(&buff[1], data, data_len);
+    int i;
+    for (i=0; i < data_len; i++)
+        printf("[%x]", buff[i]);
+
+    ret_val = this->dev->write_read_data(buff, data_len+1, data_len + 1, 1);
+    if (ret_val)
+        memcpy(data, buff, ret_val);
+    return ret_val;
+}
+

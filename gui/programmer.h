@@ -45,6 +45,7 @@ public:
     int reset_module();
     void release();
     int write_read_spi_data(unsigned char *data, int data_len, int write_read);
+    int write_read_test_spi_data(unsigned char *data, int data_len);
 private:
 
 };
