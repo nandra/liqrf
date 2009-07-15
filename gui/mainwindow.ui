@@ -29,7 +29,9 @@
    <enum>Qt::LeftToRight</enum>
   </property>
   <property name="styleSheet">
-   <string notr="true">QProgressBar,
+   <string notr="true">QComboBox,
+QLineEdit,
+QProgressBar,
 QTabWidget,
 QTextEdit,
 QPlainTextEdit {	
@@ -70,7 +72,7 @@ QPushButton:pressed {
      </sizepolicy>
     </property>
     <property name="currentIndex">
-     <number>2</number>
+     <number>5</number>
     </property>
     <widget class="QWidget" name="tab_4">
      <attribute name="title">
@@ -2324,7 +2326,7 @@ QPushButton:pressed {
      <x>0</x>
      <y>0</y>
      <width>730</width>
-     <height>25</height>
+     <height>24</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -2337,23 +2339,9 @@ QPushButton:pressed {
     <property name="title">
      <string>Settings</string>
     </property>
-    <widget class="QMenu" name="menuSettings">
-     <property name="title">
-      <string>Settings</string>
-     </property>
-     <widget class="QMenu" name="menuMCU_type">
-      <property name="title">
-       <string>MCU type</string>
-      </property>
-      <addaction name="actionPIC_16F88"/>
-      <addaction name="actionPIC_16F886"/>
-     </widget>
-     <addaction name="menuMCU_type"/>
-    </widget>
     <addaction name="actionUpload_Beep"/>
     <addaction name="actionDebug_Beep"/>
     <addaction name="separator"/>
-    <addaction name="menuSettings"/>
     <addaction name="actionTools_Settings"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
@@ -2417,7 +2405,7 @@ QPushButton:pressed {
   </action>
   <action name="actionTools_Settings">
    <property name="text">
-    <string>Tools Settings</string>
+    <string>&amp;Tools Settings</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+T</string>

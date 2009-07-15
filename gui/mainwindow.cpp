@@ -148,8 +148,6 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->action_Exit, SIGNAL(triggered(bool)), this, SLOT(close()));
     connect(ui->actionAbout, SIGNAL(triggered(bool)), this, SLOT(about()));
     connect(ui->actionAboutQt, SIGNAL(triggered(bool)), qApp, SLOT(aboutQt()));
-    connect(ui->actionPIC_16F88, SIGNAL(triggered(bool)), this, SLOT(mcu_16f88()));
-    connect(ui->actionPIC_16F886, SIGNAL(triggered(bool)), this, SLOT(mcu_16f886()));
     connect(ui->actionTools_Settings, SIGNAL(triggered(bool)), this, SLOT(toolsSetting()));
 
     /* button connections */
@@ -277,7 +275,16 @@ void MainWindow::test_signal()
 void MainWindow::toolsSetting()
 {
     /* show dialog with modality */
-    this->setup_win->exec();
+    if (this->setup_win->exec()) {
+        if (this->setup_win->select_index == 0)
+            this->mcu_16f88();
+        else if (this->setup_win->select_index == 1)
+            this->mcu_16f886();
+        else
+            ; // unsupported
+
+    }
+
 }
 
 void MainWindow::about()

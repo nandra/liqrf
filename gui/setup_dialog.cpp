@@ -56,7 +56,7 @@ void setup_dialog::on_SetupOkButton_clicked()
     compiler_options = m_ui->OptionsEdit->text();
     select_index = m_ui->SelectMicroBox->currentIndex();
 
-    this->setShown(false);
+    accept();
 }
 
 // discard any new settings
