@@ -114,6 +114,29 @@ MainWindow::MainWindow(QWidget *parent)
     }
     ui->table_buff_RF->resizeColumnsToContents();
 
+    /* set table parameters for eeprom */
+    for (int i=0; i < ui->table_eeprom->rowCount(); i++) {
+        ui->table_eeprom->setRowHeight(i, 18);
+    }
+    ui->table_eeprom->resizeColumnsToContents();
+
+    for (int i=0; i < ui->table_app_info->rowCount(); i++) {
+        ui->table_app_info->setRowHeight(i, 18);
+    }
+    ui->table_app_info->resizeColumnsToContents();
+
+    /* set table parameters for user ram */
+    for (int i=0; i < ui->table_user_ram->rowCount(); i++) {
+        ui->table_user_ram->setRowHeight(i, 18);
+    }
+    ui->table_user_ram->resizeColumnsToContents();
+
+    for (int i=0; i < ui->table_user_ram_reg->rowCount(); i++) {
+        ui->table_user_ram_reg->setRowHeight(i, 15);
+    }
+    ui->table_user_ram_reg->resizeColumnsToContents();
+
+
     /* menu connections */
     connect(ui->action_Exit, SIGNAL(triggered(bool)), this, SLOT(close()));
     connect(ui->actionAbout, SIGNAL(triggered(bool)), this, SLOT(about()));
