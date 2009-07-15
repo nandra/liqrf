@@ -83,6 +83,7 @@ MainWindow::MainWindow(QWidget *parent)
             ui->indicatorSPI->setStyleSheet("QLineEdit { background-color: red; }");
             /* disable enter prog button */
             ui->EnterProgButton->setDisabled(true);
+            ui->ResetButton->setDisabled(true);
         }
     }
 
@@ -222,6 +223,7 @@ void MainWindow::deviceAdded(const QString &udi)
          }
         timer->start();
         ui->EnterProgButton->setEnabled(true);
+        ui->ResetButton->setEnabled(true);
         ui->label_3->setStyleSheet("QLabel {}");
         ui->label_3->setText("USB device connected");
         ui->indicatorSPI->setStyleSheet("QLineEdit { background-color: green; }");
@@ -249,6 +251,7 @@ void MainWindow::deviceRemoved(const QString &udi)
             timer->stop();
             prog->release();
             ui->EnterProgButton->setDisabled(true);
+            ui->ResetButton->setDisabled(true);
             ui->label_3->setText("USB device disconnected");
             ui->label_3->setStyleSheet("QLabel {background-color: red;}");
             ui->indicatorSPI->setStyleSheet("QLineEdit { background-color: red; }");
