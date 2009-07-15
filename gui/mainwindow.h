@@ -51,6 +51,8 @@ public slots:
     void on_checkBox_stateChanged(int);
 
 private slots:
+    void on_spi_m2_clicked();
+    void on_spi_m1_clicked();
     void on_btn_add_00_clicked();
     void on_btn_crcm_clicked();
     void on_send_spi_data_clicked();

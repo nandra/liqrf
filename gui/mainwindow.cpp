@@ -820,7 +820,7 @@ void MainWindow::readSettings()
 /* send and receive raw spi data entered by user in spi test tab*/
 void MainWindow::on_send_spi_data_clicked()
 {
-    unsigned char buff[35];
+    unsigned char buff[64];
     bool ok;
     int i = 0, len, temp;
 
@@ -875,7 +875,7 @@ void MainWindow::on_send_spi_data_clicked()
         str_rx.append("\"");
 
         ui->spi_text_edit->insertPlainText(str_rx+'\n');
-
+        ui->line_tx_data_spi->clear();
     }
 }
 
@@ -904,4 +904,14 @@ void MainWindow::on_btn_crcm_clicked()
 void MainWindow::on_btn_add_00_clicked()
 {
     ui->line_tx_data_spi->insert("00.");
+}
+
+void MainWindow::on_spi_m1_clicked()
+{
+    ui->line_tx_data_spi->insert("00.00.00.00.00.00");
+}
+
+void MainWindow::on_spi_m2_clicked()
+{
+    ui->line_tx_data_spi->insert("F0.7F.00.00.00.00.00.00.00.00.00.00.00.00.00.00.00.00.00.00.00.00.00.00.00.00.00.00.00.00.00.00.00.00.00.00.00.D0");
 }
