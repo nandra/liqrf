@@ -276,15 +276,17 @@ void MainWindow::toolsSetting()
 {
     /* show dialog with modality */
     if (this->setup_win->exec()) {
-        if (this->setup_win->select_index == 0)
+        switch(this->setup_win->select_index) {
+        case 0:
             this->mcu_16f88();
-        else if (this->setup_win->select_index == 1)
+            break;
+        case 1:
             this->mcu_16f886();
-        else
-            ; // unsupported
-
+            break;
+        default:
+            qDebug() << "Unsupported mcu type";
+        }
     }
-
 }
 
 void MainWindow::about()
@@ -787,7 +789,9 @@ void MainWindow::on_btn_teminal_spi_send_clicked()
         unsigned char *data = (unsigned char *)arr.data();
 
         this->prog->write_read_spi_data(data, i, 1);
+        ui->spi_data_tx->clear();
     }
+}
 
 void MainWindow::writeSettings()
 {
