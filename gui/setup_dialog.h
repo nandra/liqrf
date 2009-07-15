@@ -19,6 +19,7 @@ public:
      QString editor_location;
      QString compiler_options;
      int select_index;     // index of selected microcontroller type
+     void reset();         // resets dialog according to saved settings
 
 protected:
     void changeEvent(QEvent *e);

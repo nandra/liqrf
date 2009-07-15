@@ -22,6 +22,7 @@ class Thread : public QThread
 
     public:
         void run(QString filename);
+        QString editor_name;
 };
 
 class MainWindow : public QMainWindow
@@ -33,6 +34,7 @@ public:
     ~MainWindow();
     enum mcu_type mcu;
     setup_dialog *setup_win;
+
 private:
     Ui::MainWindow *ui;
 
@@ -42,9 +44,11 @@ private:
     QTimer *timer;
     Thread *editor_thread;
     QString opened_file;
+    void writeSettings();
+    void readSettings();
 
 public slots:
-     void on_checkBox_stateChanged(int);
+    void on_checkBox_stateChanged(int);
 
 private slots:
     void on_btn_teminal_spi_send_clicked();
