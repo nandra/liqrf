@@ -16,6 +16,12 @@ namespace Ui
     class MainWindow;
 }
 
+// supported file types
+typedef enum {
+    HEX,
+    C
+}file_types;
+
 class Thread : public QThread
 {
     Q_OBJECT
@@ -37,13 +43,15 @@ public:
 
 private:
     Ui::MainWindow *ui;
-
+    file_types file_type;
     PreviewWindow *window;
     hex_parser *parser;
     programmer *prog;
     QTimer *timer;
     Thread *editor_thread;
     QString opened_file;
+    QString directory;      // last opened directory
+
     void writeSettings();
     void readSettings();
 
@@ -51,6 +59,7 @@ public slots:
     void on_checkBox_stateChanged(int);
 
 private slots:
+    //void on_line_tx_data_spi_textEdited(QString );
     void on_spi_m2_clicked();
     void on_spi_m1_clicked();
     void on_btn_add_00_clicked();

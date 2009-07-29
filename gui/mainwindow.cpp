@@ -47,6 +47,11 @@ MainWindow::MainWindow(QWidget *parent)
     ui->UploadTextEdit->setReadOnly(true);
     ui->term_text_edit->setReadOnly(true);
 
+    /* set up accepted characters for line edit tx in spi*/
+    QRegExp rx("(\\d|[A-F]|[a-f])*");
+    QRegExpValidator *myValidator = new QRegExpValidator(rx, this);
+    ui->line_tx_data_spi->setValidator(myValidator);
+
     /* programmer instance */
     prog = new programmer();
 
@@ -102,6 +107,8 @@ MainWindow::MainWindow(QWidget *parent)
     }
     ui->tableWidget_2->resizeColumnsToContents();
     //ui->tableWidget_2->resizeRowsToContents();
+
+    this->file_type = HEX;
 
     readSettings();
     this->setup_win->reset();
@@ -478,6 +485,8 @@ void MainWindow::update_spi_status()
          break;
     case 0x82:
          ui->label_3->setText("SPI ready (debugging mode)");
+         ui->StartDebugButton->setEnabled(true);
+         ui->StartDebugButton->setStyleSheet("QPushButton { border: 2px groove red;}");
          break;
     case 0x83:
          ui->label_3->setText("SPI not working in background ");
@@ -511,15 +520,39 @@ void MainWindow::update_spi_status()
 
 void MainWindow::on_OpenFileButton_clicked()
 {
+    QString selected_type;
 
-    opened_file = QFileDialog::getOpenFileName(this, tr("Open file"), "",
-                                            tr("Hex file (*.hex);;C file (*.c);;All Files (*)"));
+    // set last used file type
+    switch (this->file_type) {
+    case HEX:
+        selected_type = "Hex file (*.hex)";
+        break;
+    case C:
+        selected_type = "C file (*.c)";
+        break;
+    default:
+        break;
+    }
+
+    // run open file dialog
+    opened_file = QFileDialog::getOpenFileName( this,
+                                                tr("Open file"),
+                                                this->directory,
+                                                tr("Hex file (*.hex);;C file (*.c)"),
+                                                &selected_type );
+    
     if (opened_file.isEmpty())
          return;
 
+    // get directory path to opened file
+    int dir_index = opened_file.lastIndexOf("/");
+    QStringRef reference = opened_file.leftRef(dir_index);
+    this->directory = reference.toString();
+
     /* HEX files */
-    else if (opened_file.endsWith(".hex")) {
+    if (opened_file.endsWith(".hex")) {
         prog->parser->hexfile = opened_file;
+        this->file_type = HEX;
 
         /* read with correct hex format */
         if (!prog->parser->read_file(this->mcu)) {
@@ -542,6 +575,8 @@ void MainWindow::on_OpenFileButton_clicked()
 
     // C files
     } else if(opened_file.endsWith(".c")) {
+        this->file_type = C;
+
         ui->UploadButton->setDisabled(true);
         ui->ApplicationCheckBox->setDisabled(true);
         ui->EepromCheckBox->setDisabled(true);
@@ -588,7 +623,6 @@ void MainWindow::on_CompileButton_clicked()
 {
     QProcess compile_process;
     QStringList arguments;
-    QString directory;          // working directory
     QString filename;           // name of file being compiled
 
     /* display compilation output in separate window */
@@ -598,10 +632,8 @@ void MainWindow::on_CompileButton_clicked()
 
         // get separate file name and directory
         int dir_index = opened_file.lastIndexOf("/");
-        QStringRef reference = opened_file.leftRef(dir_index);
-        directory = reference.toString();
-        this->window->textEdit->insertPlainText("working dir is "+directory+'\n');
-        reference = opened_file.rightRef(opened_file.size() - dir_index - 1);
+        this->window->textEdit->insertPlainText("working dir is "+this->directory+'\n');
+        QStringRef reference = opened_file.rightRef(opened_file.size() - dir_index - 1);
         filename = reference.toString();
         this->window->textEdit->insertPlainText("file is "+filename+'\n');
 
@@ -616,7 +648,7 @@ void MainWindow::on_CompileButton_clicked()
 
         qDebug() << arguments;
         this->window->textEdit->insertPlainText("args are "+arguments.join(" ")+'\n');
-        compile_process.setWorkingDirectory(directory);
+        compile_process.setWorkingDirectory(this->directory);
         compile_process.start("wine", arguments);
 
         if (!compile_process.waitForStarted()) {
@@ -642,7 +674,7 @@ void MainWindow::on_CompileButton_clicked()
             printf("Error in compilation ( hex file not created )\n");
         } else {
             /* this is maybe hack and using same code 2 times */
-            prog->parser->hexfile = directory+"/"+filename.remove(".c").append(".hex");
+            prog->parser->hexfile = this->directory+"/"+filename.remove(".c").append(".hex");
             ui->UploadTextEdit->insertPlainText("File openned after compilation "+prog->parser->hexfile+'\n');
             /* read with correct hex format */
             if (!prog->parser->read_file(this->mcu)) {
@@ -759,7 +791,7 @@ void MainWindow::on_UploadButton_clicked()
     }
 
     prog->enter_endprog_mode();
-    /* star timer for checking SPI */
+    /* start timer for checking SPI */
     timer->start(500);
 
     prog->dev->usb->reset_usb();
@@ -802,6 +834,8 @@ void MainWindow::writeSettings()
     settings.setValue("compiler options", this->setup_win->compiler_options);
     settings.setValue("editor location", this->setup_win->editor_location);
     settings.setValue("mcu selection", this->setup_win->select_index);
+    settings.setValue("directory", this->directory);
+    settings.setValue("file type", this->file_type);
     settings.endGroup();
 }
 
@@ -814,6 +848,8 @@ void MainWindow::readSettings()
     this->setup_win->compiler_options = settings.value("compiler options").toString();
     this->setup_win->editor_location = settings.value("editor location").toString();
     this->setup_win->select_index = settings.value("mcu selection").toInt();
+    this->directory = settings.value("directory").toString();
+    this->file_type = (file_types) settings.value("file type").toInt();
     settings.endGroup();
 }
 
@@ -915,3 +951,12 @@ void MainWindow::on_spi_m2_clicked()
 {
     ui->line_tx_data_spi->insert("F0.7F.00.00.00.00.00.00.00.00.00.00.00.00.00.00.00.00.00.00.00.00.00.00.00.00.00.00.00.00.00.00.00.00.00.00.00.D0");
 }
+
+/*
+void MainWindow::on_line_tx_data_spi_textEdited(QString )
+{
+    QString str = ui->line_tx_data_spi->text();
+    str.toUpper();
+    ui->line_tx_data_spi->setText(str);
+}
+*/
