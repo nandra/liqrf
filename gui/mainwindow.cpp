@@ -41,8 +41,9 @@ MainWindow::MainWindow(QWidget *parent)
 
     /* setup dialog windows */
     setup_win = new setup_dialog();
-    this->window = new PreviewWindow();
+    this->window = new compile_dialog((QDialog*)this);
 
+    this->window->setWindowTitle("Compile output");
     /* read only text edits*/
     ui->UploadTextEdit->setReadOnly(true);
     ui->term_text_edit->setReadOnly(true);
@@ -626,16 +627,17 @@ void MainWindow::on_CompileButton_clicked()
     QString filename;           // name of file being compiled
 
     /* display compilation output in separate window */
+
     this->window->show();
 
     if ((!opened_file.isEmpty()) && (opened_file.endsWith(".c"))) {
 
         // get separate file name and directory
         int dir_index = opened_file.lastIndexOf("/");
-        this->window->textEdit->insertPlainText("working dir is "+this->directory+'\n');
+        this->window->write_data("working dir is "+this->directory+'\n');
         QStringRef reference = opened_file.rightRef(opened_file.size() - dir_index - 1);
         filename = reference.toString();
-        this->window->textEdit->insertPlainText("file is "+filename+'\n');
+        this->window->write_data("file is "+filename+'\n');
 
         // setup and run compile process
         arguments << this->setup_win->compiler_location
@@ -647,13 +649,13 @@ void MainWindow::on_CompileButton_clicked()
         arguments << filename;
 
         qDebug() << arguments;
-        this->window->textEdit->insertPlainText("args are "+arguments.join(" ")+'\n');
+        this->window->write_data("args are "+arguments.join(" ")+'\n');
         compile_process.setWorkingDirectory(this->directory);
         compile_process.start("wine", arguments);
 
         if (!compile_process.waitForStarted()) {
             fprintf(stderr, "Compile error.\n");
-            this->window->textEdit->insertPlainText("Compilation error. Please chcek wine and CC5X compiler.\n");
+            this->window->write_data("Compilation error. Please chcek wine and CC5X compiler.\n");
 
             return;
         }
@@ -664,10 +666,10 @@ void MainWindow::on_CompileButton_clicked()
         // print output of compile process
         QByteArray output, test = "marek123";
         output = compile_process.readAllStandardOutput();
-        this->window->textEdit->insertPlainText(QString(output));
+        this->window->write_data(QString(output));
         output.append(compile_process.readAllStandardError());
-        this->window->textEdit->insertPlainText(QString(output));
-        this->window->textEdit->insertPlainText("\n\n\n");
+        this->window->write_data(QString(output));
+        this->window->write_data("\n\n\n");
 
         /* check if compilation contain errors*/
         if (output.contains("Error")) {

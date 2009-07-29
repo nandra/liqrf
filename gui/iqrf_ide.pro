@@ -12,7 +12,8 @@ SOURCES += main.cpp \
     iqrf_dev.cpp \
     hex_parser.cpp \
     compile_window.cpp \
-    setup_dialog.cpp
+    setup_dialog.cpp \
+    compile_dialog.cpp
 HEADERS += mainwindow.h \
     spi.h \
     programmer.h \
@@ -20,6 +21,8 @@ HEADERS += mainwindow.h \
     iqrf_dev.h \
     hex_parser.h \
     compile_window.h \
-    setup_dialog.h
+    setup_dialog.h \
+    compile_dialog.h
 FORMS += mainwindow.ui \
-    setup_dialog.ui
+    setup_dialog.ui \
+    compile_dialog.ui

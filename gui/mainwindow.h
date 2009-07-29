@@ -8,7 +8,7 @@
 #include <QThread>
 
 #include "programmer.h"
-#include "compile_window.h"
+#include "compile_dialog.h"
 #include "setup_dialog.h"
 
 namespace Ui
@@ -44,7 +44,7 @@ public:
 private:
     Ui::MainWindow *ui;
     file_types file_type;
-    PreviewWindow *window;
+    compile_dialog *window;
     hex_parser *parser;
     programmer *prog;
     QTimer *timer;
