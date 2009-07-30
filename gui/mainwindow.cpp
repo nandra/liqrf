@@ -66,10 +66,10 @@ MainWindow::MainWindow(QWidget *parent)
 
         /* check if usb device was found */
         if (prog->dev->usb->usb_dev_found()) {
-            ui->UploadTextEdit->insertPlainText("USB device found\n");
+            ui->UploadTextEdit->append("USB device found\n");
              /* open usb and also clain interface */
             if (prog->dev->usb->open_usb()) {
-                ui->UploadTextEdit->insertPlainText("USB device opened\n");
+                ui->UploadTextEdit->append("USB device opened\n");
                 break;
             }
         } else {
@@ -327,7 +327,7 @@ void MainWindow::mcu_16f88()
     /* reread hex file if opened */
     if (!prog->parser->hexfile.isEmpty())
         if(!prog->parser->read_file(this->mcu)) {
-            ui->UploadTextEdit->insertPlainText("Error opening file "+prog->parser->hexfile+'\n');
+            ui->UploadTextEdit->append("Error opening file "+prog->parser->hexfile+'\n');
             return;
         }
 
@@ -344,7 +344,7 @@ void MainWindow::mcu_16f886()
     // reread hex file if opened
     if (!prog->parser->hexfile.isEmpty())
         if(!prog->parser->read_file(this->mcu)) {
-            ui->UploadTextEdit->insertPlainText("Error opening file "+prog->parser->hexfile+'\n');
+            ui->UploadTextEdit->append("Error opening file "+prog->parser->hexfile+'\n');
             return;
         }
 
@@ -509,7 +509,7 @@ void MainWindow::update_spi_status()
               str.append((char *)&buff[0]);
               str.append("\"\n");
 
-              ui->term_text_edit->insertPlainText(str);
+              ui->term_text_edit->append(str);
 
          } else {
             printf("Unkown SPI response!\n");
@@ -557,7 +557,7 @@ void MainWindow::on_OpenFileButton_clicked()
 
         /* read with correct hex format */
         if (!prog->parser->read_file(this->mcu)) {
-            ui->UploadTextEdit->insertPlainText("Error opening file "+prog->parser->hexfile+'\n');
+            ui->UploadTextEdit->append("Error opening file "+prog->parser->hexfile+'\n');
             return;
         }
 
@@ -586,7 +586,7 @@ void MainWindow::on_OpenFileButton_clicked()
 
     // Other
     } else {
-        ui->UploadTextEdit->insertPlainText("Unsupported file format!\n");
+        ui->UploadTextEdit->append("Unsupported file format!\n");
         ui->UploadButton->setDisabled(true);
         ui->ApplicationCheckBox->setDisabled(true);
         ui->EepromCheckBox->setDisabled(true);
@@ -596,7 +596,7 @@ void MainWindow::on_OpenFileButton_clicked()
         return;
     }
 
-    ui->UploadTextEdit->insertPlainText("Opened file "+opened_file+'\n');
+    ui->UploadTextEdit->append("Opened file "+opened_file+'\n');
     ui->file_label->setText(opened_file.rightRef(opened_file.size() - opened_file.lastIndexOf("/") - 1).toString());
 
 }
@@ -677,10 +677,10 @@ void MainWindow::on_CompileButton_clicked()
         } else {
             /* this is maybe hack and using same code 2 times */
             prog->parser->hexfile = this->directory+"/"+filename.remove(".c").append(".hex");
-            ui->UploadTextEdit->insertPlainText("File openned after compilation "+prog->parser->hexfile+'\n');
+            ui->UploadTextEdit->append("File openned after compilation "+prog->parser->hexfile+'\n');
             /* read with correct hex format */
             if (!prog->parser->read_file(this->mcu)) {
-                ui->UploadTextEdit->insertPlainText("Error opening file "+prog->parser->hexfile+'\n');
+                ui->UploadTextEdit->append("Error opening file "+prog->parser->hexfile+'\n');
                 return;
             }
             ui->ApplicationCheckBox->setEnabled(true);
@@ -704,7 +704,7 @@ void MainWindow::on_CompileButton_clicked()
 void MainWindow::on_EditFileButton_clicked()
 {
     if (this->setup_win->editor_location.isEmpty()) {
-        ui->UploadTextEdit->insertPlainText("Editor not set!");
+        ui->UploadTextEdit->append("Editor not set!");
         return;
     }
     editor_thread->editor_name = this->setup_win->editor_location;
@@ -816,7 +816,7 @@ void MainWindow::on_btn_teminal_spi_send_clicked()
         str.append(" TxD : \"");
         str.append(data);
         str.append("\"");
-        ui->term_text_edit->insertPlainText(str+'\n');
+        ui->term_text_edit->append(str+'\n');
 
         QByteArray arr = data.toAscii();
         int i = arr.count();
@@ -871,7 +871,7 @@ void MainWindow::on_send_spi_data_clicked()
         str.append(" TxD : \"");
         str.append(data);
         str.append("\"");
-        ui->spi_text_edit->insertPlainText(str+'\n');
+        ui->spi_text_edit->append(str+'\n');
         QStringList bytes = data.split(".");
         len = bytes.count();
 
@@ -912,7 +912,7 @@ void MainWindow::on_send_spi_data_clicked()
 
         str_rx.append("\"");
 
-        ui->spi_text_edit->insertPlainText(str_rx+'\n');
+        ui->spi_text_edit->append(str_rx+'\n');
         ui->line_tx_data_spi->clear();
     }
 }

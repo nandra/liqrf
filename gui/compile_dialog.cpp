@@ -10,7 +10,7 @@ compile_dialog::compile_dialog(QWidget *parent) :
 
 compile_dialog::~compile_dialog()
 {
-    //delete m_ui;
+    delete m_ui;
 }
 
 
@@ -21,7 +21,7 @@ void compile_dialog::on_pushButton_clicked()
 
 void compile_dialog::write_data(QString str)
 {
-    m_ui->compile_edit->insertPlainText(str);
+    m_ui->compile_edit->append(str);
 }
 
 void compile_dialog::done(int r)
