@@ -37,7 +37,7 @@ MainWindow::MainWindow(QWidget *parent)
     QStringList arguments;
     QString str;
     int max_setup = 3;
-
+    this->dev_found = 0;
     ui->setupUi(this);
 
     /* setup dialog windows */
@@ -63,16 +63,10 @@ MainWindow::MainWindow(QWidget *parent)
     /* user has 2 possibilities to conect usb */
     while (max_setup) {
         /* usb initialization */
-        prog->dev->usb->init_usb();
-
-        /* check if usb device was found */
-        if (prog->dev->usb->usb_dev_found()) {
+        if (prog->init()) {
             ui->UploadTextEdit->append("USB device found");
-             /* open usb and also clain interface */
-            if (prog->dev->usb->open_usb()) {
-                ui->UploadTextEdit->append("USB device opened");
-                break;
-            }
+            this->dev_found = 1;
+            break;
         } else {
             if (max_setup != 1)
                 QMessageBox::about(this, tr("USB device not found!"),
@@ -87,7 +81,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     /* start checking spi status device is presented */
     if (ui->checkBox->isChecked()) {
-        if (prog->dev->usb->usb_dev_found()) {
+        if (this->dev_found) {
             timer->start(500);
         } else {
             ui->label_3->setText("No USB device found");
@@ -230,15 +224,12 @@ void MainWindow::deviceAdded(const QString &udi)
 
     if ((vendor == 0x1de6) && (product == 0x1)) {
         qDebug() << "Device added";
-        prog->dev->usb->init_usb();
-
-        /* check if usb device was found */
-        if (prog->dev->usb->usb_dev_found()) {
-            if (!prog->dev->usb->open_usb()) {
-                qDebug() << "Cannot init USB";
-                goto end;
-            }
-         }
+        if (prog->init()) {
+            this->dev_found = 1;
+        } else {
+            qDebug() << "Device error";
+            goto end;
+        }
         timer->start();
         ui->EnterProgButton->setEnabled(true);
         ui->ResetButton->setEnabled(true);
@@ -287,7 +278,7 @@ void MainWindow::debug(QString str)
 
 void MainWindow::test_signal()
 {
-    printf("Test signal emitted %x\n",prog->dev->usb->status);
+
 }
 
 void MainWindow::toolsSetting()
@@ -415,7 +406,7 @@ void MainWindow::enterProgMode()
     QString str, str1;
 
     /* maybe needs to be extended for other SPI statuses */
-    if ((prog->dev->usb->status != NO_MODULE_ON_USB) && (prog->dev->usb->status != SPI_DISABLED)) {
+    if ((prog->get_status() != NO_MODULE_ON_USB) && (prog->get_status() != SPI_DISABLED)) {
 
         /* stop timer to avoid get data to wrong place */
         timer->stop();
@@ -423,7 +414,7 @@ void MainWindow::enterProgMode()
         prog->enter_prog_mode();
 
         /* unti status == programming */
-        while (prog->dev->get_spi_status() != PROGRAMMING_MODE)
+        while (prog->get_status() != PROGRAMMING_MODE)
             sleep(1);
         /* ask for module id (checksums are wrong don't know why)*/
         if (!prog->request_module_id()) {
@@ -466,7 +457,7 @@ void MainWindow::update_spi_status()
     int stat = 0, len;
     unsigned char buff[35];
     memset(buff, 0 , sizeof(buff));
-    stat = prog->dev->get_spi_status();
+    stat = prog->get_status();
 
     switch(stat) {
     case 0x00:
@@ -518,7 +509,6 @@ void MainWindow::update_spi_status()
               str.append(tm.currentTime().toString());
               str.append(" RxD : \"");
               str.append((char *)&buff[0]);
-              //str.append("\"\n");
 
               ui->term_text_edit->append(str);
 
@@ -754,8 +744,8 @@ void MainWindow::on_UploadButton_clicked()
                                 prog->parser->app_eeprom_size +
                                 prog->parser->flash_size);
 
-    while (prog->dev->spi_status != PROGRAMMING_MODE)
-        prog->dev->get_spi_status();
+    while (prog->get_status() != PROGRAMMING_MODE)
+        prog->get_status();
 
     if (prog->parser->usr_eeprom_size) {
         if (!prog->send_prog_data(EEPROM_USER, prog->parser->usr_eeprom, prog->parser->usr_eeprom_size,
@@ -805,7 +795,7 @@ void MainWindow::on_UploadButton_clicked()
     /* start timer for checking SPI */
     timer->start(500);
 
-    prog->dev->usb->reset_usb();
+    prog->reset();
     ui->UploadButton->setStyleSheet("QPushButton {}");
     ui->UploadButton->setDisabled(true);
     ui->EnterProgButton->setEnabled(true);
@@ -943,7 +933,7 @@ void MainWindow::on_btn_crcm_clicked()
     }
 
     int len = bytes.count();
-    crc = prog->dev->spi->count_crc_tx(buff, len);
+    crc = prog->crc(buff, len);
 
     ui->line_tx_data_spi->insert("." + str.setNum(crc, 16) + ".");
 }
@@ -963,11 +953,4 @@ void MainWindow::on_spi_m2_clicked()
     ui->line_tx_data_spi->insert("F0.7F.00.00.00.00.00.00.00.00.00.00.00.00.00.00.00.00.00.00.00.00.00.00.00.00.00.00.00.00.00.00.00.00.00.00.00.D0");
 }
 
-/*
-void MainWindow::on_line_tx_data_spi_textEdited(QString )
-{
-    QString str = ui->line_tx_data_spi->text();
-    str.toUpper();
-    ui->line_tx_data_spi->setText(str);
-}
-*/
+

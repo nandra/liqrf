@@ -32,7 +32,7 @@ class programmer {
 public:
     programmer();
     ~programmer();
-    iqrf_dev *dev;
+
     hex_parser *parser;
     void enter_prog_mode();
     void enter_endprog_mode();
@@ -46,8 +46,14 @@ public:
     void release();
     int write_read_spi_data(unsigned char *data, int data_len, int write_read);
     int write_read_test_spi_data(unsigned char *data, int data_len);
-private:
 
+    int init();
+    int get_status();
+    void reset();
+    int crc(unsigned char *buff, int len);
+
+private:
+    iqrf_dev *dev;
 };
 
 

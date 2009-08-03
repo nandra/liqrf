@@ -234,3 +234,22 @@ int programmer::write_read_test_spi_data(unsigned char *data, int data_len)
     return ret_val;
 }
 
+int programmer::init()
+{
+    return this->dev->init_device();
+}
+
+int programmer::get_status()
+{
+    return this->dev->get_spi_status();
+}
+
+void programmer::reset()
+{
+    this->dev->reset_device();
+}
+
+int programmer::crc(unsigned char *buff, int len)
+{
+    return this->dev->count_crc(buff, len);
+}

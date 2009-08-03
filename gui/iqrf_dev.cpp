@@ -29,11 +29,23 @@ iqrf_dev::~iqrf_dev()
     delete(this->spi);
 }
 
+int iqrf_dev::init_device()
+{
+    int result;
+    this->usb->init_usb();
+    if (this->usb->usb_dev_found()) {
+        if ((result = this->usb->open_usb()) < 0)
+            printf("USB error, check device connection\n");
+    }
+    return result;
+}
+
 /* get spi_status of module spi */
 int iqrf_dev::get_spi_status(void)
 {
     unsigned char buff[64];
     int len = 0;
+    time_t tm;
 
     sem_wait(&this->sem);
     buff[0] = CMD_FOR_CK;
@@ -85,7 +97,7 @@ int iqrf_dev::get_spi_status(void)
          }
          break;
     }
-    time_t tm;
+
     DBG("%lu:spi_status:%X", time(&tm), buff[1]);
     return buff[1];
 }
@@ -188,4 +200,14 @@ int iqrf_dev::write_data(unsigned char *data_buff, int tx_len)
     ret_val = this->usb->send_packet();
     sem_post(&this->sem);
     return ret_val;
+}
+
+void iqrf_dev::reset_device()
+{
+    this->usb->reset_usb();
+}
+
+int iqrf_dev::count_crc(unsigned char *buff, int len)
+{
+    return this->spi->count_crc_tx(buff, len);
 }

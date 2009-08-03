@@ -51,7 +51,7 @@ private:
     Thread *editor_thread;
     QString opened_file;
     QString directory;      // last opened directory
-
+    int dev_found;
     void writeSettings();
     void readSettings();
     void debug(QString str);

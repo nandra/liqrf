@@ -19,6 +19,9 @@ class iqrf_dev {
     int write_data(unsigned char *data_buff, int tx_len);
     int spi_status;
     sem_t sem;
+    int init_device();
+    void reset_device();
+    int count_crc(unsigned char *buff, int len);
   private:
 
 };
