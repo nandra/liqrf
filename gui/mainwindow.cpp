@@ -66,10 +66,10 @@ MainWindow::MainWindow(QWidget *parent)
 
         /* check if usb device was found */
         if (prog->dev->usb->usb_dev_found()) {
-            ui->UploadTextEdit->append("USB device found\n");
+            ui->UploadTextEdit->append("USB device found");
              /* open usb and also clain interface */
             if (prog->dev->usb->open_usb()) {
-                ui->UploadTextEdit->append("USB device opened\n");
+                ui->UploadTextEdit->append("USB device opened");
                 break;
             }
         } else {
@@ -198,6 +198,8 @@ MainWindow::MainWindow(QWidget *parent)
                 "org.freedesktop.Hal.Manager",
                 "DeviceRemoved",
                 this, SLOT(deviceRemoved(const QString &)));
+
+
 }
 
 /* template to retrieve data from HAL */
@@ -327,7 +329,7 @@ void MainWindow::mcu_16f88()
     /* reread hex file if opened */
     if (!prog->parser->hexfile.isEmpty())
         if(!prog->parser->read_file(this->mcu)) {
-            ui->UploadTextEdit->append("Error opening file "+prog->parser->hexfile+'\n');
+            ui->UploadTextEdit->append("Error opening file "+prog->parser->hexfile);
             return;
         }
 
@@ -344,7 +346,7 @@ void MainWindow::mcu_16f886()
     // reread hex file if opened
     if (!prog->parser->hexfile.isEmpty())
         if(!prog->parser->read_file(this->mcu)) {
-            ui->UploadTextEdit->append("Error opening file "+prog->parser->hexfile+'\n');
+            ui->UploadTextEdit->append("Error opening file "+prog->parser->hexfile);
             return;
         }
 
@@ -432,6 +434,7 @@ void MainWindow::enterProgMode()
         /* disable upload button */
         ui->EnterProgButton->setDisabled(true);
         /* enable open file button */
+        ui->UploadButton->setStyleSheet("QPushButton {background-color: red; font-weight: bold;}");
         ui->UploadButton->setEnabled(true);
     }
 exit:
@@ -507,7 +510,7 @@ void MainWindow::update_spi_status()
               str.append(tm.currentTime().toString());
               str.append(" RxD : \"");
               str.append((char *)&buff[0]);
-              str.append("\"\n");
+              //str.append("\"\n");
 
               ui->term_text_edit->append(str);
 
@@ -557,7 +560,7 @@ void MainWindow::on_OpenFileButton_clicked()
 
         /* read with correct hex format */
         if (!prog->parser->read_file(this->mcu)) {
-            ui->UploadTextEdit->append("Error opening file "+prog->parser->hexfile+'\n');
+            ui->UploadTextEdit->append("Error opening file "+prog->parser->hexfile);
             return;
         }
 
@@ -577,7 +580,7 @@ void MainWindow::on_OpenFileButton_clicked()
     // C files
     } else if(opened_file.endsWith(".c")) {
         this->file_type = C;
-
+        ui->UploadButton->setStyleSheet("QPushButton {}");
         ui->UploadButton->setDisabled(true);
         ui->ApplicationCheckBox->setDisabled(true);
         ui->EepromCheckBox->setDisabled(true);
@@ -586,7 +589,8 @@ void MainWindow::on_OpenFileButton_clicked()
 
     // Other
     } else {
-        ui->UploadTextEdit->append("Unsupported file format!\n");
+        ui->UploadTextEdit->append("Unsupported file format!");
+        ui->UploadButton->setStyleSheet("QPushButton {}");
         ui->UploadButton->setDisabled(true);
         ui->ApplicationCheckBox->setDisabled(true);
         ui->EepromCheckBox->setDisabled(true);
@@ -596,7 +600,7 @@ void MainWindow::on_OpenFileButton_clicked()
         return;
     }
 
-    ui->UploadTextEdit->append("Opened file "+opened_file+'\n');
+    ui->UploadTextEdit->append("Opened file "+opened_file);
     ui->file_label->setText(opened_file.rightRef(opened_file.size() - opened_file.lastIndexOf("/") - 1).toString());
 
 }
@@ -634,10 +638,10 @@ void MainWindow::on_CompileButton_clicked()
 
         // get separate file name and directory
         int dir_index = opened_file.lastIndexOf("/");
-        this->window->write_data("working dir is "+this->directory+'\n');
+        this->window->write_data("working dir is "+this->directory);
         QStringRef reference = opened_file.rightRef(opened_file.size() - dir_index - 1);
         filename = reference.toString();
-        this->window->write_data("file is "+filename+'\n');
+        this->window->write_data("file is "+filename);
 
         // setup and run compile process
         arguments << this->setup_win->compiler_location
@@ -649,13 +653,13 @@ void MainWindow::on_CompileButton_clicked()
         arguments << filename;
 
         qDebug() << arguments;
-        this->window->write_data("args are "+arguments.join(" ")+'\n');
+        this->window->write_data("args are "+arguments.join(" "));
         compile_process.setWorkingDirectory(this->directory);
         compile_process.start("wine", arguments);
 
         if (!compile_process.waitForStarted()) {
             fprintf(stderr, "Compile error.\n");
-            this->window->write_data("Compilation error. Please chcek wine and CC5X compiler.\n");
+            this->window->write_data("Compilation error. Please check wine and CC5X compiler.");
 
             return;
         }
@@ -677,10 +681,10 @@ void MainWindow::on_CompileButton_clicked()
         } else {
             /* this is maybe hack and using same code 2 times */
             prog->parser->hexfile = this->directory+"/"+filename.remove(".c").append(".hex");
-            ui->UploadTextEdit->append("File openned after compilation "+prog->parser->hexfile+'\n');
+            ui->UploadTextEdit->append("File openned after compilation "+prog->parser->hexfile);
             /* read with correct hex format */
             if (!prog->parser->read_file(this->mcu)) {
-                ui->UploadTextEdit->append("Error opening file "+prog->parser->hexfile+'\n');
+                ui->UploadTextEdit->append("Error opening file "+prog->parser->hexfile);
                 return;
             }
             ui->ApplicationCheckBox->setEnabled(true);
@@ -696,8 +700,6 @@ void MainWindow::on_CompileButton_clicked()
         }
 
     }
-    ui->UploadButton->setEnabled(true);
-
 }
 
 // start editor
@@ -797,7 +799,7 @@ void MainWindow::on_UploadButton_clicked()
     timer->start(500);
 
     prog->dev->usb->reset_usb();
-
+    ui->UploadButton->setStyleSheet("QPushButton {}");
     ui->UploadButton->setDisabled(true);
     ui->EnterProgButton->setEnabled(true);
 
@@ -816,7 +818,7 @@ void MainWindow::on_btn_teminal_spi_send_clicked()
         str.append(" TxD : \"");
         str.append(data);
         str.append("\"");
-        ui->term_text_edit->append(str+'\n');
+        ui->term_text_edit->append(str);
 
         QByteArray arr = data.toAscii();
         int i = arr.count();
@@ -871,7 +873,7 @@ void MainWindow::on_send_spi_data_clicked()
         str.append(" TxD : \"");
         str.append(data);
         str.append("\"");
-        ui->spi_text_edit->append(str+'\n');
+        ui->spi_text_edit->append(str);
         QStringList bytes = data.split(".");
         len = bytes.count();
 
@@ -912,7 +914,7 @@ void MainWindow::on_send_spi_data_clicked()
 
         str_rx.append("\"");
 
-        ui->spi_text_edit->append(str_rx+'\n');
+        ui->spi_text_edit->append(str_rx);
         ui->line_tx_data_spi->clear();
     }
 }
