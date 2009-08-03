@@ -1,6 +1,14 @@
 #include <stdio.h>
 #include "spi.h"
 
+//#define DEBUG_SPI
+
+#ifdef DEBUG_SPI
+#define DBG(fmt, args...) \
+printf("spi:" fmt "\n", ##args);
+#else
+#define DBG(fmt, args...) {}
+#endif
 
 /* construcor */
 iqrf_spi::iqrf_spi()
@@ -37,14 +45,14 @@ unsigned char iqrf_spi::check_crc_rx(unsigned char *buff, int PTYPE, int len)
         crc_val = SPI_CRC_DEFAULT ^ PTYPE;
 
         for (i = 0; i < len; i++) {
-                printf("crc = %x, buff[%d]=%x\n", crc_val, i, buff[i]);
+                DBG("crc = %x, buff[%d]=%x", crc_val, i, buff[i]);
                 crc_val ^= buff[i];
         }
 
         if (buff[len] == crc_val)
                 return 1;
 
-        fprintf(stderr, "Wrong checksum!\n");
+        DBG("Wrong checksum!");
         return 0;
 }
 

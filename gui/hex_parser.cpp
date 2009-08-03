@@ -6,13 +6,14 @@
 #include "hex_parser.h"
 
 #define MAX_DATA 32
-#define DEBUG
+//#define DEBUG_PARSER
 
 /* debugging with global verbose */
-#ifdef DEBUG
-#define debug_parser(format, arg...) printf("parser:" format, ## arg);
+#ifdef DEBUG_PARSER
+#define DBG(format, arg...) \
+    printf("parser:" format, ##arg);
 #else
-#define debug_parser(format, arg...) {}
+#define DBG(format, arg...) {}
 #endif
 
 hex_parser::hex_parser()
@@ -100,7 +101,7 @@ bool hex_parser::read_file(hex_format format)
         if (fscanf(hex, ":%2x%4x%2x", &len, &adr, &type) != 3) {
             goto read_err;
         }
-        debug_parser("lenght is %d, address is %d, type is %d\n", len, adr, type);
+        DBG("lenght is %d, address is %d, type is %d\n", len, adr, type);
 
         switch (type) {
         case DATA:
@@ -112,7 +113,7 @@ bool hex_parser::read_file(hex_format format)
                 if ((adr >= FLASH_START_ADR) && (adr < FLASH_END_ADR)) {
                     flash[flash_size] = data;
 
-                    debug_parser("flash[%d] = 0x%x\n", flash_size,
+                    DBG("flash[%d] = 0x%x\n", flash_size,
                     flash[flash_size]);
 
                     flash_size++;
@@ -120,7 +121,7 @@ bool hex_parser::read_file(hex_format format)
                             (adr < USR_EEPROM_END_ADR)) {
                     usr_eeprom[usr_eeprom_size] = data;
 
-                    debug_parser("usr_eeprom[%d] = 0x%x\n", usr_eeprom_size, usr_eeprom[usr_eeprom_size]);
+                    DBG("usr_eeprom[%d] = 0x%x\n", usr_eeprom_size, usr_eeprom[usr_eeprom_size]);
 
                     usr_eeprom_size++;
                     fscanf(hex,"%2x", &data); // skip every second byte (=0x00)
@@ -129,7 +130,7 @@ bool hex_parser::read_file(hex_format format)
                             (adr < APP_EEPROM_END_ADR)) {
                     app_eeprom[app_eeprom_size] = data;
 
-                    debug_parser("app_eeprom[%d] = 0x%x\n", app_eeprom_size, app_eeprom[app_eeprom_size]);
+                    DBG("app_eeprom[%d] = 0x%x\n", app_eeprom_size, app_eeprom[app_eeprom_size]);
 
                     app_eeprom_size++;
                     fscanf(hex,"%2x", &data); // skip every second byte (=0x00)
@@ -137,11 +138,11 @@ bool hex_parser::read_file(hex_format format)
                 }
                 // other addresses are ignored
         }
-                debug_parser("\n");
+                DBG("\n");
                 break;
         case END_OF_FILE:
-                debug_parser("EEPROM size: %d\n", app_eeprom_size + usr_eeprom_size);
-                debug_parser("FLASH size: %d\n", flash_size);
+                DBG("EEPROM size: %d\n", app_eeprom_size + usr_eeprom_size);
+                DBG("FLASH size: %d\n", flash_size);
                 fclose(hex);
                 return true;
         default:

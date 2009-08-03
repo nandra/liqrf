@@ -50,7 +50,6 @@ class lusb{
         struct usb_bus *usb_bus;
         struct usb_dev_handle *dev_handle;
         struct usb_device *dev;
-
         int found;
         char tx_buff[BUF_LEN], rx_buff[BUF_LEN];
         char tx_len, rx_len;

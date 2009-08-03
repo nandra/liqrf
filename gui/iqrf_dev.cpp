@@ -4,6 +4,15 @@
 #include <time.h>
 #include "iqrf_dev.h"
 
+//#define DEBUG_IQRF_DEV
+
+#ifdef DEBUG_IQRF_DEV
+#define DBG(fmt, args...) \
+printf("iqrfdev:" fmt , ##args);
+#else
+#define DBG(fmt, args...) {}
+#endif
+
 /* constructor */
 iqrf_dev::iqrf_dev()
 {
@@ -72,12 +81,12 @@ int iqrf_dev::get_spi_status(void)
          if (buff[1] >= 0x40 && buff[1] <= 0x63) {
               this->spi_status = SPI_DATA_READY;
          } else {
-            printf("Unkown SPI response!\n");
+            fprintf(stderr,"Unkown SPI response!\n");
          }
          break;
     }
     time_t tm;
-    printf("%lu:spi_status:%X\n", time(&tm), buff[1]);
+    DBG("%lu:spi_status:%X", time(&tm), buff[1]);
     return buff[1];
 }
 
@@ -107,7 +116,7 @@ int iqrf_dev::get_spi_cmd_data(unsigned char *data_buff, int data_len, int read_
     this->usb->set_tx_len(data_len + 4);
     this->usb->set_rx_len(data_len + 4);
     for (i = 0; i < data_len + 4; i++)
-        printf("data transfered[%d]:0x%X\n", i, buff[i]);
+        DBG("data transfered[%d]:0x%X", i, buff[i]);
     this->usb->write_tx_buff(buff, data_len + 4);
     this->usb->send_receive_packet();
     len = this->usb->read_rx_buff(buff);
@@ -116,17 +125,17 @@ int iqrf_dev::get_spi_cmd_data(unsigned char *data_buff, int data_len, int read_
 
     if (crc_rx) {
         memcpy(data_buff, &buff[2], data_len);
-        printf("Received data len:0x%x\n", len);
+        DBG("Received data len:0x%x", len);
         for (i = 2; i < data_len; i++) {
-            printf("%c", buff[i]);
+            DBG("%c", buff[i]);
         }
-        printf("\n");
+
         sem_post(&this->sem);
         return data_len;
     } else {
         /* this could occur in case of module info */
         memcpy(data_buff, &buff[2], 4);
-        printf("Wrong data checksum\n");
+        DBG("Wrong data checksum");
     }
     sem_post(&this->sem);
     return 0;
@@ -142,8 +151,7 @@ int iqrf_dev::write_read_data(unsigned char *data_buff, int tx_len, int rx_len, 
     memset(buff, 0, sizeof(buff));
     memcpy(buff, data_buff, tx_len);
     for (i=0; i < tx_len; i++)
-        printf("[%d]=0x%X ", i, buff[i]);
-    printf("\n");
+        DBG("[%d]=0x%X ", i, buff[i]);
     PTYPE = buff[2];
     this->usb->set_tx_len(tx_len);
     this->usb->set_rx_len(rx_len);
@@ -152,8 +160,8 @@ int iqrf_dev::write_read_data(unsigned char *data_buff, int tx_len, int rx_len, 
     this->usb->send_receive_packet();
     len = this->usb->read_rx_buff(buff);
     for (i=0; i < len; i++)
-        printf("rcv[%d]=0x%X ", i, buff[i]);
-    printf("\n");
+        DBG("rcv[%d]=0x%X ", i, buff[i]);
+
     if (len && check_crc) {
         crc_rx = this->spi->check_crc_rx(&buff[2], PTYPE, len-3);
         memcpy(data_buff, buff, len);
@@ -171,8 +179,7 @@ int iqrf_dev::write_data(unsigned char *data_buff, int tx_len)
     memset(buff, 0, sizeof(buff));
     memcpy(buff, data_buff, tx_len);
     for (i=0; i < tx_len; i++)
-        printf("[%d]=0x%X ", i, buff[i]);
-    printf("\n");
+        DBG("[%d]=0x%X ", i, buff[i]);
 
     this->usb->set_tx_len(tx_len);
 

@@ -2,6 +2,16 @@
 #include <string.h>
 #include "lusb.h"
 
+#define DEBUG_USB
+
+#ifdef DEBUG_USB
+#define DBG(fmt, args...) \
+printf("lusb:" fmt, ##args);
+#else
+#define DBG(fmt, args...) {}
+#endif
+
+
 /* table of supported devices */
 static struct iqrf_usb devices[] = {
     {CKUSB02_VENDOR_ID_OLD, CKUSB02_PRODUCT_ID_OLD},
@@ -52,7 +62,7 @@ void lusb::init_usb()
                                 if (device != NULL) {
                                     this->found = 1;
                                     this->dev = device;
-                                    printf("USB device found:%x:%x\n", devices[i].vendor_id, devices[i].product_id);
+                                    DBG("USB device found:%x:%x\n", devices[i].vendor_id, devices[i].product_id);
                                     /*TODO: for multi-instance handling remove break*/
                                     break;
                                 }

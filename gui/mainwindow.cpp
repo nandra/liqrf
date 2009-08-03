@@ -28,6 +28,7 @@
 #include <QtDBus>
 #include <QSettings>
 
+#define DEBUG
 
 /* window contructor */
 MainWindow::MainWindow(QWidget *parent)
@@ -276,6 +277,13 @@ void MainWindow::deviceRemoved(const QString &udi)
     }
 }
 
+void MainWindow::debug(QString str)
+{
+#ifdef DEBUG
+    qDebug() << str;
+#else
+#endif /* DEBUG */
+}
 
 void MainWindow::test_signal()
 {
@@ -434,7 +442,7 @@ void MainWindow::enterProgMode()
         /* disable upload button */
         ui->EnterProgButton->setDisabled(true);
         /* enable open file button */
-        ui->UploadButton->setStyleSheet("QPushButton {background-color: red; font-weight: bold;}");
+        ui->UploadButton->setStyleSheet("QPushButton {border: 2px groove red; font-weight: bold;}");
         ui->UploadButton->setEnabled(true);
     }
 exit:
@@ -677,7 +685,7 @@ void MainWindow::on_CompileButton_clicked()
 
         /* check if compilation contain errors*/
         if (output.contains("Error")) {
-            printf("Error in compilation ( hex file not created )\n");
+            fprintf(stderr,"Error in compilation ( hex file not created )\n");
         } else {
             /* this is maybe hack and using same code 2 times */
             prog->parser->hexfile = this->directory+"/"+filename.remove(".c").append(".hex");
@@ -755,7 +763,6 @@ void MainWindow::on_UploadButton_clicked()
             qDebug() << "Error occured";
             return;
         }
-        printf("Programming user eeprom (%d)\n", prog->parser->usr_eeprom_size);
         size += prog->parser->usr_eeprom_size;
         ui->progressBar->setValue(size);
     }
@@ -766,7 +773,7 @@ void MainWindow::on_UploadButton_clicked()
             qDebug() << "Error occured";
             return;
         }
-        printf("Programming app eeprom (%d)\n", prog->parser->app_eeprom_size);
+
         size += prog->parser->app_eeprom_size;
         ui->progressBar->setValue(size);
     }

@@ -2,6 +2,15 @@
 #include <string.h>
 #include "programmer.h"
 
+//#define DEBUG_PROGRAMMER
+
+#ifdef DEBUG_PROGRAMMER
+#define DBG(format, arg...) \
+    DBG("prog:" format, ##arg);
+#else
+#define DBG(format, arg...) {}
+#endif
+
 programmer::programmer()
 {
     this->dev = new iqrf_dev;
@@ -86,13 +95,13 @@ int programmer::get_module_id(void)
     if ((len = this->dev->write_read_data(buff, 14, 13, 1)))
         ret_val = 1;
 
-    printf("Module ID:");
+    DBG("Module ID:");
     for (i = 0; i < len; i++) {
-        printf("%02X ", buff[i+2]);
+        DBG("%02X ", buff[i+2]);
         this->module_id[i] = buff[i+2];
     }
 
-    printf("\n");
+    DBG("\n");
 
     return ret_val;
 }
@@ -217,7 +226,7 @@ int programmer::write_read_test_spi_data(unsigned char *data, int data_len)
     memcpy(&buff[1], data, data_len);
     int i;
     for (i=0; i < data_len; i++)
-        printf("[%x]", buff[i]);
+        DBG("[%x]", buff[i]);
 
     ret_val = this->dev->write_read_data(buff, data_len+1, data_len + 1, 1);
     if (ret_val)
