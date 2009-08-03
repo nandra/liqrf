@@ -29,3 +29,9 @@ void compile_dialog::done(int r)
     m_ui->compile_edit->clear();
     this->setShown(false);
 }
+
+void compile_dialog::on_compile_close_clicked()
+{
+    m_ui->compile_edit->clear();
+    this->setShown(false);
+}

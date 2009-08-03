@@ -22,6 +22,7 @@ public slots:
     void done(int r);
 private slots:
 
+    void on_compile_close_clicked();
     void on_pushButton_clicked();
 };
 
