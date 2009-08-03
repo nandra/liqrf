@@ -89,6 +89,7 @@ int lusb::open_usb()
             ret_val = usb_claim_interface(this->dev_handle, 0);
             if (ret_val < 0) {
                 perror("usb_claim_interface");
+                ret_val = 0;
             } else {
                 ret_val = 1;
             }

@@ -31,10 +31,11 @@ iqrf_dev::~iqrf_dev()
 
 int iqrf_dev::init_device()
 {
-    int result;
+    int result = 0;
     this->usb->init_usb();
     if (this->usb->usb_dev_found()) {
-        if ((result = this->usb->open_usb()) < 0)
+        result = this->usb->open_usb();
+        if (!result)
             printf("USB error, check device connection\n");
     }
     return result;
