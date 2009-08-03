@@ -44,7 +44,6 @@ MainWindow::MainWindow(QWidget *parent)
     setup_win = new setup_dialog();
     this->window = new compile_dialog((QDialog*)this);
 
-    this->window->setWindowTitle("Compile output");
     /* read only text edits*/
     ui->UploadTextEdit->setReadOnly(true);
     ui->term_text_edit->setReadOnly(true);

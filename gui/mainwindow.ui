@@ -23,7 +23,7 @@
    </size>
   </property>
   <property name="windowTitle">
-   <string>QTLiqrf</string>
+   <string>IQRF IDE</string>
   </property>
   <property name="layoutDirection">
    <enum>Qt::LeftToRight</enum>
