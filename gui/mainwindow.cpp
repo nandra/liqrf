@@ -49,7 +49,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->term_text_edit->setReadOnly(true);
 
     /* set up accepted characters for line edit tx in spi*/
-    QRegExp rx("(\\d|[A-F]|[a-f])*");
+    QRegExp rx("[0-9a-fA-F.]*");
     QRegExpValidator *myValidator = new QRegExpValidator(rx, this);
     ui->line_tx_data_spi->setValidator(myValidator);
 
