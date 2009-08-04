@@ -193,6 +193,11 @@ MainWindow::MainWindow(QWidget *parent)
                 "DeviceRemoved",
                 this, SLOT(deviceRemoved(const QString &)));
 
+   /*FIXME: this is just temporary until debug infos will be released */
+    ui->TabWidget->removeTab(0);
+    ui->TabWidget->removeTab(1);
+    ui->TabWidget->removeTab(0);
+    ui->TabWidget->removeTab(0);
 
 }
 
