@@ -24,7 +24,7 @@ void compile_dialog::write_data(QString str)
     m_ui->compile_edit->append(str);
 }
 
-void compile_dialog::done(int r)
+void compile_dialog::done(int)
 {
     m_ui->compile_edit->clear();
     this->setShown(false);

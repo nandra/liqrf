@@ -46,8 +46,9 @@ int iqrf_dev::get_spi_status(void)
 {
     unsigned char buff[64];
     int len = 0;
+#ifdef DEBUG_IQRF_DEV
     time_t tm;
-
+#endif /* DEBUG_IQRF_DEV */
     sem_wait(&this->sem);
     buff[0] = CMD_FOR_CK;
     buff[1] = 0;
