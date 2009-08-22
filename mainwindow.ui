@@ -1,0 +1,2441 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>730</width>
+    <height>498</height>
+   </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>730</width>
+    <height>498</height>
+   </size>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>730</width>
+    <height>498</height>
+   </size>
+  </property>
+  <property name="windowTitle">
+   <string>IQRF IDE</string>
+  </property>
+  <property name="layoutDirection">
+   <enum>Qt::LeftToRight</enum>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">QComboBox,
+QLineEdit,
+QProgressBar,
+QTabWidget,
+QTextEdit,
+QPlainTextEdit {	
+	border: 1px groove gray;
+	border-radius: 4px;
+	padding: 2px 2px;
+}
+
+QPushButton {
+	border-style: outset;
+	border-width: 16px;
+	border: 2px groove gray;
+	border-radius: 4px;
+	padding: 2px 4px;
+}
+
+QPushButton:pressed {
+	border-style: inset;
+}</string>
+  </property>
+  <widget class="QWidget" name="centralWidget">
+   <widget class="QTabWidget" name="TabWidget">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>80</y>
+      <width>701</width>
+      <height>351</height>
+     </rect>
+    </property>
+    <property name="sizePolicy">
+     <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+      <horstretch>0</horstretch>
+      <verstretch>0</verstretch>
+     </sizepolicy>
+    </property>
+    <property name="currentIndex">
+     <number>6</number>
+    </property>
+    <widget class="QWidget" name="tab_4">
+     <attribute name="title">
+      <string>Buffers</string>
+     </attribute>
+     <widget class="QTableWidget" name="table_buff_info">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>30</y>
+        <width>651</width>
+        <height>71</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>8</pointsize>
+       </font>
+      </property>
+      <row>
+       <property name="text">
+        <string>0</string>
+       </property>
+      </row>
+      <row>
+       <property name="text">
+        <string>16</string>
+       </property>
+      </row>
+      <row>
+       <property name="text">
+        <string>32</string>
+       </property>
+      </row>
+      <column>
+       <property name="text">
+        <string>0</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>1</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>2</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>3</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>4</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>5</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>6</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>7</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>8</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>9</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>10</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>11</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>12</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>13</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>14</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>15</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Ascii</string>
+       </property>
+      </column>
+     </widget>
+     <widget class="QTableWidget" name="table_buff_com">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>130</y>
+        <width>651</width>
+        <height>71</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>8</pointsize>
+       </font>
+      </property>
+      <row>
+       <property name="text">
+        <string>0</string>
+       </property>
+      </row>
+      <row>
+       <property name="text">
+        <string>16</string>
+       </property>
+      </row>
+      <row>
+       <property name="text">
+        <string>32</string>
+       </property>
+      </row>
+      <column>
+       <property name="text">
+        <string>0</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>1</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>2</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>3</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>4</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>5</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>6</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>7</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>8</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>9</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>10</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>11</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>12</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>13</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>14</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>15</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Ascii</string>
+       </property>
+      </column>
+     </widget>
+     <widget class="QTableWidget" name="table_buff_RF">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>230</y>
+        <width>651</width>
+        <height>71</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>8</pointsize>
+       </font>
+      </property>
+      <row>
+       <property name="text">
+        <string>0</string>
+       </property>
+      </row>
+      <row>
+       <property name="text">
+        <string>16</string>
+       </property>
+      </row>
+      <row>
+       <property name="text">
+        <string>32</string>
+       </property>
+      </row>
+      <column>
+       <property name="text">
+        <string>0</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>1</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>2</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>3</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>4</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>5</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>6</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>7</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>8</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>9</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>10</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>11</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>12</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>13</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>14</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>15</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Ascii</string>
+       </property>
+      </column>
+     </widget>
+     <widget class="QLabel" name="label_10">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>10</y>
+        <width>81</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Buffer INFO</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_11">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>110</y>
+        <width>81</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Buffer COM</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_12">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>210</y>
+        <width>81</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Buffer RF</string>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="tab_3">
+     <attribute name="title">
+      <string>EEPROM</string>
+     </attribute>
+     <widget class="QTableWidget" name="table_eeprom">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>10</y>
+        <width>580</width>
+        <height>191</height>
+       </rect>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>580</width>
+        <height>191</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>651</width>
+        <height>191</height>
+       </size>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>8</pointsize>
+       </font>
+      </property>
+      <property name="verticalScrollBarPolicy">
+       <enum>Qt::ScrollBarAlwaysOff</enum>
+      </property>
+      <property name="horizontalScrollBarPolicy">
+       <enum>Qt::ScrollBarAlwaysOff</enum>
+      </property>
+      <row>
+       <property name="text">
+        <string>00</string>
+       </property>
+      </row>
+      <row>
+       <property name="text">
+        <string>10</string>
+       </property>
+      </row>
+      <row>
+       <property name="text">
+        <string>20</string>
+       </property>
+      </row>
+      <row>
+       <property name="text">
+        <string>30</string>
+       </property>
+      </row>
+      <row>
+       <property name="text">
+        <string>40</string>
+       </property>
+      </row>
+      <row>
+       <property name="text">
+        <string>50</string>
+       </property>
+      </row>
+      <row>
+       <property name="text">
+        <string>60</string>
+       </property>
+      </row>
+      <row>
+       <property name="text">
+        <string>70</string>
+       </property>
+      </row>
+      <row>
+       <property name="text">
+        <string>90</string>
+       </property>
+      </row>
+      <column>
+       <property name="text">
+        <string>00</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>01</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>02</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>03</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>04</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>05</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>06</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>07</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>08</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>09</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>0A</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>0B</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>0C</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>0D</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>0E</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>0F</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Ascii</string>
+       </property>
+      </column>
+     </widget>
+     <widget class="QLabel" name="label_13">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>210</y>
+        <width>111</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Application info</string>
+      </property>
+     </widget>
+     <widget class="QTableWidget" name="table_app_info">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>230</y>
+        <width>580</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>580</width>
+        <height>20</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>651</width>
+        <height>191</height>
+       </size>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>8</pointsize>
+       </font>
+      </property>
+      <property name="verticalScrollBarPolicy">
+       <enum>Qt::ScrollBarAlwaysOff</enum>
+      </property>
+      <property name="horizontalScrollBarPolicy">
+       <enum>Qt::ScrollBarAlwaysOff</enum>
+      </property>
+      <row>
+       <property name="text">
+        <string>A0</string>
+       </property>
+      </row>
+      <row>
+       <property name="text">
+        <string>A1</string>
+       </property>
+      </row>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="tab_2">
+     <attribute name="title">
+      <string>User RAM</string>
+     </attribute>
+     <widget class="QTableWidget" name="table_user_ram">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>10</y>
+        <width>591</width>
+        <height>141</height>
+       </rect>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>0</width>
+        <height>0</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>651</width>
+        <height>191</height>
+       </size>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>8</pointsize>
+       </font>
+      </property>
+      <property name="verticalScrollBarPolicy">
+       <enum>Qt::ScrollBarAlwaysOff</enum>
+      </property>
+      <property name="horizontalScrollBarPolicy">
+       <enum>Qt::ScrollBarAlwaysOff</enum>
+      </property>
+      <row>
+       <property name="text">
+        <string>0190</string>
+       </property>
+      </row>
+      <row>
+       <property name="text">
+        <string>01A0</string>
+       </property>
+      </row>
+      <row>
+       <property name="text">
+        <string>01B0</string>
+       </property>
+      </row>
+      <row>
+       <property name="text">
+        <string>01C0</string>
+       </property>
+      </row>
+      <row>
+       <property name="text">
+        <string>01D0</string>
+       </property>
+      </row>
+      <row>
+       <property name="text">
+        <string>01E0</string>
+       </property>
+      </row>
+      <column>
+       <property name="text">
+        <string>00</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>01</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>02</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>03</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>04</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>05</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>06</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>07</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>08</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>09</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>0A</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>0B</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>0C</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>0D</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>0E</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>0F</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Ascii</string>
+       </property>
+      </column>
+     </widget>
+     <widget class="QTableWidget" name="table_user_ram_reg">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>170</y>
+        <width>215</width>
+        <height>61</height>
+       </rect>
+      </property>
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>0</width>
+        <height>0</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>215</width>
+        <height>241</height>
+       </size>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>8</pointsize>
+       </font>
+      </property>
+      <property name="verticalScrollBarPolicy">
+       <enum>Qt::ScrollBarAlwaysOff</enum>
+      </property>
+      <property name="horizontalScrollBarPolicy">
+       <enum>Qt::ScrollBarAlwaysOff</enum>
+      </property>
+      <property name="showGrid">
+       <bool>true</bool>
+      </property>
+      <property name="gridStyle">
+       <enum>Qt::SolidLine</enum>
+      </property>
+      <attribute name="horizontalHeaderVisible">
+       <bool>false</bool>
+      </attribute>
+      <attribute name="horizontalHeaderDefaultSectionSize">
+       <number>60</number>
+      </attribute>
+      <attribute name="horizontalHeaderMinimumSectionSize">
+       <number>32</number>
+      </attribute>
+      <attribute name="verticalHeaderDefaultSectionSize">
+       <number>15</number>
+      </attribute>
+      <row>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+        </font>
+       </property>
+       <property name="textAlignment">
+        <set>AlignHCenter|AlignVCenter|AlignCenter</set>
+       </property>
+      </row>
+      <row>
+       <property name="text">
+        <string/>
+       </property>
+      </row>
+      <column>
+       <property name="text">
+        <string>Address</string>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="background">
+        <color>
+         <red>170</red>
+         <green>255</green>
+         <blue>255</blue>
+        </color>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Register</string>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="background">
+        <color>
+         <red>170</red>
+         <green>255</green>
+         <blue>255</blue>
+        </color>
+       </property>
+       <property name="foreground">
+        <brush brushstyle="NoBrush">
+         <color alpha="255">
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+         </color>
+        </brush>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Hex</string>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="background">
+        <color>
+         <red>170</red>
+         <green>255</green>
+         <blue>255</blue>
+        </color>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Dec</string>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="background">
+        <color>
+         <red>170</red>
+         <green>255</green>
+         <blue>255</blue>
+        </color>
+       </property>
+      </column>
+      <item row="0" column="0">
+       <property name="text">
+        <string>0x70</string>
+       </property>
+      </item>
+      <item row="0" column="1">
+       <property name="text">
+        <string>userReg0</string>
+       </property>
+      </item>
+      <item row="1" column="0">
+       <property name="text">
+        <string>0x71</string>
+       </property>
+      </item>
+      <item row="1" column="1">
+       <property name="text">
+        <string>userReg1</string>
+       </property>
+      </item>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="tab">
+     <attribute name="title">
+      <string>System info</string>
+     </attribute>
+     <widget class="QTableWidget" name="tableWidget">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>30</y>
+        <width>215</width>
+        <height>241</height>
+       </rect>
+      </property>
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>215</width>
+        <height>241</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>215</width>
+        <height>241</height>
+       </size>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>8</pointsize>
+       </font>
+      </property>
+      <property name="verticalScrollBarPolicy">
+       <enum>Qt::ScrollBarAlwaysOff</enum>
+      </property>
+      <property name="horizontalScrollBarPolicy">
+       <enum>Qt::ScrollBarAlwaysOff</enum>
+      </property>
+      <property name="showGrid">
+       <bool>true</bool>
+      </property>
+      <property name="gridStyle">
+       <enum>Qt::SolidLine</enum>
+      </property>
+      <attribute name="horizontalHeaderVisible">
+       <bool>false</bool>
+      </attribute>
+      <attribute name="horizontalHeaderDefaultSectionSize">
+       <number>60</number>
+      </attribute>
+      <attribute name="horizontalHeaderMinimumSectionSize">
+       <number>32</number>
+      </attribute>
+      <attribute name="verticalHeaderDefaultSectionSize">
+       <number>15</number>
+      </attribute>
+      <row>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+        </font>
+       </property>
+       <property name="textAlignment">
+        <set>AlignHCenter|AlignVCenter|AlignCenter</set>
+       </property>
+      </row>
+      <row>
+       <property name="text">
+        <string/>
+       </property>
+      </row>
+      <row>
+       <property name="text">
+        <string/>
+       </property>
+      </row>
+      <row>
+       <property name="text">
+        <string/>
+       </property>
+      </row>
+      <row>
+       <property name="text">
+        <string/>
+       </property>
+      </row>
+      <row>
+       <property name="text">
+        <string/>
+       </property>
+      </row>
+      <row>
+       <property name="text">
+        <string/>
+       </property>
+      </row>
+      <row>
+       <property name="text">
+        <string/>
+       </property>
+      </row>
+      <row>
+       <property name="text">
+        <string/>
+       </property>
+      </row>
+      <row>
+       <property name="text">
+        <string/>
+       </property>
+      </row>
+      <row>
+       <property name="text">
+        <string/>
+       </property>
+      </row>
+      <row>
+       <property name="text">
+        <string/>
+       </property>
+      </row>
+      <row>
+       <property name="text">
+        <string/>
+       </property>
+      </row>
+      <row>
+       <property name="text">
+        <string/>
+       </property>
+      </row>
+      <column>
+       <property name="text">
+        <string>Address</string>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="background">
+        <color>
+         <red>170</red>
+         <green>255</green>
+         <blue>255</blue>
+        </color>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Register</string>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="background">
+        <color>
+         <red>170</red>
+         <green>255</green>
+         <blue>255</blue>
+        </color>
+       </property>
+       <property name="foreground">
+        <brush brushstyle="NoBrush">
+         <color alpha="255">
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+         </color>
+        </brush>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Hex</string>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="background">
+        <color>
+         <red>170</red>
+         <green>255</green>
+         <blue>255</blue>
+        </color>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Dec</string>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="background">
+        <color>
+         <red>170</red>
+         <green>255</green>
+         <blue>255</blue>
+        </color>
+       </property>
+      </column>
+      <item row="0" column="0">
+       <property name="text">
+        <string>0x03</string>
+       </property>
+      </item>
+      <item row="0" column="1">
+       <property name="text">
+        <string>STATUS</string>
+       </property>
+      </item>
+      <item row="1" column="0">
+       <property name="text">
+        <string>0x05</string>
+       </property>
+      </item>
+      <item row="1" column="1">
+       <property name="text">
+        <string>PORTA</string>
+       </property>
+      </item>
+      <item row="2" column="0">
+       <property name="text">
+        <string>0x06</string>
+       </property>
+      </item>
+      <item row="2" column="1">
+       <property name="text">
+        <string>PORTB</string>
+       </property>
+      </item>
+      <item row="3" column="0">
+       <property name="text">
+        <string>0x18</string>
+       </property>
+      </item>
+      <item row="3" column="1">
+       <property name="text">
+        <string>RCSTA</string>
+       </property>
+      </item>
+      <item row="4" column="0">
+       <property name="text">
+        <string>0x19</string>
+       </property>
+      </item>
+      <item row="4" column="1">
+       <property name="text">
+        <string>TXREG</string>
+       </property>
+      </item>
+      <item row="5" column="0">
+       <property name="text">
+        <string>0x1A</string>
+       </property>
+      </item>
+      <item row="5" column="1">
+       <property name="text">
+        <string>RCREG</string>
+       </property>
+      </item>
+      <item row="6" column="0">
+       <property name="text">
+        <string>0x1E</string>
+       </property>
+      </item>
+      <item row="6" column="1">
+       <property name="text">
+        <string>ADRESH</string>
+       </property>
+      </item>
+      <item row="7" column="0">
+       <property name="text">
+        <string>0x81</string>
+       </property>
+      </item>
+      <item row="7" column="1">
+       <property name="text">
+        <string>OPTION</string>
+       </property>
+      </item>
+      <item row="8" column="0">
+       <property name="text">
+        <string>0x85</string>
+       </property>
+      </item>
+      <item row="8" column="1">
+       <property name="text">
+        <string>TRISA</string>
+       </property>
+      </item>
+      <item row="9" column="0">
+       <property name="text">
+        <string>0x86</string>
+       </property>
+      </item>
+      <item row="9" column="1">
+       <property name="text">
+        <string>TRISB</string>
+       </property>
+      </item>
+      <item row="10" column="0">
+       <property name="text">
+        <string>0x98</string>
+       </property>
+      </item>
+      <item row="10" column="1">
+       <property name="text">
+        <string>TXSTA</string>
+       </property>
+      </item>
+      <item row="11" column="0">
+       <property name="text">
+        <string>0x99</string>
+       </property>
+      </item>
+      <item row="11" column="1">
+       <property name="text">
+        <string>SPBRG</string>
+       </property>
+      </item>
+      <item row="12" column="0">
+       <property name="text">
+        <string>0x9E</string>
+       </property>
+      </item>
+      <item row="12" column="1">
+       <property name="text">
+        <string>ADRESL</string>
+       </property>
+      </item>
+      <item row="13" column="0">
+       <property name="text">
+        <string>0x105</string>
+       </property>
+      </item>
+      <item row="13" column="1">
+       <property name="text">
+        <string>WDTCON</string>
+       </property>
+      </item>
+     </widget>
+     <widget class="QLabel" name="label_8">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>10</y>
+        <width>121</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>System Registers</string>
+      </property>
+     </widget>
+     <widget class="QTableWidget" name="tableWidget_2">
+      <property name="geometry">
+       <rect>
+        <x>340</x>
+        <y>30</y>
+        <width>215</width>
+        <height>241</height>
+       </rect>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>215</width>
+        <height>241</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>215</width>
+        <height>241</height>
+       </size>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>8</pointsize>
+       </font>
+      </property>
+      <property name="verticalScrollBarPolicy">
+       <enum>Qt::ScrollBarAlwaysOff</enum>
+      </property>
+      <property name="horizontalScrollBarPolicy">
+       <enum>Qt::ScrollBarAlwaysOff</enum>
+      </property>
+      <property name="showGrid">
+       <bool>true</bool>
+      </property>
+      <property name="gridStyle">
+       <enum>Qt::SolidLine</enum>
+      </property>
+      <attribute name="horizontalHeaderVisible">
+       <bool>false</bool>
+      </attribute>
+      <attribute name="horizontalHeaderDefaultSectionSize">
+       <number>60</number>
+      </attribute>
+      <attribute name="horizontalHeaderMinimumSectionSize">
+       <number>32</number>
+      </attribute>
+      <attribute name="verticalHeaderDefaultSectionSize">
+       <number>15</number>
+      </attribute>
+      <row>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+        </font>
+       </property>
+       <property name="textAlignment">
+        <set>AlignHCenter|AlignVCenter|AlignCenter</set>
+       </property>
+      </row>
+      <row>
+       <property name="text">
+        <string/>
+       </property>
+      </row>
+      <row>
+       <property name="text">
+        <string/>
+       </property>
+      </row>
+      <row>
+       <property name="text">
+        <string/>
+       </property>
+      </row>
+      <row>
+       <property name="text">
+        <string/>
+       </property>
+      </row>
+      <row>
+       <property name="text">
+        <string/>
+       </property>
+      </row>
+      <row>
+       <property name="text">
+        <string/>
+       </property>
+      </row>
+      <row>
+       <property name="text">
+        <string/>
+       </property>
+      </row>
+      <row>
+       <property name="text">
+        <string/>
+       </property>
+      </row>
+      <row>
+       <property name="text">
+        <string/>
+       </property>
+      </row>
+      <row>
+       <property name="text">
+        <string/>
+       </property>
+      </row>
+      <row>
+       <property name="text">
+        <string/>
+       </property>
+      </row>
+      <row>
+       <property name="text">
+        <string/>
+       </property>
+      </row>
+      <row>
+       <property name="text">
+        <string/>
+       </property>
+      </row>
+      <column>
+       <property name="text">
+        <string>Address</string>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="background">
+        <color>
+         <red>170</red>
+         <green>255</green>
+         <blue>255</blue>
+        </color>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Register</string>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="background">
+        <color>
+         <red>170</red>
+         <green>255</green>
+         <blue>255</blue>
+        </color>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Hex</string>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="background">
+        <color>
+         <red>170</red>
+         <green>255</green>
+         <blue>255</blue>
+        </color>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Dec</string>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="background">
+        <color>
+         <red>170</red>
+         <green>255</green>
+         <blue>255</blue>
+        </color>
+       </property>
+      </column>
+      <item row="0" column="0">
+       <property name="text">
+        <string>0x4C</string>
+       </property>
+      </item>
+      <item row="0" column="1">
+       <property name="text">
+        <string>toutRF</string>
+       </property>
+      </item>
+      <item row="1" column="0">
+       <property name="text">
+        <string>0x153</string>
+       </property>
+      </item>
+      <item row="1" column="1">
+       <property name="text">
+        <string>PIN</string>
+       </property>
+      </item>
+      <item row="2" column="0">
+       <property name="text">
+        <string>0x154</string>
+       </property>
+      </item>
+      <item row="2" column="1">
+       <property name="text">
+        <string>DLEN</string>
+       </property>
+      </item>
+      <item row="3" column="0">
+       <property name="text">
+        <string>0x156</string>
+       </property>
+      </item>
+      <item row="3" column="1">
+       <property name="text">
+        <string>RX</string>
+       </property>
+      </item>
+      <item row="4" column="0">
+       <property name="text">
+        <string>0x157</string>
+       </property>
+      </item>
+      <item row="4" column="1">
+       <property name="text">
+        <string>TX</string>
+       </property>
+      </item>
+      <item row="5" column="0">
+       <property name="text">
+        <string>0x15C</string>
+       </property>
+      </item>
+      <item row="5" column="1">
+       <property name="text">
+        <string>RTDEF</string>
+       </property>
+      </item>
+      <item row="6" column="0">
+       <property name="text">
+        <string>0x15D</string>
+       </property>
+      </item>
+      <item row="6" column="1">
+       <property name="text">
+        <string>RTV0</string>
+       </property>
+      </item>
+      <item row="7" column="0">
+       <property name="text">
+        <string>0x15E</string>
+       </property>
+      </item>
+      <item row="7" column="1">
+       <property name="text">
+        <string>RTV1</string>
+       </property>
+      </item>
+      <item row="8" column="0">
+       <property name="text">
+        <string>0x15F</string>
+       </property>
+      </item>
+      <item row="8" column="1">
+       <property name="text">
+        <string>RTV2</string>
+       </property>
+      </item>
+      <item row="9" column="0">
+       <property name="text">
+        <string>0x160</string>
+       </property>
+      </item>
+      <item row="9" column="1">
+       <property name="text">
+        <string>RTV3</string>
+       </property>
+      </item>
+      <item row="10" column="0">
+       <property name="text">
+        <string>0x161</string>
+       </property>
+      </item>
+      <item row="10" column="1">
+       <property name="text">
+        <string>MPRV0</string>
+       </property>
+      </item>
+      <item row="11" column="0">
+       <property name="text">
+        <string>0x162</string>
+       </property>
+      </item>
+      <item row="11" column="1">
+       <property name="text">
+        <string>MPRV1</string>
+       </property>
+      </item>
+      <item row="12" column="0">
+       <property name="text">
+        <string>0x163</string>
+       </property>
+      </item>
+      <item row="12" column="1">
+       <property name="text">
+        <string>MPRV2</string>
+       </property>
+      </item>
+      <item row="13" column="0">
+       <property name="text">
+        <string>0x166</string>
+       </property>
+      </item>
+      <item row="13" column="1">
+       <property name="text">
+        <string>TIME</string>
+       </property>
+      </item>
+     </widget>
+     <widget class="QLabel" name="label_9">
+      <property name="geometry">
+       <rect>
+        <x>340</x>
+        <y>10</y>
+        <width>121</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Network Registers</string>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="SPITestTab">
+     <attribute name="title">
+      <string>SPI Test</string>
+     </attribute>
+     <widget class="QPushButton" name="btn_crcm">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>130</y>
+        <width>83</width>
+        <height>27</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>CRCM</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="btn_add_00">
+      <property name="geometry">
+       <rect>
+        <x>110</x>
+        <y>130</y>
+        <width>83</width>
+        <height>27</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Add 0x00</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="pushButton_5">
+      <property name="geometry">
+       <rect>
+        <x>200</x>
+        <y>130</y>
+        <width>83</width>
+        <height>27</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Get data</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_5">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>10</y>
+        <width>60</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>TX Data</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_6">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>70</y>
+        <width>60</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>RX Data</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="line_tx_data_spi">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>30</y>
+        <width>661</width>
+        <height>27</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="line_rx_data_spi">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>90</y>
+        <width>661</width>
+        <height>27</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="send_spi_data">
+      <property name="geometry">
+       <rect>
+        <x>360</x>
+        <y>130</y>
+        <width>83</width>
+        <height>27</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Send</string>
+      </property>
+     </widget>
+     <widget class="QTextEdit" name="spi_text_edit">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>180</y>
+        <width>661</width>
+        <height>131</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_7">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>160</y>
+        <width>101</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Communication</string>
+      </property>
+     </widget>
+     <widget class="QToolButton" name="spi_m1">
+      <property name="geometry">
+       <rect>
+        <x>460</x>
+        <y>150</y>
+        <width>25</width>
+        <height>24</height>
+       </rect>
+      </property>
+      <property name="mouseTracking">
+       <bool>false</bool>
+      </property>
+      <property name="toolTip">
+       <string>SPI status</string>
+      </property>
+      <property name="text">
+       <string>M1</string>
+      </property>
+     </widget>
+     <widget class="QToolButton" name="spi_m2">
+      <property name="geometry">
+       <rect>
+        <x>490</x>
+        <y>150</y>
+        <width>25</width>
+        <height>24</height>
+       </rect>
+      </property>
+      <property name="toolTip">
+       <string>Read SPI data</string>
+      </property>
+      <property name="text">
+       <string>M2</string>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="TerminalTab">
+     <attribute name="title">
+      <string>Terminal</string>
+     </attribute>
+     <widget class="QTextEdit" name="term_text_edit">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>110</y>
+        <width>671</width>
+        <height>201</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="pushButton">
+      <property name="geometry">
+       <rect>
+        <x>600</x>
+        <y>70</y>
+        <width>83</width>
+        <height>27</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Clear</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_2">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>90</y>
+        <width>101</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Communication</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="spi_data_tx">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>30</y>
+        <width>441</width>
+        <height>27</height>
+       </rect>
+      </property>
+      <property name="toolTip">
+       <string>Type text max. 35 chars</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_4">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>10</y>
+        <width>60</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>TX Text</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="btn_teminal_spi_send">
+      <property name="geometry">
+       <rect>
+        <x>460</x>
+        <y>30</y>
+        <width>83</width>
+        <height>27</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Send</string>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="UploadTab">
+     <attribute name="title">
+      <string>Programming</string>
+     </attribute>
+     <widget class="QLabel" name="label">
+      <property name="geometry">
+       <rect>
+        <x>270</x>
+        <y>10</y>
+        <width>71</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Upload Log</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="clear_upload_btn">
+      <property name="geometry">
+       <rect>
+        <x>360</x>
+        <y>0</y>
+        <width>83</width>
+        <height>27</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Clear</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="OpenFileButton">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>30</y>
+        <width>116</width>
+        <height>25</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Open File</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="EditFileButton">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
+      <property name="geometry">
+       <rect>
+        <x>140</x>
+        <y>30</y>
+        <width>101</width>
+        <height>25</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Edit File</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="CompileButton">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
+      <property name="geometry">
+       <rect>
+        <x>60</x>
+        <y>130</y>
+        <width>131</width>
+        <height>25</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Compile</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="file_label">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>60</y>
+        <width>231</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="EnterProgButton">
+      <property name="geometry">
+       <rect>
+        <x>60</x>
+        <y>200</y>
+        <width>131</width>
+        <height>25</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Enter Prog Mode</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="UploadButton">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
+      <property name="geometry">
+       <rect>
+        <x>60</x>
+        <y>290</y>
+        <width>131</width>
+        <height>25</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Upload</string>
+      </property>
+     </widget>
+     <widget class="QCheckBox" name="ApplicationCheckBox">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>230</y>
+        <width>239</width>
+        <height>23</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>APPLICATION</string>
+      </property>
+     </widget>
+     <widget class="QCheckBox" name="EepromCheckBox">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>250</y>
+        <width>239</width>
+        <height>23</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>EEPROM</string>
+      </property>
+     </widget>
+     <widget class="Line" name="line">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>110</y>
+        <width>231</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+     </widget>
+     <widget class="Line" name="line_2">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>180</y>
+        <width>231</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_mcu">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>160</y>
+        <width>191</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+     </widget>
+     <widget class="QTextEdit" name="UploadTextEdit">
+      <property name="geometry">
+       <rect>
+        <x>270</x>
+        <y>30</y>
+        <width>411</width>
+        <height>281</height>
+       </rect>
+      </property>
+      <property name="readOnly">
+       <bool>true</bool>
+      </property>
+     </widget>
+    </widget>
+   </widget>
+   <widget class="QGroupBox" name="groupBox">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>0</y>
+      <width>291</width>
+      <height>71</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string>Module Info</string>
+    </property>
+    <widget class="QLabel" name="label_os">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>20</y>
+       <width>251</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_mod_id">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>37</y>
+       <width>251</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QWidget" name="layoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>330</x>
+      <y>10</y>
+      <width>277</width>
+      <height>29</height>
+     </rect>
+    </property>
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <widget class="QPushButton" name="ResetButton">
+       <property name="text">
+        <string>Reset Module</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="StartDebugButton">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
+       <property name="text">
+        <string>Start Debug</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="ClearAllButton">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
+       <property name="text">
+        <string>Clear All</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QLineEdit" name="indicatorSPI">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>440</y>
+      <width>16</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true"/>
+    </property>
+    <property name="readOnly">
+     <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_3">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>440</y>
+      <width>231</width>
+      <height>25</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>SPI check</string>
+    </property>
+   </widget>
+   <widget class="QCheckBox" name="checkBox">
+    <property name="geometry">
+     <rect>
+      <x>280</x>
+      <y>440</y>
+      <width>91</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Check SPI</string>
+    </property>
+    <property name="checked">
+     <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QProgressBar" name="progressBar">
+    <property name="geometry">
+     <rect>
+      <x>390</x>
+      <y>440</y>
+      <width>118</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="value">
+     <number>0</number>
+    </property>
+    <property name="textVisible">
+     <bool>false</bool>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QMenuBar" name="menuBar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>730</width>
+     <height>25</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuFile">
+    <property name="title">
+     <string>File</string>
+    </property>
+    <addaction name="action_Exit"/>
+   </widget>
+   <widget class="QMenu" name="menuEdit">
+    <property name="title">
+     <string>Settings</string>
+    </property>
+    <addaction name="actionUpload_Beep"/>
+    <addaction name="actionDebug_Beep"/>
+    <addaction name="separator"/>
+    <addaction name="actionTools_Settings"/>
+   </widget>
+   <widget class="QMenu" name="menuHelp">
+    <property name="title">
+     <string>Help</string>
+    </property>
+    <addaction name="actionAbout"/>
+    <addaction name="actionAboutQt"/>
+   </widget>
+   <addaction name="menuFile"/>
+   <addaction name="menuEdit"/>
+   <addaction name="menuHelp"/>
+  </widget>
+  <action name="actionAbout">
+   <property name="text">
+    <string>&amp;About</string>
+   </property>
+  </action>
+  <action name="actionAboutQt">
+   <property name="text">
+    <string>About &amp;Qt</string>
+   </property>
+  </action>
+  <action name="action_Exit">
+   <property name="text">
+    <string>E&amp;xit</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Q</string>
+   </property>
+  </action>
+  <action name="actionUpload_Beep">
+   <property name="text">
+    <string>Upload Beep</string>
+   </property>
+  </action>
+  <action name="actionDebug_Beep">
+   <property name="text">
+    <string>Debug Beep</string>
+   </property>
+  </action>
+  <action name="actionMCU_type">
+   <property name="text">
+    <string>MCU type</string>
+   </property>
+  </action>
+  <action name="actionPIC_16F88">
+   <property name="text">
+    <string>PIC 16F88</string>
+   </property>
+  </action>
+  <action name="actionPIC_16F886">
+   <property name="text">
+    <string>PIC 16F886</string>
+   </property>
+  </action>
+  <action name="actionTools">
+   <property name="text">
+    <string>tools</string>
+   </property>
+  </action>
+  <action name="actionTools_Settings">
+   <property name="text">
+    <string>&amp;Tools Settings</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+T</string>
+   </property>
+  </action>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <resources/>
+ <connections/>
+</ui>
