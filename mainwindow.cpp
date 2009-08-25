@@ -506,7 +506,7 @@ void MainWindow::update_spi_status()
          if (stat >= 0x40 && stat <= 0x63) {
               ui->label_3->setText("SPI data ready");
               /* if data are ready print to text array in Terminal label */
-              len = prog->write_read_spi_data(buff, stat, 0);
+              len = prog->write_read_spi_data(buff, stat-0x40, 0);
               buff[len] = '\0';
               QString str;
               QTime tm;
