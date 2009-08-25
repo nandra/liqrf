@@ -646,15 +646,19 @@ void MainWindow::on_CompileButton_clicked()
         this->window->write_data("file is "+filename);
 
         // setup and run compile process
-        arguments << this->setup_win->compiler_location
-                    << this->setup_win->compiler_options;
+        arguments << this->setup_win->compiler_location;
+
+        /* if it's not splitted it's represented like whole string
+         * what makes problems during compilation
+         */
+        arguments << this->setup_win->compiler_options.split(" ");
+
         if (this->mcu == MCU_16F88)
             arguments << "-p16F88";
         else
             arguments << "-p16F886";
         arguments << filename;
 
-        qDebug() << arguments;
         this->window->write_data("args are "+arguments.join(" "));
         compile_process.setWorkingDirectory(this->directory);
         compile_process.start("wine", arguments);
@@ -670,7 +674,7 @@ void MainWindow::on_CompileButton_clicked()
             return;
 
         // print output of compile process
-        QByteArray output, test = "marek123";
+        QByteArray output;
         output = compile_process.readAllStandardOutput();
         this->window->write_data(QString(output));
         output.append(compile_process.readAllStandardError());
