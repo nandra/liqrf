@@ -4,7 +4,7 @@
 #include <time.h>
 #include "iqrf_dev.h"
 
-#define DEBUG_IQRF_DEV
+//#define DEBUG_IQRF_DEV
 
 #ifdef DEBUG_IQRF_DEV
 #define DBG(fmt, args...) \
