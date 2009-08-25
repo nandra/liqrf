@@ -513,6 +513,7 @@ void MainWindow::update_spi_status()
               str.append(tm.currentTime().toString());
               str.append(" RxD : \"");
               str.append((char *)&buff[0]);
+              str.append("\"");
 
               ui->term_text_edit->append(str);
 

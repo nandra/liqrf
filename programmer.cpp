@@ -15,6 +15,7 @@ programmer::programmer()
 {
     this->dev = new iqrf_dev;
     this->parser = new hex_parser;
+    this->usr_eeprom = 0;
 }
 
 programmer::~programmer()
@@ -125,11 +126,18 @@ int programmer::send_prog_data(int data_type, unsigned char *data, int data_len,
 
         memcpy(&buff[5], data, data_len);
         buff[5 + data_len] = this->dev->spi->count_crc_tx(&buff[1], sizeof(buff) -1);
+        this->usr_eeprom = 1;
         break;
     case EEPROM_APP:
         buff[0] = CMD_PROG;
         buff[1] = EEPROM_DATA;
-        buff[2] = UNKNOWN;
+        if (this->usr_eeprom) {
+            buff[2] = 0x9D;
+            this->usr_eeprom = 0;
+        } else {
+                buff[2] = UNKNOWN_DATA;
+        }
+
         /* address is just one byte */
         buff[3] = addr & 0xFF;
         buff[4] = data_len;
@@ -141,7 +149,7 @@ int programmer::send_prog_data(int data_type, unsigned char *data, int data_len,
     case FLASH_PROG:
         buff[0] = CMD_PROG;
         buff[1] = FLASH_DATA;
-        buff[2] = UNKNOWN;
+        buff[2] = UNKNOWN_DATA;
         buff[3] = addr & 0xFF;
         buff[4] = (addr >> 8) & 0xFF;
 

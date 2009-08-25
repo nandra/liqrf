@@ -14,7 +14,7 @@
 #define CMD_PROG 0x07
 #define EEPROM_DATA 0xF3
 #define FLASH_DATA 0xF6
-#define UNKNOWN 0xA2
+#define UNKNOWN_DATA 0xA2
 
 /* flash and eeprom data types */
 #define EEPROM_APP 0x01
@@ -54,6 +54,7 @@ public:
 
 private:
     iqrf_dev *dev;
+    unsigned char usr_eeprom;
 };
 
 
