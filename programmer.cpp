@@ -132,7 +132,10 @@ int programmer::send_prog_data(int data_type, unsigned char *data, int data_len,
         buff[0] = CMD_PROG;
         buff[1] = EEPROM_DATA;
         if (this->usr_eeprom) {
-            buff[2] = 0x9D;
+            if (data_len < 32)
+                buff[2] = 0x9D;
+            else
+                buff[2] = 0xA2;
             this->usr_eeprom = 0;
         } else {
                 buff[2] = UNKNOWN_DATA;
