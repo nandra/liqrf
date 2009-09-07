@@ -1,7 +1,7 @@
 #ifndef PROGRAMMER_H
 #define PROGRAMMER_H
 
-#include "iqrf_dev.h"
+#include "core_class/iqrf_dev.h"
 #include "hex_parser.h"
 
 /* every usb prog. write has following entries
