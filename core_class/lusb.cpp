@@ -2,7 +2,7 @@
 #include <string.h>
 #include "lusb.h"
 
-#define DEBUG_USB
+//#define DEBUG_USB
 
 #ifdef DEBUG_USB
 #define DBG(fmt, args...) \
