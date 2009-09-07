@@ -6,21 +6,22 @@ TARGET = iqrf_ide
 TEMPLATE = app
 SOURCES += main.cpp \
     mainwindow.cpp \
-    spi.cpp \
     programmer.cpp \
-    lusb.cpp \
-    iqrf_dev.cpp \
     hex_parser.cpp \
     setup_dialog.cpp \
-    compile_dialog.cpp
+    compile_dialog.cpp \
+    core/iqrf_dev.cpp \
+    core/lusb.cpp \
+    core/spi.cpp
 HEADERS += mainwindow.h \
-    spi.h \
     programmer.h \
     lusb.h \
-    iqrf_dev.h \
     hex_parser.h \
     setup_dialog.h \
-    compile_dialog.h
+    compile_dialog.h \
+    core/iqrf_dev.h \
+    core/lusb.h \
+    core/spi.h
 FORMS += mainwindow.ui \
     setup_dialog.ui \
     compile_dialog.ui
