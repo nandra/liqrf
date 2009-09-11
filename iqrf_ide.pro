@@ -10,18 +10,18 @@ SOURCES += main.cpp \
     hex_parser.cpp \
     setup_dialog.cpp \
     compile_dialog.cpp \
-    core/iqrf_dev.cpp \
-    core/lusb.cpp \
-    core/spi.cpp
+    core_class/iqrf_dev.cpp \
+    core_class/lusb.cpp \
+    core_class/spi.cpp
 HEADERS += mainwindow.h \
     programmer.h \
     lusb.h \
     hex_parser.h \
     setup_dialog.h \
     compile_dialog.h \
-    core/iqrf_dev.h \
-    core/lusb.h \
-    core/spi.h
+    core_class/iqrf_dev.h \
+    core_class/lusb.h \
+    core_class/spi.h
 FORMS += mainwindow.ui \
     setup_dialog.ui \
     compile_dialog.ui
