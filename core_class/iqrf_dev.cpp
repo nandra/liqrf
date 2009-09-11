@@ -105,7 +105,7 @@ int iqrf_dev::get_spi_status(void)
 }
 
 /* get data from spi */
-int iqrf_dev::get_spi_cmd_data(unsigned char *data_buff, int data_len, int read_write, int crc_rx_dec)
+int iqrf_dev::get_spi_cmd_data(unsigned char *data_buff, int data_len, int read_write)
 {
     unsigned char buff[64], PTYPE = 0;
     int i, len, crc_rx;
@@ -136,7 +136,7 @@ int iqrf_dev::get_spi_cmd_data(unsigned char *data_buff, int data_len, int read_
     this->usb->send_receive_packet();
     len = this->usb->read_rx_buff(buff);
     /* count crc for retrieved data */
-    crc_rx = this->spi->check_crc_rx(&buff[2], PTYPE, data_len - crc_rx_dec);
+    crc_rx = this->spi->check_crc_rx(&buff[2], PTYPE, data_len);
 
     if (crc_rx) {
         memcpy(data_buff, &buff[2], data_len);
