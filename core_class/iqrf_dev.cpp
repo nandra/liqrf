@@ -108,7 +108,7 @@ int iqrf_dev::get_spi_status(void)
 int iqrf_dev::get_spi_cmd_data(unsigned char *data_buff, int data_len, int read_write)
 {
     unsigned char buff[64], PTYPE = 0;
-    int i, len, crc_rx;
+    int i, len, crc_rx, ret_val = 0;
 
     sem_wait(&this->sem);
     /* avoid get longer data line 35 bytes */
@@ -145,15 +145,14 @@ int iqrf_dev::get_spi_cmd_data(unsigned char *data_buff, int data_len, int read_
             DBG("%c", buff[i]);
         DBG("\n");
 
-        sem_post(&this->sem);
-        return data_len;
+        ret_val = data_len;
     } else {
         /* this could occur in case of module info */
         memcpy(data_buff, &buff[2], 4);
         DBG("Wrong data checksum\n");
     }
     sem_post(&this->sem);
-    return 0;
+    return ret_val;
 }
 
 /* write and reading data to/from spi */
