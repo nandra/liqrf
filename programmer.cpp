@@ -209,7 +209,7 @@ void programmer::release()
  * it uis used when user send response
  * for spi command
  */
-int programmer::write_read_spi_data(unsigned char *data, int data_len, int write_read)
+int programmer::write_read_spi_data(unsigned char *data, int data_len, bool write_read)
 {
     int ret_val = 0;
 

@@ -506,7 +506,7 @@ void MainWindow::update_spi_status()
          if (stat >= 0x40 && stat <= 0x63) {
               ui->label_3->setText("SPI data ready");
               /* if data are ready print to text array in Terminal label */
-              len = prog->write_read_spi_data(buff, stat-0x40, 0);
+              len = prog->write_read_spi_data(buff, stat-0x40, false);
               buff[len] = '\0';
               QString str;
               QTime tm;
@@ -830,7 +830,7 @@ void MainWindow::on_btn_teminal_spi_send_clicked()
         int i = arr.count();
         unsigned char *data = (unsigned char *)arr.data();
 
-        this->prog->write_read_spi_data(data, i, 1);
+        this->prog->write_read_spi_data(data, i, true);
         ui->spi_data_tx->clear();
     }
 }
