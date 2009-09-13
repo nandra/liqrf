@@ -16,7 +16,7 @@ CXXFLAGS      = -pipe -g -Wall -W -D_REENTRANT $(DEFINES)
 INCPATH       = -I/usr/share/qt4/mkspecs/linux-g++ -I. -I/usr/include/QtCore -I/usr/include/QtCore -I/usr/include/QtGui -I/usr/include/QtGui -I/usr/include/QtDBus -I/usr/include/QtDBus -I/usr/include -I. -I.
 LINK          = g++
 LFLAGS        = 
-LIBS          = $(SUBLIBS)  -L/usr/lib -lQtDBus -L/usr/lib -L/lib -ldbus-1 -lQtXml -pthread -pthread -pthread -pthread -pthread -pthread -lQtGui -L/usr/X11R6/lib -pthread -lpng -lSM -lICE -pthread -pthread -lXi -lXrender -lXrandr -lXfixes -lXcursor -lXinerama -lfreetype -lfontconfig -lXext -lX11 -lQtCore -lz -lm -pthread -lgthread-2.0 -lrt -lglib-2.0 -ldl -lpthread
+LIBS          = $(SUBLIBS)  -L/usr/lib -lQtDBus -L/usr/lib -L/lib -ldbus-1 -lQtXml -pthread -pthread -pthread -pthread -pthread -pthread -lQtGui -L/usr/X11R6/lib -pthread -lpng -lSM -lICE -pthread -pthread -lXi -lXrender -lXrandr -lXfixes -lXcursor -lXinerama -lfreetype -lfontconfig -lXext -lX11 -lQtCore -lz -lm -pthread -lgthread-2.0 -lrt -lglib-2.0 -ldl -lpthread -lusb
 AR            = ar cqs
 RANLIB        = 
 QMAKE         = /usr/bin/qmake
@@ -48,9 +48,9 @@ SOURCES       = main.cpp \
 		hex_parser.cpp \
 		setup_dialog.cpp \
 		compile_dialog.cpp \
-		core_class/iqrf_dev.cpp \
-		core_class/lusb.cpp \
-		core_class/spi.cpp moc_mainwindow.cpp \
+		iqrf_core/iqrf_dev.cpp \
+		iqrf_core/lusb.cpp \
+		iqrf_core/spi.cpp moc_mainwindow.cpp \
 		moc_setup_dialog.cpp \
 		moc_compile_dialog.cpp
 OBJECTS       = main.o \
@@ -171,7 +171,7 @@ qmake:  FORCE
 
 dist: 
 	@$(CHK_DIR_EXISTS) .tmp/iqrf_ide1.0.0 || $(MKDIR) .tmp/iqrf_ide1.0.0 
-	$(COPY_FILE) --parents $(SOURCES) $(DIST) .tmp/iqrf_ide1.0.0/ && $(COPY_FILE) --parents mainwindow.h programmer.h lusb.h hex_parser.h setup_dialog.h compile_dialog.h core_class/iqrf_dev.h core_class/lusb.h core_class/spi.h .tmp/iqrf_ide1.0.0/ && $(COPY_FILE) --parents main.cpp mainwindow.cpp programmer.cpp hex_parser.cpp setup_dialog.cpp compile_dialog.cpp core_class/iqrf_dev.cpp core_class/lusb.cpp core_class/spi.cpp .tmp/iqrf_ide1.0.0/ && $(COPY_FILE) --parents mainwindow.ui setup_dialog.ui compile_dialog.ui .tmp/iqrf_ide1.0.0/ && (cd `dirname .tmp/iqrf_ide1.0.0` && $(TAR) iqrf_ide1.0.0.tar iqrf_ide1.0.0 && $(COMPRESS) iqrf_ide1.0.0.tar) && $(MOVE) `dirname .tmp/iqrf_ide1.0.0`/iqrf_ide1.0.0.tar.gz . && $(DEL_FILE) -r .tmp/iqrf_ide1.0.0
+	$(COPY_FILE) --parents $(SOURCES) $(DIST) .tmp/iqrf_ide1.0.0/ && $(COPY_FILE) --parents mainwindow.h programmer.h lusb.h hex_parser.h setup_dialog.h compile_dialog.h iqrf_core/iqrf_dev.h iqrf_core/lusb.h iqrf_core/spi.h .tmp/iqrf_ide1.0.0/ && $(COPY_FILE) --parents main.cpp mainwindow.cpp programmer.cpp hex_parser.cpp setup_dialog.cpp compile_dialog.cpp iqrf_core/iqrf_dev.cpp iqrf_core/lusb.cpp iqrf_core/spi.cpp .tmp/iqrf_ide1.0.0/ && $(COPY_FILE) --parents mainwindow.ui setup_dialog.ui compile_dialog.ui .tmp/iqrf_ide1.0.0/ && (cd `dirname .tmp/iqrf_ide1.0.0` && $(TAR) iqrf_ide1.0.0.tar iqrf_ide1.0.0 && $(COMPRESS) iqrf_ide1.0.0.tar) && $(MOVE) `dirname .tmp/iqrf_ide1.0.0`/iqrf_ide1.0.0.tar.gz . && $(DEL_FILE) -r .tmp/iqrf_ide1.0.0
 
 
 clean:compiler_clean 
@@ -194,9 +194,9 @@ compiler_moc_header_make_all: moc_mainwindow.cpp moc_setup_dialog.cpp moc_compil
 compiler_moc_header_clean:
 	-$(DEL_FILE) moc_mainwindow.cpp moc_setup_dialog.cpp moc_compile_dialog.cpp
 moc_mainwindow.cpp: programmer.h \
-		core_class/iqrf_dev.h \
-		core_class/lusb.h \
-		core_class/spi.h \
+		iqrf_core/iqrf_dev.h \
+		iqrf_core/lusb.h \
+		iqrf_core/spi.h \
 		hex_parser.h \
 		compile_dialog.h \
 		setup_dialog.h \
@@ -252,9 +252,9 @@ compiler_clean: compiler_moc_header_clean compiler_uic_clean
 
 main.o: main.cpp mainwindow.h \
 		programmer.h \
-		core_class/iqrf_dev.h \
-		core_class/lusb.h \
-		core_class/spi.h \
+		iqrf_core/iqrf_dev.h \
+		iqrf_core/lusb.h \
+		iqrf_core/spi.h \
 		hex_parser.h \
 		compile_dialog.h \
 		setup_dialog.h
@@ -262,9 +262,9 @@ main.o: main.cpp mainwindow.h \
 
 mainwindow.o: mainwindow.cpp mainwindow.h \
 		programmer.h \
-		core_class/iqrf_dev.h \
-		core_class/lusb.h \
-		core_class/spi.h \
+		iqrf_core/iqrf_dev.h \
+		iqrf_core/lusb.h \
+		iqrf_core/spi.h \
 		hex_parser.h \
 		compile_dialog.h \
 		setup_dialog.h \
@@ -272,9 +272,9 @@ mainwindow.o: mainwindow.cpp mainwindow.h \
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mainwindow.o mainwindow.cpp
 
 programmer.o: programmer.cpp programmer.h \
-		core_class/iqrf_dev.h \
-		core_class/lusb.h \
-		core_class/spi.h \
+		iqrf_core/iqrf_dev.h \
+		iqrf_core/lusb.h \
+		iqrf_core/spi.h \
 		hex_parser.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o programmer.o programmer.cpp
 
@@ -289,16 +289,16 @@ compile_dialog.o: compile_dialog.cpp compile_dialog.h \
 		ui_compile_dialog.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o compile_dialog.o compile_dialog.cpp
 
-iqrf_dev.o: core_class/iqrf_dev.cpp core_class/iqrf_dev.h \
-		core_class/lusb.h \
-		core_class/spi.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o iqrf_dev.o core_class/iqrf_dev.cpp
+iqrf_dev.o: iqrf_core/iqrf_dev.cpp iqrf_core/iqrf_dev.h \
+		iqrf_core/lusb.h \
+		iqrf_core/spi.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o iqrf_dev.o iqrf_core/iqrf_dev.cpp
 
-lusb.o: core_class/lusb.cpp core_class/lusb.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o lusb.o core_class/lusb.cpp
+lusb.o: iqrf_core/lusb.cpp iqrf_core/lusb.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o lusb.o iqrf_core/lusb.cpp
 
-spi.o: core_class/spi.cpp core_class/spi.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o spi.o core_class/spi.cpp
+spi.o: iqrf_core/spi.cpp iqrf_core/spi.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o spi.o iqrf_core/spi.cpp
 
 moc_mainwindow.o: moc_mainwindow.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_mainwindow.o moc_mainwindow.cpp
