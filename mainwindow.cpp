@@ -507,15 +507,17 @@ void MainWindow::update_spi_status()
               ui->label_3->setText("SPI data ready");
               /* if data are ready print to text array in Terminal label */
               len = prog->write_read_spi_data(buff, stat-0x40, false);
-              buff[len] = '\0';
-              QString str;
-              QTime tm;
-              str.append(tm.currentTime().toString());
-              str.append(" RxD : \"");
-              str.append((char *)&buff[0]);
-              str.append("\"");
+              if (len > 0) {
+                  buff[len] = '\0';
+                  QString str;
+                  QTime tm;
+                  str.append(tm.currentTime().toString());
+                  str.append(" RxD : \"");
+                  str.append((char *)&buff[0]);
+                  str.append("\"");
 
-              ui->term_text_edit->append(str);
+                  ui->term_text_edit->append(str);
+              }
 
          } else {
             printf("Unkown SPI response!\n");
