@@ -88,6 +88,10 @@ MainWindow::MainWindow(QWidget *parent)
             /* disable enter prog button */
             ui->EnterProgButton->setDisabled(true);
             ui->ResetButton->setDisabled(true);
+
+            ui->send_spi_data->setDisabled(true);
+            ui->spi_data_tx->setDisabled(true);
+            ui->btn_teminal_spi_send->setDisabled(true);
         }
     }
 
@@ -965,3 +969,9 @@ void MainWindow::on_spi_m2_clicked()
 }
 
 
+
+void MainWindow::on_spi_data_tx_returnPressed()
+{
+    qDebug() << "Function called";
+    this->on_btn_teminal_spi_send_clicked();//on_btn_teminal_spi_send_clicked();
+}
