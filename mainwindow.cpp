@@ -308,11 +308,17 @@ void MainWindow::toolsSetting()
 
 void MainWindow::about()
 {
+    QString str = "<h2>Iqrf IDE</h2>" "<p>Version: v";
+
+    str.append(VERSION);
+    str.append("<p>open nandra 2009"
+               "<p><a href=\"http://open-nandra.com\">open-nandra.com</a>");
+    /* this for sure could be done easiest way */
+    QByteArray ba = str.toLatin1();
+    const char *str1 = ba.data();
+
     QMessageBox::about(this, tr("About QTLiqrf"),
-                       tr("<h2>QTLiqrf</h2>"
-                          "<p>Version: xx"
-                          "<p>open nandra 2009"
-                          "<p><a href=\"http://open-nandra.com\">open-nandra.com</a>"));
+                       tr(str1));
 }
 
 /* reset module command */

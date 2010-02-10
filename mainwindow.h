@@ -11,6 +11,8 @@
 #include "compile_dialog.h"
 #include "setup_dialog.h"
 
+#define VERSION "0.1.1"
+
 namespace Ui
 {
     class MainWindow;
