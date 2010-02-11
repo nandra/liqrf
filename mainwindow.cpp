@@ -88,10 +88,7 @@ MainWindow::MainWindow(QWidget *parent)
             /* disable enter prog button */
             ui->EnterProgButton->setDisabled(true);
             ui->ResetButton->setDisabled(true);
-
-            ui->send_spi_data->setDisabled(true);
-            ui->spi_data_tx->setDisabled(true);
-            ui->btn_teminal_spi_send->setDisabled(true);
+            this->enable_tab_func(false);
         }
     }
 
@@ -205,6 +202,26 @@ MainWindow::MainWindow(QWidget *parent)
 
 }
 
+/* when device is disconnected disable some features in tabs
+ * or vice versa
+ */
+
+void MainWindow::enable_tab_func(bool en)
+{
+    if (en) {
+        ui->send_spi_data->setDisabled(false);
+        ui->spi_data_tx->setDisabled(false);
+        ui->btn_teminal_spi_send->setDisabled(false);
+    } else {
+        ui->send_spi_data->setDisabled(true);
+        ui->spi_data_tx->setDisabled(true);
+        ui->btn_teminal_spi_send->setDisabled(true);
+    }
+}
+
+
+
+
 /* template to retrieve data from HAL */
 template<typename T>
 T dbusRequest(QDBusInterface &i, const QString &method, const QString &param)
@@ -244,6 +261,7 @@ void MainWindow::deviceAdded(const QString &udi)
         ui->label_3->setStyleSheet("QLabel {}");
         ui->label_3->setText("USB device connected");
         ui->indicatorSPI->setStyleSheet("QLineEdit { background-color: green; }");
+        this->enable_tab_func(true);
     }
 end:
     return;
@@ -272,6 +290,7 @@ void MainWindow::deviceRemoved(const QString &udi)
             ui->label_3->setText("USB device disconnected");
             ui->label_3->setStyleSheet("QLabel {background-color: red;}");
             ui->indicatorSPI->setStyleSheet("QLineEdit { background-color: red; }");
+            this->enable_tab_func(false);
         }
     }
 }

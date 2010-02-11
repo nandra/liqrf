@@ -57,6 +57,8 @@ private:
     void writeSettings();
     void readSettings();
     void debug(QString str);
+    void enable_tab_func(bool en);
+
 public slots:
     void on_checkBox_stateChanged(int);
 
