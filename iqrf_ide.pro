@@ -2,6 +2,7 @@
 # Project created by QtCreator 2009-07-10T12:47:44
 # -------------------------------------------------
 QT += dbus
+LIBS += -L/usr/lib -lusb
 TARGET = iqrf_ide
 TEMPLATE = app
 SOURCES += main.cpp \
