@@ -2,8 +2,14 @@ FW uploader for iqrf devices.
 More informations at: http://iqrf.com
 Project page: http://open-nandra.com/?page_id=108
 
-Compilation: 
-For compile uploader just type make.
+HOW TO COMPILE IDE:
+1. clone repo : git clone git@github.com:nandra/liqrf.git
+2. init and update submodule : git submodule init; git submodule update
+3. make
+4. change ownership of libusb in default udev rule (lib/udev/rules.d/*-default*)
+   from 664 to 666.
+5. connect CK-USB and run binary.
+6. Enjoy ;)
 
 
 Additional informations:
