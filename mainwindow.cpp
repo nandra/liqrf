@@ -62,7 +62,7 @@ MainWindow::MainWindow(QWidget *parent)
     /* user has 2 possibilities to conect usb */
     while (max_setup) {
         /* usb initialization */
-        if (prog->init()) {
+        if (prog->init() > 0) {
             ui->UploadTextEdit->append("USB device found");
             this->dev_found = 1;
             break;
@@ -997,6 +997,5 @@ void MainWindow::on_spi_m2_clicked()
 
 void MainWindow::on_spi_data_tx_returnPressed()
 {
-    qDebug() << "Function called";
     this->on_btn_teminal_spi_send_clicked();//on_btn_teminal_spi_send_clicked();
 }

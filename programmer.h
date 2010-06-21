@@ -1,8 +1,12 @@
 #ifndef PROGRAMMER_H
 #define PROGRAMMER_H
 
-#include "iqrf_core/iqrf_dev.h"
+#include <iqrf.h>
 #include "hex_parser.h"
+
+
+/* maximum length for usb rx and tx buffer */
+#define BUF_LEN 64
 
 /* every usb prog. write has following entries
    CMD_PROG, EEPROM_DATA or FLASH_DATA,
@@ -53,7 +57,7 @@ public:
     int crc(unsigned char *buff, int len);
 
 private:
-    iqrf_dev *dev;
+    //iqrf_dev *dev;
     unsigned char usr_eeprom;
 };
 

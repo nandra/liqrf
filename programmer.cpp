@@ -13,14 +13,14 @@
 
 programmer::programmer()
 {
-    this->dev = new iqrf_dev;
+    //this->dev = new iqrf_dev;
     this->parser = new hex_parser;
     this->usr_eeprom = 0;
 }
 
 programmer::~programmer()
 {
-    delete dev;
+    //delete dev;
     delete parser;
 }
 
@@ -32,9 +32,9 @@ void programmer::enter_prog_mode()
     memset(buff, 0, sizeof(buff));
     buff[0] = CMD_ENTER_PROG;
     buff[1] = UNKNOWN_PROG;
-    buff[2] = this->dev->spi->count_crc_tx(&buff[1], sizeof(buff) - 1);
+    buff[2] = iqrf_count_tx_crc(&buff[1], sizeof(buff) - 1);
 
-    this->dev->write_data(buff, 3);
+    iqrf_write_data(buff, 3);
 }
 
 void programmer::enter_endprog_mode()
@@ -48,9 +48,9 @@ void programmer::enter_endprog_mode()
     buff[3] = 0xDE;
     buff[4] = 0x01;
     buff[5] = 0xFF;
-    buff[6] = this->dev->spi->count_crc_tx(&buff[1], sizeof(buff) - 1);
+    buff[6] = iqrf_count_tx_crc(&buff[1], sizeof(buff) - 1);
 
-    this->dev->write_read_data(buff, 9, 8, 1);
+    iqrf_write_read_data(buff, 9, 8, 1);
 
 
 }
@@ -68,9 +68,9 @@ int programmer::request_module_id(void)
     buff[1] = 0xF5;
     buff[2] = 0x81;
     buff[3] = 0x00;
-    buff[4] = this->dev->spi->count_crc_tx(&buff[1], sizeof(buff) -1);
+    buff[4] = iqrf_count_tx_crc(&buff[1], sizeof(buff) -1);
 
-    if (this->dev->write_read_data(buff, 11, 10, 1))
+    if (iqrf_write_read_data(buff, 11, 10, 1))
         ret_val = 1;
 
     return ret_val;
@@ -91,9 +91,9 @@ int programmer::get_module_id(void)
     buff[0] = CMD_FOR_CK;
     buff[1] = 0xF0;
     buff[2] = 0x08;
-    buff[11] = this->dev->spi->count_crc_tx(&buff[1], sizeof(buff) -1);
+    buff[11] = iqrf_count_tx_crc(&buff[1], sizeof(buff) -1);
 
-    if ((len = this->dev->write_read_data(buff, 14, 13, 1)))
+    if ((len = iqrf_write_read_data(buff, 14, 13, 1)))
         ret_val = 1;
 
     DBG("Module ID:");
@@ -125,7 +125,7 @@ int programmer::send_prog_data(int data_type, unsigned char *data, int data_len,
         buff[4] = data_len;
 
         memcpy(&buff[5], data, data_len);
-        buff[5 + data_len] = this->dev->spi->count_crc_tx(&buff[1], sizeof(buff) -1);
+        buff[5 + data_len] = iqrf_count_tx_crc(&buff[1], sizeof(buff) -1);
         this->usr_eeprom = 1;
         break;
     case EEPROM_APP:
@@ -146,7 +146,7 @@ int programmer::send_prog_data(int data_type, unsigned char *data, int data_len,
         buff[4] = data_len;
 
         memcpy(&buff[5], data, data_len);
-        buff[5 + data_len] = this->dev->spi->count_crc_tx(&buff[1], sizeof(buff) -1);
+        buff[5 + data_len] = iqrf_count_tx_crc(&buff[1], sizeof(buff) -1);
         break;
 
     case FLASH_PROG:
@@ -168,7 +168,7 @@ int programmer::send_prog_data(int data_type, unsigned char *data, int data_len,
                 buff[5 + data_len + i] = 0x3F;
             }
         }
-        buff[5 + data_len + data_fill] = this->dev->spi->count_crc_tx(&buff[1],
+        buff[5 + data_len + data_fill] = iqrf_count_tx_crc(&buff[1],
                         sizeof(buff) -1);
         break;
     default:
@@ -176,7 +176,7 @@ int programmer::send_prog_data(int data_type, unsigned char *data, int data_len,
         break;
     }
 
-    if (this->dev->write_read_data(buff, BUF_LEN, BUF_LEN, 1))
+    if (iqrf_write_read_data(buff, BUF_LEN, BUF_LEN, 1))
             ret_val = 1;
     return ret_val;
 }
@@ -191,9 +191,9 @@ int programmer::reset_module()
 
     buff[0] = CMD_ENTER_PROG;
     buff[1] = 0x8B;
-    buff[2] = this->dev->spi->count_crc_tx(&buff[1], sizeof(buff) -1);;
+    buff[2] = iqrf_count_tx_crc(&buff[1], sizeof(buff) -1);;
 
-    if ((len = this->dev->write_data(buff, 3)))
+    if ((len = iqrf_write_data(buff, 3)))
         ret_val = 1;
 
     return ret_val;
@@ -202,7 +202,7 @@ int programmer::reset_module()
 /* release entries in programmer */
 void programmer::release()
 {
-    this->dev->usb->release_usb();
+    iqrf_release_device();
 }
 
 /* send command for write/read SPI data
@@ -216,7 +216,7 @@ int programmer::write_read_spi_data(unsigned char *data, int data_len, bool writ
     if (data_len > SPI_DATA_LENGTH)
         data_len = SPI_DATA_LENGTH;
 
-    ret_val = this->dev->get_spi_cmd_data(data, data_len, write_read);
+    ret_val = iqrf_read_write_spi_cmd_data(data, data_len, write_read);
 
     return ret_val;
 }
@@ -239,7 +239,7 @@ int programmer::write_read_test_spi_data(unsigned char *data, int data_len)
     for (i=0; i < data_len; i++)
         DBG("[%x]", buff[i]);
 
-    ret_val = this->dev->write_read_data(buff, data_len+1, data_len + 1, 1);
+    ret_val = iqrf_write_read_data(buff, data_len+1, data_len + 1, 1);
     if (ret_val)
         memcpy(data, buff, ret_val);
     return ret_val;
@@ -247,20 +247,20 @@ int programmer::write_read_test_spi_data(unsigned char *data, int data_len)
 
 int programmer::init()
 {
-    return this->dev->init_device();
+    return iqrf_init_device();
 }
 
 int programmer::get_status()
 {
-    return this->dev->get_spi_status();
+    return iqrf_get_spi_status();
 }
 
 void programmer::reset()
 {
-    this->dev->reset_device();
+    iqrf_reset_device();
 }
 
 int programmer::crc(unsigned char *buff, int len)
 {
-    return this->dev->count_crc(buff, len);
+    return iqrf_count_tx_crc(buff, len);
 }
