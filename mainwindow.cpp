@@ -62,7 +62,7 @@ MainWindow::MainWindow(QWidget *parent)
     /* user has 2 possibilities to conect usb */
     while (max_setup) {
         /* usb initialization */
-        if (prog->init() > 0) {
+        if (prog->init() == 0) {
             ui->UploadTextEdit->append("USB device found");
             this->dev_found = 1;
             break;
