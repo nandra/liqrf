@@ -3,7 +3,7 @@
 # -------------------------------------------------
 QT += dbus
 
-LIBS += -L/usr/lib -lusb -L/usr/local/lib -liqrf
+LIBS += -L/usr/lib -lusb-1.0 -L/usr/local/lib -liqrf
 
 TARGET = iqrf_ide
 
